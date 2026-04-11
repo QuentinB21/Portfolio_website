@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import type { FormEvent, ReactNode } from 'react'
+import type { CSSProperties, FormEvent, ReactNode } from 'react'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import {
   FiArrowRight,
@@ -192,28 +192,36 @@ function App() {
     theme,
   }
 
+  const chromeAction =
+    location.pathname === '/cv' ? (
+      <button className="primary-button" onClick={() => void handleDownloadCv()} type="button">
+        <LuDownload size={16} />
+        <span className="cta-label">TÃ©lÃ©charger le PDF</span>
+      </button>
+    ) : undefined
+
   return (
     <>
       <div className="app-shell">
         <div className="ambient ambient-top" />
         <div className="ambient ambient-left" />
         <div className="grid-overlay" />
-        <Routes>
-          <Route path="/" element={<OverviewPage {...shellProps} />} />
-          <Route path="/work" element={<WorkPage {...shellProps} timelineEntries={timelineEntries} />} />
-          <Route
-            path="/cv"
-            element={
-              <CvPage
-                {...shellProps}
-                cvHtml={cvHtml}
-                cvLoading={cvLoading}
-                cvError={cvError}
-                onDownloadCv={handleDownloadCv}
-              />
-            }
-          />
-        </Routes>
+        <SiteChrome {...shellProps} action={chromeAction}>
+          <Routes>
+            <Route path="/" element={<OverviewPage onNavigate={navTo} />} />
+            <Route path="/work" element={<WorkPage timelineEntries={timelineEntries} />} />
+            <Route
+              path="/cv"
+              element={
+                <CvPage
+                  cvHtml={cvHtml}
+                  cvLoading={cvLoading}
+                  cvError={cvError}
+                />
+              }
+            />
+          </Routes>
+        </SiteChrome>
       </div>
 
       <ChatWidget
@@ -246,6 +254,11 @@ function SiteChrome({
   children,
   action,
 }: SharedPageProps & { children: ReactNode; action?: ReactNode }) {
+  const activeNavIndex = Math.max(
+    navItems.findIndex((item) => item.path === currentPath),
+    0,
+  )
+
   return (
     <div className="page-shell">
       <div className="chrome-utilities" aria-label="Actions rapides">
@@ -262,7 +275,16 @@ function SiteChrome({
       </div>
 
       <header className="topbar glass-panel">
-        <nav className="topbar-nav" aria-label="Navigation principale">
+        <nav
+          className="topbar-nav"
+          aria-label="Navigation principale"
+          style={
+            {
+              '--active-index': activeNavIndex,
+              '--nav-count': navItems.length,
+            } as CSSProperties
+          }
+        >
           {navItems.map((item) => (
             <button
               key={item.path}
@@ -282,9 +304,9 @@ function SiteChrome({
   )
 }
 
-function OverviewPage(props: SharedPageProps) {
+function OverviewPage({ onNavigate }: Pick<SharedPageProps, 'onNavigate'>) {
   return (
-    <SiteChrome {...props}>
+    <>
       <section className="hero-layout">
         <article className="glass-panel hero-panel">
           <span className="eyebrow-pill">
@@ -296,10 +318,10 @@ function OverviewPage(props: SharedPageProps) {
             puis oriente vers une page dédiée aux travaux et au parcours.
           </p>
           <div className="hero-actions">
-            <button className="primary-button" onClick={() => props.onNavigate('/work')} type="button">
+            <button className="primary-button" onClick={() => onNavigate('/work')} type="button">
               Voir les travaux <FiArrowRight size={16} />
             </button>
-            <button className="secondary-button" onClick={() => props.onNavigate('/cv')} type="button">
+            <button className="secondary-button" onClick={() => onNavigate('/cv')} type="button">
               Consulter le CV
             </button>
           </div>
@@ -371,20 +393,26 @@ function OverviewPage(props: SharedPageProps) {
         />
         <div className="contact-strip">
           {contact.map((item) => (
-            <a className="glass-panel contact-pill" href={item.href} key={item.label} rel="noreferrer" target="_blank">
+            <a
+              className={`glass-panel contact-pill ${getContactToneClass(item.href)}`}
+              href={item.href}
+              key={item.label}
+              rel="noreferrer"
+              target="_blank"
+            >
               <span className="contact-icon">{item.icon}</span>
               <span>{item.label}</span>
             </a>
           ))}
         </div>
       </section>
-    </SiteChrome>
+    </>
   )
 }
 
-function WorkPage(props: SharedPageProps & { timelineEntries: TimelineItem[] }) {
+function WorkPage({ timelineEntries }: { timelineEntries: TimelineItem[] }) {
   return (
-    <SiteChrome {...props}>
+    <>
       <section className="stacked-section">
         <div className="glass-panel editorial-hero">
           <div>
@@ -440,7 +468,7 @@ function WorkPage(props: SharedPageProps & { timelineEntries: TimelineItem[] }) 
             subtitle="Une timeline verticale simple est plus lisible qu’un damier de cartes quand l’information est chronologique."
           />
           <div className="timeline-list">
-            {props.timelineEntries.map((item) => (
+            {timelineEntries.map((item) => (
               <article className="timeline-entry" key={`${item.title}-${item.period}`}>
                 <div className="timeline-period">{item.period}</div>
                 <div className="timeline-content">
@@ -474,7 +502,7 @@ function WorkPage(props: SharedPageProps & { timelineEntries: TimelineItem[] }) 
           </div>
         </aside>
       </section>
-    </SiteChrome>
+    </>
   )
 }
 
@@ -482,23 +510,13 @@ function CvPage({
   cvHtml,
   cvLoading,
   cvError,
-  onDownloadCv,
-  ...props
-}: SharedPageProps & {
+}: {
   cvHtml: string
   cvLoading: boolean
   cvError: string | null
-  onDownloadCv: () => Promise<void>
 }) {
   return (
-    <SiteChrome
-      {...props}
-      action={
-        <button className="primary-button" onClick={() => void onDownloadCv()} type="button">
-          <LuDownload size={16} /> Télécharger le PDF
-        </button>
-      }
-    >
+    <>
       <section className="stacked-section">
         <div className="glass-panel cv-hero">
           <div>
@@ -527,7 +545,7 @@ function CvPage({
           {!cvLoading && !cvError && <div className="markdown-body" dangerouslySetInnerHTML={{ __html: cvHtml }} />}
         </article>
       </section>
-    </SiteChrome>
+    </>
   )
 }
 
@@ -549,4 +567,21 @@ function StoryItem({ label, value }: { label: string; value: string }) {
   )
 }
 
+function getContactToneClass(href: string) {
+  if (href.startsWith('mailto:')) {
+    return 'contact-pill-mail'
+  }
+
+  if (href.includes('linkedin.com')) {
+    return 'contact-pill-linkedin'
+  }
+
+  if (href.includes('github.com')) {
+    return 'contact-pill-github'
+  }
+
+  return ''
+}
+
 export default App
+

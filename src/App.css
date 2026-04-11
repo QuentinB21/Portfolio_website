@@ -114,34 +114,61 @@
 }
 
 .topbar-nav {
-  display: inline-flex;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--nav-count), minmax(0, 1fr));
   align-items: center;
-  gap: 0.35rem;
+  gap: 0;
   padding: 0.3rem;
   border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  isolation: isolate;
+  min-width: 16.5rem;
+}
+
+.topbar-nav::before {
+  content: '';
+  position: absolute;
+  top: 0.3rem;
+  bottom: 0.3rem;
+  left: 0.3rem;
+  z-index: 0;
+  width: calc((100% - 0.6rem) / var(--nav-count));
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-mint));
+  box-shadow: 0 12px 28px rgba(106, 168, 255, 0.2);
+  transform: translateX(calc(var(--active-index) * 100%));
+  transition:
+    transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.28s ease;
 }
 
 .nav-tab {
+  position: relative;
+  z-index: 1;
   border: none;
   border-radius: 999px;
   background: transparent;
   color: var(--text-muted);
   padding: 0.7rem 1rem;
+  min-width: 0;
   font-size: 0.86rem;
   font-weight: 500;
+  text-align: center;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  transition:
+    color 0.28s ease,
+    transform 0.28s ease,
+    opacity 0.28s ease;
 }
 
 .nav-tab:hover {
-  background: rgba(255, 255, 255, 0.06);
   color: var(--text-strong);
+  transform: translateY(-1px);
 }
 
 .nav-tab.is-active {
-  background: linear-gradient(135deg, var(--accent-blue), var(--accent-mint));
   color: var(--button-primary-text);
-  box-shadow: 0 12px 28px rgba(106, 168, 255, 0.2);
 }
 
 .primary-button,
@@ -425,6 +452,39 @@
 .contact-pill {
   align-items: center;
   color: var(--text-strong);
+  transition:
+    transform 0.24s ease,
+    background 0.24s ease,
+    border-color 0.24s ease,
+    box-shadow 0.24s ease,
+    color 0.24s ease;
+}
+
+.contact-pill:hover {
+  transform: translateY(-2px);
+}
+
+.contact-pill:hover .contact-icon,
+.contact-pill:hover span {
+  color: #f8fbff;
+}
+
+.contact-pill-mail:hover {
+  border-color: rgba(234, 67, 53, 0.35);
+  background: linear-gradient(135deg, rgba(234, 67, 53, 0.85), rgba(251, 188, 5, 0.72));
+  box-shadow: 0 16px 34px rgba(234, 67, 53, 0.2);
+}
+
+.contact-pill-linkedin:hover {
+  border-color: rgba(10, 102, 194, 0.4);
+  background: linear-gradient(135deg, rgba(10, 102, 194, 0.9), rgba(64, 148, 240, 0.76));
+  box-shadow: 0 16px 34px rgba(10, 102, 194, 0.22);
+}
+
+.contact-pill-github:hover {
+  border-color: rgba(118, 131, 150, 0.35);
+  background: linear-gradient(135deg, rgba(36, 41, 47, 0.92), rgba(88, 96, 105, 0.8));
+  box-shadow: 0 16px 34px rgba(15, 18, 22, 0.28);
 }
 
 .contact-icon,
@@ -857,6 +917,7 @@
   }
 
   .topbar-nav {
+    min-width: 0;
     overflow-x: auto;
     justify-content: center;
   }
