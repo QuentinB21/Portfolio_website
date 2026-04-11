@@ -39,7 +39,6 @@ export function ChatWidget({
             </button>
           </div>
 
-          {/* <div className="chat-modal-body"> */}
             <div className="chat-window">
               <div className="chat-messages">
                 {messages.map((message, index) => (
@@ -67,7 +66,7 @@ export function ChatWidget({
                   </div>
                 )}
               </div>
-              <div style={{ backgroundColor: 'transparent', filter: 'blur(12px)' }}>
+              <div style={{ backgroundColor: 'transparent'}}>
                 <form className="chat-input" onSubmit={onSubmit}>
                   <input
                     aria-label="Votre question"

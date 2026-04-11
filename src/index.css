@@ -1,13 +1,35 @@
 :root {
-  font-family: 'Space Grotesk', 'Manrope', 'Segoe UI', system-ui, sans-serif;
-  line-height: 1.6;
-  font-weight: 400;
-  color: #e7edf5;
-  background-color: #050913;
+  font-family: 'Inter', 'Manrope', 'Segoe UI', system-ui, sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --accent-blue: #6aa8ff;
+  --accent-aqua: #80e2ff;
+  --accent-mint: #89f0c1;
+  --accent-link: #8bcdfd;
+  --bg-start: #091019;
+  --bg-end: #0b0f14;
+  --text-strong: #f4f7fb;
+  --text-body: #d6dfeb;
+  --text-muted: #92a3b8;
+  --text-subtle: #718197;
+  --glass-fill: rgba(17, 24, 38, 0.54);
+  --topbar-fill: rgba(15, 22, 37, 0.58);
+  --panel-soft-fill: rgba(17, 24, 38, 0.4);
+  --button-secondary-fill: rgba(21, 34, 53, 0.74);
+  --chat-fill: rgba(13, 20, 32, 0.74);
+  --glass-stroke: rgba(244, 248, 255, 0.12);
+  --glass-inner: rgba(248, 251, 255, 0.08);
+  --glass-shadow: 0 24px 56px rgba(1, 4, 10, 0.34);
+  --pill-fill: rgba(22, 33, 50, 0.72);
+  --pill-stroke: rgba(244, 248, 255, 0.08);
+  --pill-text: #cfd9e7;
+  --accent-pill-fill: rgba(21, 39, 58, 0.82);
+  --accent-pill-stroke: rgba(141, 211, 255, 0.18);
+  --accent-pill-text: #f4f7fb;
+  --button-primary-text: #08111b;
+  --footer-text: #6e7e93;
 }
 
 *,
@@ -16,14 +38,45 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
-  background: radial-gradient(circle at 20% 20%, rgba(78, 118, 255, 0.08), transparent 25%),
-    radial-gradient(circle at 80% 0%, rgba(75, 224, 255, 0.06), transparent 25%),
-    radial-gradient(circle at 30% 70%, rgba(255, 255, 255, 0.05), transparent 22%),
-    #050913;
-  color: #e7edf5;
+  background: linear-gradient(180deg, var(--bg-start) 0%, var(--bg-end) 100%);
+  color: var(--text-strong);
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+body.light {
+  --accent-blue: #4a8bff;
+  --accent-aqua: #8ccfff;
+  --accent-mint: #7fe4c5;
+  --accent-link: #3e79ff;
+  --bg-start: #f7fafd;
+  --bg-end: #e8eef5;
+  --text-strong: #142033;
+  --text-body: #334155;
+  --text-muted: #66758a;
+  --text-subtle: #7e8a9c;
+  --glass-fill: rgba(255, 255, 255, 0.62);
+  --topbar-fill: rgba(255, 255, 255, 0.74);
+  --panel-soft-fill: rgba(255, 255, 255, 0.46);
+  --button-secondary-fill: rgba(238, 244, 251, 1);
+  --chat-fill: rgba(255, 255, 255, 0.78);
+  --glass-stroke: rgba(255, 255, 255, 0.78);
+  --glass-inner: rgba(255, 255, 255, 0.92);
+  --glass-shadow: 0 24px 56px rgba(138, 160, 184, 0.18);
+  --pill-fill: rgba(237, 243, 250, 0.96);
+  --pill-stroke: rgba(216, 226, 237, 1);
+  --pill-text: #415168;
+  --accent-pill-fill: rgba(234, 246, 255, 1);
+  --accent-pill-stroke: rgba(140, 200, 255, 0.45);
+  --accent-pill-text: #142033;
+  --button-primary-text: #ffffff;
+  --footer-text: #69798e;
 }
 
 a {
@@ -31,13 +84,15 @@ a {
   text-decoration: none;
 }
 
-img {
-  max-width: 100%;
-  display: block;
+button,
+input,
+textarea {
+  font: inherit;
 }
 
-button {
-  font-family: inherit;
+img {
+  display: block;
+  max-width: 100%;
 }
 
 #root {
@@ -47,211 +102,17 @@ button {
 .grid-overlay {
   position: fixed;
   inset: 0;
-  background-size: 120px 120px, 120px 120px;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4), transparent 70%);
-  pointer-events: none;
   z-index: 0;
-}
-
-body.light {
-  background: linear-gradient(180deg, #f0f4f8 0%, #e2e8f0 100%);
-  color: #1e293b;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(215, 231, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(215, 231, 255, 0.04) 1px, transparent 1px);
+  background-size: 120px 120px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.45));
 }
 
 body.light .grid-overlay {
-  display: none;
-  opacity: 0.4;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
-}
-
-/* Light Mode Liquid Glass Navbar */
-body.light .navbar {
-  background: rgba(255, 255, 255, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow:
-    0 8px 32px 0 rgba(31, 38, 135, 0.1),
-    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-}
-
-body.light .navbar .brand-mark {
-  box-shadow: 0 8px 20px rgba(53, 210, 255, 0.25);
-}
-
-body.light .navbar .nav-link {
-  color: #475569;
-}
-
-body.light .navbar .nav-link:hover {
-  color: #0f172a;
-  background: rgba(0, 0, 0, 0.04);
-}
-
-body.light .glass-card,
-body.light .status-card,
-body.light .project-card,
-body.light .ai-card,
-body.light .timeline-card,
-body.light .contact-card,
-body.light .stat-card {
-  background: rgba(255, 255, 255, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
-  color: #1e293b;
-  backdrop-filter: blur(12px);
-}
-
-body.light .hero-lead p {
-  color: #475569;
-}
-
-body.light .hero-lead h2 {
-  color: #0f172a;
-}
-
-body.light .btn {
-  color: #334155;
-  border-color: rgba(0, 0, 0, 0.1);
-}
-
-body.light .btn:hover {
-  background: rgba(0, 0, 0, 0.05);
-  color: #0f172a;
-}
-
-body.light .btn-primary {
-  color: #fff;
-  box-shadow: 0 10px 25px rgba(79, 139, 255, 0.25);
-}
-
-body.light .chip,
-body.light .badge {
-  background: rgba(255, 255, 255, 0.5);
-  color: #334155;
-  border-color: rgba(0, 0, 0, 0.06);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
-}
-
-body.light .project-description,
-body.light .timeline-sub,
-body.light .section-subtitle,
-body.light .status-meta span,
-body.light .section-title,
-body.light .stat-card span {
-  color: #475569;
-}
-
-body.light .status-card h4,
-body.light .skill-card h4,
-body.light .timeline-title,
-body.light .project-title,
-body.light .ai-title,
-body.light .stat-card h3 {
-  color: #0f172a;
-}
-
-body.light .location {
-  background: rgba(255, 255, 255, 0.5);
-  color: #475569;
-  border-color: rgba(0, 0, 0, 0.05);
-}
-
-body.light .message.assistant {
-  background: #eff6ff;
-  border-color: rgba(47, 107, 255, 0.1);
-  color: #1e293b;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
-}
-
-body.light .message.user {
-  background: #ffffff;
-  border-color: rgba(0, 0, 0, 0.04);
-  color: #0f172a;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-}
-
-body.light .chat-window,
-body.light .chat-input {
-  background: rgba(255, 255, 255, 0.8);
-  border-color: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-}
-
-body.light .chat-input input {
-  background: #ffffff;
-  border-color: rgba(0, 0, 0, 0.06);
-  color: #0f172a;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
-}
-
-body.light .chat-input input::placeholder {
-  color: #94a3b8;
-}
-
-body.light .chat-modal {
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
-}
-
-body.light .markdown-body {
-  color: #334155;
-}
-
-body.light .markdown-body h1,
-body.light .markdown-body h2,
-body.light .markdown-body h3 {
-  color: #0f172a;
-}
-
-body.light .brand-mark {
-  color: #fff;
-  /* Keep white text inside the gradient brand mark */
-}
-
-body.light .chat-modal-header {
-  background: rgba(255, 255, 255, 0.6);
-  border-bottom-color: rgba(0, 0, 0, 0.04);
-}
-
-body.light .bubble.assistant {
-  background: #eff6ff;
-  border-color: rgba(37, 99, 235, 0.1);
-  color: #1e293b;
-  box-shadow: 0 1px 2px rgba(37, 99, 235, 0.05);
-}
-
-body.light .bubble.user {
-  background: #ffffff;
-  border-color: rgba(226, 232, 240, 0.8);
-  color: #0f172a;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-body.light .chat-chip {
-  background: #ffffff;
-  color: #475569;
-  border-color: rgba(226, 232, 240, 1);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
-}
-
-body.light .chat-chip:hover {
-  background: #f8fafc;
-  color: #0f172a;
-  border-color: rgba(148, 163, 184, 0.4);
-}
-
-body.light .chat-modal-title,
-body.light .chat-modal-eyebrow,
-body.light .bubble-name,
-body.light .bubble-meta {
-  color: #64748b;
-}
-
-body.light .footer {
-  color: #64748b;
+  background-image:
+    linear-gradient(rgba(39, 54, 74, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(39, 54, 74, 0.05) 1px, transparent 1px);
 }
