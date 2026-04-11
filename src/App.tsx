@@ -196,7 +196,7 @@ function App() {
     location.pathname === '/cv' ? (
       <button className="primary-button" onClick={() => void handleDownloadCv()} type="button">
         <LuDownload size={16} />
-        <span className="cta-label">TÃ©lÃ©charger le PDF</span>
+        <span className="cta-label">Télécharger le PDF</span>
       </button>
     ) : undefined
 
