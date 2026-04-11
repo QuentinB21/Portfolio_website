@@ -43,12 +43,6 @@ const overviewProofs = [
   },
 ]
 
-const workPrinciples = [
-  "Une page d'accueil doit orienter, pas tout raconter.",
-  'Les détails chronologiques vivent mieux dans une page dédiée.',
-  'Le liquid glass gagne en élégance avec quelques masses fortes et des accents ciblés.',
-]
-
 function App() {
   const cvPdfUrl = import.meta.env.VITE_CV_PDF_URL || '/cv.pdf'
   const cvMarkdownUrl =

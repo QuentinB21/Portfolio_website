@@ -2,18 +2,24 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 
+ARG VITE_CV_PDF_URL
+ARG VITE_CV_MARKDOWN_URL
+
+ENV VITE_CV_PDF_URL=$VITE_CV_PDF_URL
+ENV VITE_CV_MARKDOWN_URL=$VITE_CV_MARKDOWN_URL
+
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 
 COPY . .
 RUN npm run build
 
-# Runtime stage (Node server + static files)
+# Runtime stage
 FROM node:20-alpine
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install --omit=dev
+RUN npm ci --omit=dev
 
 COPY --from=builder /app/dist ./dist
 COPY server ./server
