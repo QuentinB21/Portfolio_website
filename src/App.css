@@ -40,6 +40,21 @@
   padding: 7.5rem 0 5rem;
 }
 
+.chrome-utilities {
+  position: fixed;
+  top: 1.5rem;
+  right: max(16px, calc((100vw - 1160px) / 16));
+  z-index: 22;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  pointer-events: none;
+}
+
+.chrome-utilities > * {
+  pointer-events: auto;
+}
+
 .page-content {
   display: flex;
   flex-direction: column;
@@ -60,15 +75,16 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;
-  width: min(1160px, calc(100% - 32px));
+  width: fit-content;
+  max-width: calc(100vw - 21rem);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 1rem;
-  padding: 0.875rem 1rem;
   margin-bottom: 2rem;
   border-radius: 1.4rem;
   background: var(--topbar-fill);
+  overflow: visible;
 }
 
 .brand-button {
@@ -103,7 +119,6 @@
   gap: 0.35rem;
   padding: 0.3rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.03);
 }
 
 .nav-tab {
@@ -118,16 +133,15 @@
   transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
-.nav-tab:hover,
-.nav-tab.is-active {
+.nav-tab:hover {
   background: rgba(255, 255, 255, 0.06);
   color: var(--text-strong);
 }
 
-.topbar-actions {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.65rem;
+.nav-tab.is-active {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-mint));
+  color: var(--button-primary-text);
+  box-shadow: 0 12px 28px rgba(106, 168, 255, 0.2);
 }
 
 .primary-button,
@@ -284,6 +298,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.85rem;
+  margin-top: 1em;
 }
 
 .hero-actions {
@@ -760,13 +775,7 @@
 }
 
 @media (max-width: 1100px) {
-  .topbar {
-    flex-wrap: wrap;
-  }
-
   .topbar-nav {
-    order: 3;
-    width: 100%;
     justify-content: center;
   }
 
@@ -804,7 +813,6 @@
     font-size: 2.35rem;
   }
 
-  .topbar-actions,
   .hero-actions,
   .cv-meta,
   .project-feature-head,
@@ -813,7 +821,6 @@
     width: 100%;
   }
 
-  .topbar-actions,
   .hero-actions,
   .project-feature-head {
     flex-direction: column;
@@ -822,7 +829,6 @@
 
   .primary-button,
   .secondary-button,
-  .icon-button,
   .inline-action {
     width: 100%;
   }
@@ -842,6 +848,42 @@
   }
 
   .topbar {
-    width: min(100% - 20px, 1160px);
+    left: 10px;
+    transform: none;
+    width: fit-content;
+    max-width: calc(100vw - 84px);
+    justify-content: center;
+    padding: 0;
+  }
+
+  .topbar-nav {
+    overflow-x: auto;
+    justify-content: center;
+  }
+
+  .chrome-utilities {
+    top: 1.5rem;
+    right: 10px;
+    width: auto;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .chrome-utilities .icon-button {
+    width: 2.7rem;
+  }
+
+  .chrome-utilities .primary-button {
+    width: 2.8rem;
+    min-width: 2.8rem;
+    height: 2.8rem;
+    padding: 0;
+    font-size: 0;
+    gap: 0;
+  }
+
+  .chrome-utilities .primary-button svg {
+    width: 16px;
+    height: 16px;
   }
 }

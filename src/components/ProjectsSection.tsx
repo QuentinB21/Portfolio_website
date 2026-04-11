@@ -14,7 +14,7 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
       </div>
       <div className="projects-grid">
         {projects.map((project) => (
-          <article className="project-card" key={project.title}>
+          <article className="project-card glass-panel proof-card" key={project.title}>
             <div className="project-top">
               <h4 className="project-title">{project.title}</h4>
               <span className="badge">{project.status}</span>

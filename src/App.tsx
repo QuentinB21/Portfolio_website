@@ -5,7 +5,6 @@ import {
   FiArrowRight,
   FiExternalLink,
   FiMapPin,
-  FiMessageSquare,
   FiTrendingUp,
 } from 'react-icons/fi'
 import { LuDownload, LuMoon, LuSparkles, LuSun } from 'react-icons/lu'
@@ -249,12 +248,20 @@ function SiteChrome({
 }: SharedPageProps & { children: ReactNode; action?: ReactNode }) {
   return (
     <div className="page-shell">
-      <header className="topbar glass-panel">
-        <button className="brand-button" onClick={() => onNavigate('/')} type="button">
-          <span className="brand-orb" />
-          <span className="brand-text">Quentin.Dev</span>
+      <div className="chrome-utilities" aria-label="Actions rapides">
+        {action}
+        <button
+          className="icon-button"
+          onClick={onToggleTheme}
+          type="button"
+          aria-label={theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'}
+          title={theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'}
+        >
+          {theme === 'dark' ? <LuSun size={16} /> : <LuMoon size={16} />}
         </button>
+      </div>
 
+      <header className="topbar glass-panel">
         <nav className="topbar-nav" aria-label="Navigation principale">
           {navItems.map((item) => (
             <button
@@ -267,19 +274,6 @@ function SiteChrome({
             </button>
           ))}
         </nav>
-
-        <div className="topbar-actions">
-          {action}
-          <button
-            className="icon-button"
-            onClick={onToggleTheme}
-            type="button"
-            aria-label={theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'}
-            title={theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'}
-          >
-            {theme === 'dark' ? <LuSun size={16} /> : <LuMoon size={16} />}
-          </button>
-        </div>
       </header>
 
       <main className="page-content">{children}</main>
@@ -290,14 +284,7 @@ function SiteChrome({
 
 function OverviewPage(props: SharedPageProps) {
   return (
-    <SiteChrome
-      {...props}
-      action={
-        <button className="primary-button" onClick={() => props.onOpenChat()} type="button">
-          <FiMessageSquare size={16} /> Parler avec mon IA
-        </button>
-      }
-    >
+    <SiteChrome {...props}>
       <section className="hero-layout">
         <article className="glass-panel hero-panel">
           <span className="eyebrow-pill">
@@ -397,14 +384,7 @@ function OverviewPage(props: SharedPageProps) {
 
 function WorkPage(props: SharedPageProps & { timelineEntries: TimelineItem[] }) {
   return (
-    <SiteChrome
-      {...props}
-      action={
-        <button className="primary-button" onClick={() => props.onNavigate('/cv')} type="button">
-          <LuDownload size={16} /> Ouvrir le CV
-        </button>
-      }
-    >
+    <SiteChrome {...props}>
       <section className="stacked-section">
         <div className="glass-panel editorial-hero">
           <div>
@@ -430,7 +410,7 @@ function WorkPage(props: SharedPageProps & { timelineEntries: TimelineItem[] }) 
         />
         <div className="project-stack">
           {projects.map((project) => (
-            <article className="glass-panel project-feature" key={project.title}>
+            <article className="glass-panel proof-card project-feature" key={project.title}>
               <div className="project-feature-head">
                 <div>
                   <h2>{project.title}</h2>
