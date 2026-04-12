@@ -5,6 +5,7 @@ import { FiArrowRight, FiExternalLink, FiMapPin, FiTrendingUp } from 'react-icon
 import { LuBriefcaseBusiness, LuDownload, LuGraduationCap, LuMoon, LuSparkles, LuSun } from 'react-icons/lu'
 import './App.css'
 import logoMark from './assets/1_glass.png'
+import { buildAnalyticsContext, initializeAnalytics, sendAnalyticsEvent } from './utils/analytics'
 import { fetchAndRenderMarkdown, printHtmlContent } from './utils/printCv'
 import { ChatWidget } from './components/ChatWidget'
 import { contact, timelineItems, projects, skills, cannedAnswers } from './data/content'
@@ -133,6 +134,10 @@ function App() {
   )
 
   useEffect(() => {
+    initializeAnalytics()
+  }, [])
+
+  useEffect(() => {
     const fetchCv = async () => {
       try {
         const { html } = await fetchAndRenderMarkdown(cvMarkdownUrl)
@@ -192,7 +197,7 @@ function App() {
     return "Je note ta question. L'API distante n'est pas branchee ici, mais je peux te parler du parcours, des competences et des experiences de Quentin."
   }
 
-  const streamAnswer = (answer: string) => {
+  const streamAnswer = (answer: string, analyticsContext: Record<string, unknown>) => {
     if (typingRef.current) {
       window.clearInterval(typingRef.current)
     }
@@ -210,12 +215,18 @@ function App() {
         }
         setIsTyping(false)
         setTypingText('')
+        sendAnalyticsEvent('chat_assistant_rendered', {
+          ...analyticsContext,
+          answerLength: answer.length,
+        })
         setMessages((prev) => [...prev, { from: 'assistant', text: answer }])
       }
     }, 12)
   }
 
   const handleDownloadCv = async () => {
+    sendAnalyticsEvent('cv_download_clicked', buildAnalyticsContext(location.pathname, theme))
+
     if (cvHtml) {
       printHtmlContent(cvHtml, 'CV Quentin Bouchot')
       return
@@ -231,27 +242,45 @@ function App() {
     }
   }
 
-  const fetchAiAnswer = async (question: string): Promise<string> => {
+  const fetchAiAnswer = async (
+    question: string,
+    analyticsContext: Record<string, unknown>,
+  ): Promise<{ answer: string; usage: { promptTokens: number | null; completionTokens: number | null; totalTokens: number | null } | null }> => {
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: question }),
+        body: JSON.stringify({ message: question, analytics: analyticsContext }),
       })
 
       if (!res.ok) {
         const errText = await res.text()
         console.error('Chat API error', errText)
-        return 'Le service IA ne repond pas. Reessaie plus tard.'
+        return {
+          answer: 'Le service IA ne repond pas. Reessaie plus tard.',
+          usage: null,
+        }
       }
 
       const data = await res.json()
       const content = data?.answer
-      if (!content) return 'Pas de reponse recue. Reessaie plus tard.'
-      return content.trim()
+      if (!content) {
+        return {
+          answer: 'Pas de reponse recue. Reessaie plus tard.',
+          usage: null,
+        }
+      }
+
+      return {
+        answer: content.trim(),
+        usage: data?.usage || null,
+      }
     } catch (error) {
       console.error('Chat API request failed', error)
-      return "Une erreur est survenue avec l'IA. Reessaie plus tard."
+      return {
+        answer: "Une erreur est survenue avec l'IA. Reessaie plus tard.",
+        usage: null,
+      }
     }
   }
 
@@ -259,20 +288,39 @@ function App() {
     evt.preventDefault()
     const value = input.trim()
     if (!value) return
+
+    const analyticsContext = buildAnalyticsContext(location.pathname, theme)
+
     setMessages((prev) => [...prev, { from: 'user', text: value }])
     setInput('')
     setIsTyping(true)
     setTypingText('')
+    sendAnalyticsEvent('chat_user_message', {
+      ...analyticsContext,
+      messageLength: value.length,
+    })
 
-    fetchAiAnswer(value).then((response) => {
-      streamAnswer(response || pickAnswer(value))
+    fetchAiAnswer(value, analyticsContext).then((response) => {
+      const finalAnswer = response.answer || pickAnswer(value)
+      streamAnswer(finalAnswer, analyticsContext)
     })
   }
 
   const shellProps = {
     onNavigate: navTo,
-    onToggleTheme: () => setTheme((current) => (current === 'dark' ? 'light' : 'dark')),
-    onOpenChat: () => setChatOpen(true),
+    onToggleTheme: () =>
+      setTheme((current) => {
+        const next = current === 'dark' ? 'light' : 'dark'
+        sendAnalyticsEvent('theme_toggled', {
+          ...buildAnalyticsContext(location.pathname, next),
+          theme: next,
+        })
+        return next
+      }),
+    onOpenChat: () => {
+      sendAnalyticsEvent('chat_opened', buildAnalyticsContext(location.pathname, theme))
+      setChatOpen(true)
+    },
     currentPath: location.pathname,
     theme,
   }
@@ -317,7 +365,13 @@ function App() {
         input={input}
         onInputChange={setInput}
         onSubmit={handleSubmit}
-        onToggle={() => setChatOpen((current) => !current)}
+        onToggle={() =>
+          setChatOpen((current) => {
+            const next = !current
+            sendAnalyticsEvent(next ? 'chat_opened' : 'chat_closed', buildAnalyticsContext(location.pathname, theme))
+            return next
+          })
+        }
       />
     </>
   )

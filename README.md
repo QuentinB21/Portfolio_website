@@ -1,11 +1,17 @@
 # Portfolio Quentin Bouchot
 
-Site personnel/portfolio en React + TypeScript + Vite. Il met en avant le profil de Quentin Bouchot, ses experiences, sa timeline, une page CV synchronisee depuis GitHub et un chatbot branche sur un backend Node.
+Site personnel/portfolio en React + TypeScript + Vite avec backend Node/Express.
+
+L'architecture de suivi est hybride :
+- `Umami` pour l'analytics produit et les metriques d'usage du site
+- `Grafana + Loki + Alloy` pour les logs applicatifs et le suivi detaille du chatbot
 
 ## Stack
 - React 19, TypeScript, Vite
 - Styles custom, `react-icons`, `react-markdown`
 - Backend Node/Express pour servir le build et proteger les variables sensibles
+- Umami pour les analytics web
+- Grafana, Loki et Alloy pour l'observabilite
 
 ## Demarrer en local
 ```bash
@@ -18,13 +24,19 @@ Ouvrir `http://localhost:5173`.
 ```bash
 docker compose up --build
 ```
-Le service est expose sur `http://localhost:8088`.
+
+Services exposes :
+- portfolio : `http://localhost:8088`
+- Umami : `http://127.0.0.1:3001`
+- Grafana : `http://127.0.0.1:3002`
+- Loki : `http://127.0.0.1:3100`
 
 ## Structure
 - `src/App.tsx` : pages principales et logique front
 - `src/data/content.tsx` : contenu editorial du portfolio
-- `src/App.css` / `src/index.css` : styles globaux
-- `server/index.js` : serveur Express et endpoints backend
+- `src/utils/analytics.ts` : integration Umami cote front
+- `server/index.js` : backend Express, age calcule, chatbot et logs structures
+- `observability/` : configuration Loki, Alloy et Grafana
 
 ## CV synchronise
 Le CV est charge depuis `https://raw.githubusercontent.com/QuentinB21/QuentinB21/main/README.md` et rendu en markdown.
@@ -33,6 +45,28 @@ Pour le bouton de telechargement PDF sur la page CV :
 - place un fichier `public/cv.pdf`
 - ou definis `VITE_CV_PDF_URL` dans ton `.env`
 
+## Ce que suit Umami
+Umami couvre les usages produit :
+- pages visitees
+- duree de visite / session
+- pays / region / navigateur / appareil
+- referrer
+- evenements custom comme :
+  - ouverture / fermeture du chat
+  - message envoye au chat
+  - reponse rendue
+  - changement de theme
+  - clic sur telechargement CV
+
+## Ce que suit Grafana + Loki
+Loki collecte les logs structures du backend :
+- message utilisateur envoye au chatbot
+- reponse du modele
+- consommation de tokens
+- latence OpenAI
+- erreurs du chatbot
+- contexte pseudonymise (session, visiteur, pays/region si headers disponibles)
+
 ## Variables sensibles
 Les donnees sensibles ou semi-sensibles doivent rester cote serveur dans `.env` :
 - `OPENAI_API_KEY`
@@ -40,15 +74,16 @@ Les donnees sensibles ou semi-sensibles doivent rester cote serveur dans `.env` 
 - `OPENAI_BASE_URL`
 - `PROFILE_BIRTHDATE`
 - `CHATBOT_SYSTEM_PROMPT`
-
-Le front ne contient plus ces donnees :
-- la date de naissance n'est pas exposee au client, seul l'age calcule est renvoye par `/api/profile`
-- le prompt systeme du chatbot est lu depuis le serveur
+- `MONITORING_IP_HASH_SALT`
+- `UMAMI_DB_PASSWORD`
+- `UMAMI_APP_SECRET`
+- `GRAFANA_ADMIN_PASSWORD`
 
 ## Configuration
 1. Cree un fichier `.env` ou `.env.local` a partir de `.env.example`
-2. Renseigne les variables serveur comme `OPENAI_API_KEY`, `PROFILE_BIRTHDATE` et `CHATBOT_SYSTEM_PROMPT`
-3. Le front dialogue uniquement avec `/api/chat` et `/api/profile`
+2. Renseigne les variables serveur et observabilite
+3. Lance `docker compose up --build`
+4. Cree ton website dans Umami, puis copie son `website id` dans `VITE_UMAMI_WEBSITE_ID`
 
 ## Scripts utiles
 - `npm run dev` : serveur de dev
