@@ -751,6 +751,89 @@
   box-shadow: 0 0 0 0.3rem rgba(137, 240, 193, 0.12);
 }
 
+body.light .timeline-list::before {
+  background: linear-gradient(
+    180deg,
+    rgba(154, 191, 233, 0.16),
+    rgba(151, 203, 255, 0.6),
+    rgba(154, 191, 233, 0.16)
+  );
+}
+
+body.light .timeline-card {
+  border-color: rgba(194, 208, 226, 0.78);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(244, 248, 253, 0.9));
+  box-shadow:
+    0 22px 48px rgba(181, 194, 212, 0.2),
+    0 8px 22px rgba(202, 215, 233, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+body.light .timeline-entry::before {
+  background: linear-gradient(90deg, rgba(171, 198, 229, 0.22), rgba(124, 184, 248, 0.66));
+}
+
+body.light .timeline-card-experience {
+  background:
+    radial-gradient(circle at top left, rgba(120, 176, 255, 0.18), transparent 43%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(243, 248, 255, 0.92));
+}
+
+body.light .timeline-card-education {
+  background:
+    radial-gradient(circle at top left, rgba(133, 231, 193, 0.16), transparent 43%),
+    linear-gradient(180deg, rgba(254, 255, 255, 0.82), rgba(241, 249, 247, 0.92));
+}
+
+body.light .timeline-badge {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(241, 246, 253, 0.94));
+  color: rgba(49, 67, 92, 0.96);
+  border-color: rgba(195, 209, 228, 0.78);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92);
+}
+
+body.light .timeline-kind {
+  color: rgba(76, 94, 118, 0.94);
+  border-color: rgba(193, 209, 228, 0.7);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
+}
+
+body.light .timeline-kind-experience {
+  background: rgba(103, 164, 255, 0.12);
+}
+
+body.light .timeline-kind-education {
+  background: rgba(120, 221, 182, 0.12);
+}
+
+body.light .timeline-node {
+  border-color: rgba(193, 209, 228, 0.86);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(236, 243, 251, 0.92));
+  box-shadow:
+    0 16px 34px rgba(183, 198, 219, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96);
+}
+
+body.light .timeline-node-core {
+  box-shadow: 0 0 0 0.34rem rgba(106, 168, 255, 0.14);
+}
+
+body.light .timeline-node-education .timeline-node-core {
+  box-shadow: 0 0 0 0.34rem rgba(137, 240, 193, 0.14);
+}
+
+body.light .timeline-content h3 {
+  color: rgba(24, 38, 58, 0.98);
+}
+
+body.light .timeline-place {
+  color: rgba(75, 92, 115, 0.96);
+}
+
+body.light .timeline-content p {
+  color: rgba(83, 100, 123, 0.92);
+}
+
 .timeline-content {
   display: flex;
   flex-direction: column;
