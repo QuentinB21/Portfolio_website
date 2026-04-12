@@ -45,6 +45,21 @@ const defaultMessages: ChatMessage[] = [
 ]
 
 const MONTH_LABELS = ['Janv.', 'Fevr.', 'Mars', 'Avr.', 'Mai', 'Juin', 'Juil.', 'Aout', 'Sept.', 'Oct.', 'Nov.', 'Dec.']
+const BIRTH_DATE = { year: 2003, month: 6, day: 7 }
+
+function getCurrentAge() {
+  const now = new Date()
+  let age = now.getFullYear() - BIRTH_DATE.year
+  const hasHadBirthdayThisYear =
+    now.getMonth() + 1 > BIRTH_DATE.month ||
+    (now.getMonth() + 1 === BIRTH_DATE.month && now.getDate() >= BIRTH_DATE.day)
+
+  if (!hasHadBirthdayThisYear) {
+    age -= 1
+  }
+
+  return age
+}
 
 function parseTimelineDate(value: string | null) {
   if (!value) return null
@@ -378,6 +393,8 @@ function SiteChrome({
 }
 
 function OverviewPage({ onNavigate }: Pick<SharedPageProps, 'onNavigate'>) {
+  const currentAge = getCurrentAge()
+
   return (
     <>
       <section className="hero-layout">
@@ -411,7 +428,9 @@ function OverviewPage({ onNavigate }: Pick<SharedPageProps, 'onNavigate'>) {
         <aside className="hero-rail">
           <article className="glass-panel side-panel proof-card">
             <span className="section-kicker">Profil</span>
-            <h2>Quentin Bouchot</h2>
+            <h2>
+              Quentin Bouchot <span className="inline-muted">· {currentAge} ans</span>
+            </h2>
             <p>
               Eleve ingenieur en informatique et reseaux a CPE Lyon, specialise en developpement logiciel, data et IA.
             </p>
