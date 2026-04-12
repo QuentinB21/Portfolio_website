@@ -42,6 +42,39 @@ const overviewProofs = [
   },
 ]
 
+const CHAT_STORAGE_KEY = 'quentinbot:messages'
+
+const defaultMessages: ChatMessage[] = [
+  { from: 'assistant', text: 'Salut, je suis QuentinBot. Je peux parler de mes projets, de mon parcours ou de ma stack.' },
+]
+
+function readStoredMessages(): ChatMessage[] {
+  if (typeof window === 'undefined') 
+    return defaultMessages
+
+  try {
+    const raw = window.localStorage.getItem(CHAT_STORAGE_KEY)
+    if (!raw) 
+      return defaultMessages
+
+    const parsed = JSON.parse(raw)
+    if (!Array.isArray(parsed)) return defaultMessages
+
+    const sanitized = parsed.filter(
+      (message): message is ChatMessage =>
+        typeof message === 'object' &&
+        message !== null &&
+        (message.from === 'user' || message.from === 'assistant') &&
+        typeof message.text === 'string',
+    )
+
+    return sanitized.length > 0 ? sanitized : defaultMessages
+  } 
+  catch {
+    return defaultMessages
+  }
+}
+
 function App() {
   const cvPdfUrl = import.meta.env.VITE_CV_PDF_URL || '/cv.pdf'
   const cvMarkdownUrl =
@@ -51,10 +84,7 @@ function App() {
   const [cvLoading, setCvLoading] = useState(true)
   const [cvError, setCvError] = useState<string | null>(null)
   const [cvHtml, setCvHtml] = useState('')
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    { from: 'assistant', text: 'Salut, je suis QuentinBot. Je peux parler de mes projets, de mon parcours ou de ma stack.' },
-    { from: 'assistant', text: 'Pose-moi une question ou clique sur “Parler avec mon IA” pour démarrer.' },
-  ])
+  const [messages, setMessages] = useState<ChatMessage[]>(() => readStoredMessages())
   const [input, setInput] = useState('')
   const [typingText, setTypingText] = useState('')
   const [isTyping, setIsTyping] = useState(false)
@@ -93,6 +123,10 @@ function App() {
   useEffect(() => {
     document.body.classList.toggle('light', theme === 'light')
   }, [theme])
+
+  useEffect(() => {
+    window.localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(messages))
+  }, [messages])
 
   const navTo = (path: string) => {
     if (location.pathname !== path) {
