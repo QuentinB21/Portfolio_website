@@ -7,7 +7,7 @@ import {
   FiMapPin,
   FiTrendingUp,
 } from 'react-icons/fi'
-import { LuDownload, LuMoon, LuSparkles, LuSun } from 'react-icons/lu'
+import { LuBriefcaseBusiness, LuDownload, LuGraduationCap, LuMoon, LuSparkles, LuSun } from 'react-icons/lu'
 import './App.css'
 import { fetchAndRenderMarkdown, printHtmlContent } from './utils/printCv'
 import { ChatWidget } from './components/ChatWidget'
@@ -502,16 +502,37 @@ function WorkPage({ timelineEntries }: { timelineEntries: TimelineItem[] }) {
             subtitle="Une timeline verticale simple est plus lisible qu’un damier de cartes quand l’information est chronologique."
           />
           <div className="timeline-list">
-            {timelineEntries.map((item) => (
-              <article className="timeline-entry" key={`${item.title}-${item.period}`}>
-                <div className="timeline-period">{item.period}</div>
-                <div className="timeline-content">
-                  <h3>{item.title}</h3>
-                  <p className="timeline-place">{item.place}</p>
-                  <p>{item.detail}</p>
-                </div>
-              </article>
-            ))}
+            {timelineEntries.map((item, index) => {
+              const variant = getTimelineVariant(item)
+
+              return (
+                <article
+                  className={`timeline-entry timeline-entry-${index % 2 === 0 ? 'left' : 'right'}`}
+                  key={`${item.title}-${item.period}`}
+                >
+                  <div className="timeline-card-shell">
+                    <div className={`timeline-card glass-panel timeline-card-${variant.kind}`}>
+                      <div className="timeline-card-top">
+                        <span className="timeline-badge">{item.period}</span>
+                        <span className={`timeline-kind timeline-kind-${variant.kind}`}>
+                          {variant.icon}
+                          {variant.label}
+                        </span>
+                      </div>
+                      <div className="timeline-content">
+                        <h3>{item.title}</h3>
+                        <p className="timeline-place">{item.place}</p>
+                        <p>{item.detail}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className={`timeline-node timeline-node-${variant.kind}`} aria-hidden="true">
+                    <span className="timeline-node-core" />
+                  </div>
+                  <div className="timeline-spacer" aria-hidden="true" />
+                </article>
+              )
+            })}
           </div>
         </div>
 
@@ -601,6 +622,26 @@ function StoryItem({ label, value }: { label: string; value: string }) {
   )
 }
 
+function getTimelineVariant(item: TimelineItem) {
+  const educationHints = ['dipl', 'iut', 'but', 'cpe', 'ecole', 'universit']
+  const source = `${item.title} ${item.place}`.toLowerCase()
+  const isEducation = educationHints.some((hint) => source.includes(hint))
+
+  if (isEducation) {
+    return {
+      kind: 'education' as const,
+      label: 'Formation',
+      icon: <LuGraduationCap size={14} />,
+    }
+  }
+
+  return {
+    kind: 'experience' as const,
+    label: 'Expérience',
+    icon: <LuBriefcaseBusiness size={14} />,
+  }
+}
+
 function getContactToneClass(href: string) {
   if (href.startsWith('mailto:')) {
     return 'contact-pill-mail'
@@ -618,4 +659,3 @@ function getContactToneClass(href: string) {
 }
 
 export default App
-
