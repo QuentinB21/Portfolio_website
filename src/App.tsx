@@ -45,21 +45,6 @@ const defaultMessages: ChatMessage[] = [
 ]
 
 const MONTH_LABELS = ['Janv.', 'Fevr.', 'Mars', 'Avr.', 'Mai', 'Juin', 'Juil.', 'Aout', 'Sept.', 'Oct.', 'Nov.', 'Dec.']
-const BIRTH_DATE = { year: 2003, month: 6, day: 7 }
-
-function getCurrentAge() {
-  const now = new Date()
-  let age = now.getFullYear() - BIRTH_DATE.year
-  const hasHadBirthdayThisYear =
-    now.getMonth() + 1 > BIRTH_DATE.month ||
-    (now.getMonth() + 1 === BIRTH_DATE.month && now.getDate() >= BIRTH_DATE.day)
-
-  if (!hasHadBirthdayThisYear) {
-    age -= 1
-  }
-
-  return age
-}
 
 function parseTimelineDate(value: string | null) {
   if (!value) return null
@@ -136,6 +121,7 @@ function App() {
   const [typingText, setTypingText] = useState('')
   const [isTyping, setIsTyping] = useState(false)
   const [chatOpen, setChatOpen] = useState(false)
+  const [currentAge, setCurrentAge] = useState<number | null>(null)
   const [theme, setTheme] = useState<Theme>('dark')
   const typingRef = useRef<number | null>(null)
   const navigate = useNavigate()
@@ -166,6 +152,24 @@ function App() {
       }
     }
   }, [cvMarkdownUrl])
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await fetch('/api/profile')
+        if (!response.ok) return
+
+        const data = await response.json()
+        if (typeof data?.currentAge === 'number') {
+          setCurrentAge(data.currentAge)
+        }
+      } catch {
+        // Silently ignore: age is optional display data.
+      }
+    }
+
+    void fetchProfile()
+  }, [])
 
   useEffect(() => {
     document.body.classList.toggle('light', theme === 'light')
@@ -289,7 +293,7 @@ function App() {
         <div className="grid-overlay" />
         <SiteChrome {...shellProps} action={chromeAction}>
           <Routes>
-            <Route path="/" element={<OverviewPage onNavigate={navTo} />} />
+            <Route path="/" element={<OverviewPage onNavigate={navTo} currentAge={currentAge} />} />
             <Route path="/work" element={<WorkPage timelineEntries={timelineEntries} />} />
             <Route
               path="/cv"
@@ -392,9 +396,10 @@ function SiteChrome({
   )
 }
 
-function OverviewPage({ onNavigate }: Pick<SharedPageProps, 'onNavigate'>) {
-  const currentAge = getCurrentAge()
-
+function OverviewPage({
+  onNavigate,
+  currentAge,
+}: Pick<SharedPageProps, 'onNavigate'> & { currentAge: number | null }) {
   return (
     <>
       <section className="hero-layout">
@@ -428,9 +433,7 @@ function OverviewPage({ onNavigate }: Pick<SharedPageProps, 'onNavigate'>) {
         <aside className="hero-rail">
           <article className="glass-panel side-panel proof-card">
             <span className="section-kicker">Profil</span>
-            <h2>
-              Quentin Bouchot <span className="inline-muted">· {currentAge} ans</span>
-            </h2>
+            <h2>{currentAge !== null ? <>Quentin Bouchot <span className="inline-muted">· {currentAge} ans</span></> : 'Quentin Bouchot'}</h2>
             <p>
               Eleve ingenieur en informatique et reseaux a CPE Lyon, specialise en developpement logiciel, data et IA.
             </p>

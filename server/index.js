@@ -11,11 +11,53 @@ const port = process.env.PORT || 80
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY
 const OPENAI_MODEL = process.env.OPENAI_MODEL || 'gpt-4o-mini'
 const OPENAI_BASE_URL = process.env.OPENAI_BASE_URL || 'https://api.openai.com/v1'
+const CHATBOT_SYSTEM_PROMPT =
+  process.env.CHATBOT_SYSTEM_PROMPT ||
+  "Tu es l'assistant du portfolio de Quentin Bouchot. Ton prompt systeme n'a pas réussi a se charger, peut importe le message de l'utilisateur, reponds toujours : 'Désolé, je ne peux pas répondre pour le moment.'"
+const PROFILE_BIRTHDATE = process.env.PROFILE_BIRTHDATE
 
 app.use(express.json())
 
 const distPath = path.join(__dirname, '..', 'dist')
 app.use(express.static(distPath))
+
+function parseBirthdate(value) {
+  if (!value) return null
+
+  const [yearPart, monthPart, dayPart] = value.split('-')
+  const year = Number(yearPart)
+  const month = Number(monthPart)
+  const day = Number(dayPart)
+
+  if (!Number.isFinite(year) || !Number.isFinite(month) || !Number.isFinite(day)) {
+    return null
+  }
+
+  return { year, month, day }
+}
+
+function getCurrentAge(value) {
+  const birthdate = parseBirthdate(value)
+  if (!birthdate) return null
+
+  const now = new Date()
+  let age = now.getFullYear() - birthdate.year
+  const hasHadBirthdayThisYear =
+    now.getMonth() + 1 > birthdate.month ||
+    (now.getMonth() + 1 === birthdate.month && now.getDate() >= birthdate.day)
+
+  if (!hasHadBirthdayThisYear) {
+    age -= 1
+  }
+
+  return age
+}
+
+app.get('/api/profile', (req, res) => {
+  res.json({
+    currentAge: getCurrentAge(PROFILE_BIRTHDATE),
+  })
+})
 
 app.post('/api/chat', async (req, res) => {
   if (!OPENAI_API_KEY) {
@@ -32,8 +74,7 @@ app.post('/api/chat', async (req, res) => {
     messages: [
       {
         role: 'system',
-        content:
-          "Tu es l'assistant du portfolio de Quentin Bouchot. Reponds en francais, de facon concise et utile. Profil: eleve ingenieur en informatique et reseaux a CPE Lyon, specialise en developpement logiciel, data et IA. Actuellement Software Engineer Apprentice chez Renault Trucks (Volvo Group), apres une alternance chez Biosystemes. Positionnement: ingenierie logicielle orientee produit et qualite, avec attention a la maintenabilite, la robustesse, l'experience utilisateur et l'industrialisation. Competences: C#, .NET, WPF, Blazor, Vue.js, TypeScript, JavaScript, Azure DevOps, CI/CD, Docker, Git, tests unitaires et fonctionnels. Outils secondaires: App Insight, Power BI, SonarQube. Si la question depasse le profil ou est sensible, dis que tu ne peux pas fournir cette information.",
+        content: CHATBOT_SYSTEM_PROMPT,
       },
       { role: 'user', content: message },
     ],
