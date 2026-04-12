@@ -55,6 +55,20 @@
   pointer-events: auto;
 }
 
+.chrome-brand {
+  position: fixed;
+  top: 1.5rem;
+  left: max(16px, calc((100vw - 1160px) / 16));
+  z-index: 22;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.chrome-brand > * {
+  pointer-events: auto;
+}
+
 .page-content {
   display: flex;
   flex-direction: column;
@@ -91,19 +105,32 @@
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  border: none;
-  padding: 0;
-  background: transparent;
+  border: 1px solid var(--glass-stroke);
+  min-height: 2.7rem;
+  padding: 0.15rem 0.8rem 0.15rem 0.2rem;
+  background: var(--glass-fill);
   color: var(--text-strong);
   cursor: pointer;
+  border-radius: 1.1rem;
+  box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-inner);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.brand-orb {
-  width: 1.1rem;
-  height: 1.1rem;
-  border-radius: 999px;
-  background: linear-gradient(135deg, var(--accent-blue), var(--accent-aqua));
-  box-shadow: 0 0 0 0.35rem rgba(106, 168, 255, 0.12);
+.brand-button:hover {
+  transform: translateY(-1px);
+}
+
+.brand-logo {
+  width: 2.3rem;
+  height: 2.3rem;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 16px rgba(74, 139, 255, 0.18));
 }
 
 .brand-text {
@@ -119,7 +146,7 @@
   grid-template-columns: repeat(var(--nav-count), minmax(0, 1fr));
   align-items: center;
   gap: 0;
-  padding: 0.3rem;
+  padding: 0;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.03);
   isolation: isolate;
@@ -214,8 +241,33 @@
   width: 2.7rem;
   height: 2.7rem;
   border: 1px solid var(--glass-stroke);
-  background: var(--button-secondary-fill);
+  background: var(--glass-fill);
   color: var(--text-muted);
+  box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-inner);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+}
+
+.theme-toggle-button {
+  padding: 0;
+  line-height: 1;
+  border-radius: 1.1rem;
+  background: var(--glass-fill);
+  color: var(--text-strong);
+  box-shadow:
+    var(--glass-shadow),
+    inset 0 1px 0 var(--glass-inner),
+    0 0 0 1px rgba(255, 255, 255, 0.02);
+}
+
+.theme-toggle-button svg {
+  display: block;
+  flex: 0 0 auto;
+}
+
+.theme-toggle-button:hover {
+  color: var(--text-strong);
+  border-color: rgba(255, 255, 255, 0.18);
 }
 
 .theme-switch-glyph {
@@ -1158,16 +1210,40 @@ body.light .chat-messages::-webkit-scrollbar-thumb:hover {
   }
 
   .topbar {
-    left: 10px;
-    transform: none;
-    width: fit-content;
-    max-width: calc(100vw - 84px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100vw - 132px);
+    max-width: 18rem;
     justify-content: center;
     padding: 0;
   }
 
+  .brand-text {
+    display: none;
+  }
+
+  .chrome-brand {
+    left: 10px;
+  }
+
+  .brand-button {
+    width: 2.7rem;
+    min-width: 2.7rem;
+    height: 2.7rem;
+    padding: 0.15rem;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .brand-logo {
+    width: 2rem;
+    height: 2rem;
+  }
+
   .topbar-nav {
+    width: 100%;
     min-width: 0;
+    max-width: none;
     overflow-x: auto;
     justify-content: center;
   }
@@ -1176,15 +1252,21 @@ body.light .chat-messages::-webkit-scrollbar-thumb:hover {
     top: 1.5rem;
     right: 10px;
     width: auto;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
   }
 
   .chrome-utilities .icon-button {
     width: 2.7rem;
+    height: 2.7rem;
+  }
+
+  .chrome-utilities .theme-toggle-button {
+    order: 0;
   }
 
   .chrome-utilities .primary-button {
+    order: 1;
     width: 2.8rem;
     min-width: 2.8rem;
     height: 2.8rem;

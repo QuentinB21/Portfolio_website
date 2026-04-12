@@ -9,6 +9,7 @@ import {
 } from 'react-icons/fi'
 import { LuBriefcaseBusiness, LuDownload, LuGraduationCap, LuMoon, LuSparkles, LuSun } from 'react-icons/lu'
 import './App.css'
+import logoMark from './assets/1_glass.png'
 import { fetchAndRenderMarkdown, printHtmlContent } from './utils/printCv'
 import { ChatWidget } from './components/ChatWidget'
 import { contact, educations, experiences, projects, skills, cannedAnswers } from './data/content'
@@ -295,10 +296,17 @@ function SiteChrome({
 
   return (
     <div className="page-shell">
+      <div className="chrome-brand" aria-label="Identité du site">
+        <button className="brand-button" onClick={() => onNavigate('/')} type="button" aria-label="Retour à l'accueil">
+          <img className="brand-logo" src={logoMark} alt="Logo Quentin Bouchot" />
+          <span className="brand-text">Quentin.Dev</span>
+        </button>
+      </div>
+
       <div className="chrome-utilities" aria-label="Actions rapides">
         {action}
         <button
-          className="icon-button"
+          className="icon-button theme-toggle-button"
           onClick={onToggleTheme}
           type="button"
           aria-label={theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'}
