@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import type { FormEvent } from 'react'
-import { FiSend } from 'react-icons/fi'
+import { FiSend, FiX } from 'react-icons/fi'
 import { FaRobot } from 'react-icons/fa'
 import type { ChatMessage } from '../types'
 
@@ -44,7 +44,7 @@ export function ChatWidget({
               <h4 className="chat-modal-title">QuentinBot</h4>
             </div>
             <button className="close-btn icon-only" type="button" onClick={onToggle} aria-label="Fermer le chat">
-              ×
+              <FiX size={16} />
             </button>
           </div>
 
