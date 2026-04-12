@@ -1,18 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { CSSProperties, FormEvent, ReactNode } from 'react'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
-import {
-  FiArrowRight,
-  FiExternalLink,
-  FiMapPin,
-  FiTrendingUp,
-} from 'react-icons/fi'
+import { FiArrowRight, FiExternalLink, FiMapPin, FiTrendingUp } from 'react-icons/fi'
 import { LuBriefcaseBusiness, LuDownload, LuGraduationCap, LuMoon, LuSparkles, LuSun } from 'react-icons/lu'
 import './App.css'
 import logoMark from './assets/1_glass.png'
 import { fetchAndRenderMarkdown, printHtmlContent } from './utils/printCv'
 import { ChatWidget } from './components/ChatWidget'
-import { contact, educations, experiences, projects, skills, cannedAnswers } from './data/content'
+import { contact, timelineItems, projects, skills, cannedAnswers } from './data/content'
 import type { ChatMessage, TimelineItem } from './types'
 
 type Theme = 'dark' | 'light'
@@ -24,39 +19,76 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { label: 'Overview', path: '/' },
-  { label: 'Travaux', path: '/work' },
+  { label: 'Carriere', path: '/work' },
   { label: 'CV', path: '/cv' },
 ]
 
 const overviewProofs = [
   {
-    title: 'Expérience industrialisée',
-    body: "Desktop, web, maintenance, CI/CD: le spectre est assez large pour rassurer sans transformer l'accueil en catalogue.",
+    title: 'Qualite logicielle',
+    body: 'Tests, maintenance et reduction des regressions structurent ma maniere de faire evoluer des applications reelles.',
   },
   {
-    title: 'Stack utile',
-    body: 'React, TypeScript, .NET, Node et intégration IA servent des cas concrets plutôt que de faire vitrine technique.',
+    title: 'Vision produit',
+    body: "Je concois des applications utiles, lisibles et robustes, avec une vraie attention portee a l'experience utilisateur.",
   },
   {
-    title: 'Posture produit',
-    body: 'Lisibilité, structure, accessibilité et sens de la livraison priment sur la démonstration visuelle gratuite.',
+    title: 'Industrialisation progressive',
+    body: 'CI/CD, qualite logicielle et testabilite ne sont pas accessoires : ils servent a faire grandir un produit proprement.',
   },
 ]
 
 const CHAT_STORAGE_KEY = 'quentinbot:messages'
 
 const defaultMessages: ChatMessage[] = [
-  { from: 'assistant', text: 'Salut, je suis QuentinBot. Je peux parler de mes projets, de mon parcours ou de ma stack.' },
+  { from: 'assistant', text: 'Salut, je suis QuentinBot. Je peux presenter le parcours, les competences et les experiences de Quentin.' },
 ]
 
+const MONTH_LABELS = ['Janv.', 'Fevr.', 'Mars', 'Avr.', 'Mai', 'Juin', 'Juil.', 'Aout', 'Sept.', 'Oct.', 'Nov.', 'Dec.']
+
+function parseTimelineDate(value: string | null) {
+  if (!value) return null
+
+  const [yearPart, monthPart] = value.split('-')
+  const year = Number(yearPart)
+  const month = monthPart ? Number(monthPart) : 1
+
+  if (!Number.isFinite(year) || !Number.isFinite(month)) {
+    return null
+  }
+
+  return { year, month }
+}
+
+function getTimelineStartValue(item: TimelineItem) {
+  const parsed = parseTimelineDate(item.periodStart)
+  if (!parsed) return Number.NEGATIVE_INFINITY
+  return parsed.year * 100 + parsed.month
+}
+
+function formatTimelineDate(value: string | null) {
+  if (!value) return 'Present'
+
+  const parsed = parseTimelineDate(value)
+  if (!parsed) return value
+
+  return `${MONTH_LABELS[parsed.month - 1]} ${parsed.year}`
+}
+
+function formatTimelinePeriod(item: TimelineItem) {
+  return `${formatTimelineDate(item.periodStart)} - ${formatTimelineDate(item.periodEnd)}`
+}
+
 function readStoredMessages(): ChatMessage[] {
-  if (typeof window === 'undefined') 
+  if (typeof window === 'undefined') {
     return defaultMessages
+  }
 
   try {
     const raw = window.localStorage.getItem(CHAT_STORAGE_KEY)
-    if (!raw) 
+    if (!raw) {
       return defaultMessages
+    }
 
     const parsed = JSON.parse(raw)
     if (!Array.isArray(parsed)) return defaultMessages
@@ -70,8 +102,7 @@ function readStoredMessages(): ChatMessage[] {
     )
 
     return sanitized.length > 0 ? sanitized : defaultMessages
-  } 
-  catch {
+  } catch {
     return defaultMessages
   }
 }
@@ -96,7 +127,7 @@ function App() {
   const location = useLocation()
 
   const timelineEntries = useMemo<TimelineItem[]>(
-    () => [...experiences, ...educations].sort((a, b) => b.period.localeCompare(a.period)),
+    () => [...timelineItems].sort((a, b) => getTimelineStartValue(b) - getTimelineStartValue(a)),
     [],
   )
 
@@ -106,7 +137,7 @@ function App() {
         const { html } = await fetchAndRenderMarkdown(cvMarkdownUrl)
         setCvHtml(html)
       } catch {
-        setCvError("Le CV n'a pas pu être chargé depuis GitHub.")
+        setCvError("Le CV n'a pas pu etre charge depuis GitHub.")
       } finally {
         setCvLoading(false)
       }
@@ -139,7 +170,7 @@ function App() {
     const normalized = question.toLowerCase()
     const found = cannedAnswers.find((entry) => entry.keywords.some((keyword) => normalized.includes(keyword)))
     if (found) return found.answer
-    return "Je note ta question. L'API distante n'est pas branchée ici, mais je peux te parler de mes projets, de mon parcours et de mon stack."
+    return "Je note ta question. L'API distante n'est pas branchee ici, mais je peux te parler du parcours, des competences et des experiences de Quentin."
   }
 
   const streamAnswer = (answer: string) => {
@@ -192,16 +223,16 @@ function App() {
       if (!res.ok) {
         const errText = await res.text()
         console.error('Chat API error', errText)
-        return 'Le service IA ne répond pas. Réessaie plus tard.'
+        return 'Le service IA ne repond pas. Reessaie plus tard.'
       }
 
       const data = await res.json()
       const content = data?.answer
-      if (!content) return 'Pas de réponse reçue. Réessaie plus tard.'
+      if (!content) return 'Pas de reponse recue. Reessaie plus tard.'
       return content.trim()
     } catch (error) {
       console.error('Chat API request failed', error)
-      return "Une erreur est survenue avec l'IA. Réessaie plus tard."
+      return "Une erreur est survenue avec l'IA. Reessaie plus tard."
     }
   }
 
@@ -231,7 +262,7 @@ function App() {
     location.pathname === '/cv' ? (
       <button className="primary-button" onClick={() => void handleDownloadCv()} type="button">
         <LuDownload size={16} />
-        <span className="cta-label">Télécharger le PDF</span>
+        <span className="cta-label">Telecharger le PDF</span>
       </button>
     ) : undefined
 
@@ -296,8 +327,8 @@ function SiteChrome({
 
   return (
     <div className="page-shell">
-      <div className="chrome-brand" aria-label="Identité du site">
-        <button className="brand-button" onClick={() => onNavigate('/')} type="button" aria-label="Retour à l'accueil">
+      <div className="chrome-brand" aria-label="Identite du site">
+        <button className="brand-button" onClick={() => onNavigate('/')} type="button" aria-label="Retour a l'accueil">
           <img className="brand-logo" src={logoMark} alt="Logo Quentin Bouchot" />
           <span className="brand-text">Quentin.Dev</span>
         </button>
@@ -352,23 +383,24 @@ function OverviewPage({ onNavigate }: Pick<SharedPageProps, 'onNavigate'>) {
       <section className="hero-layout">
         <article className="glass-panel hero-panel">
           <span className="eyebrow-pill">
-            <LuSparkles size={14} /> Disponible pour missions ciblées
+            <LuSparkles size={14} /> Eleve ingenieur · logiciel, data & IA
           </span>
-          <h1>Une page d’accueil plus éditoriale, plus claire et plus désirable.</h1>
+          <h1>Ingenierie logicielle orientee produit, qualite et robustesse.</h1>
           <p className="hero-copy">
-            Au lieu d’un assemblage de blocs concurrents, l’accueil pose un message fort, quelques preuves crédibles
-            puis oriente vers une page dédiée aux travaux et au parcours.
+            Eleve ingenieur en informatique et reseaux a CPE Lyon, je developpe aujourd'hui des outils de diagnostic
+            chez Renault Trucks. Mon approche met l'accent sur la maintenabilite du code, la fiabilite des applications,
+            l'experience utilisateur et l'industrialisation logicielle.
           </p>
           <div className="hero-actions">
             <button className="primary-button" onClick={() => onNavigate('/work')} type="button">
-              Voir les travaux <FiArrowRight size={16} />
+              Voir la carriere <FiArrowRight size={16} />
             </button>
             <button className="secondary-button" onClick={() => onNavigate('/cv')} type="button">
               Consulter le CV
             </button>
           </div>
           <div className="pill-row">
-            {['React', 'TypeScript', '.NET / Blazor', 'Node.js', 'Docker', 'IA appliquée'].map((item) => (
+            {['C#', '.NET', 'Blazor', 'Vue.js', 'Azure DevOps', 'Docker'].map((item) => (
               <span className="soft-pill" key={item}>
                 {item}
               </span>
@@ -378,15 +410,14 @@ function OverviewPage({ onNavigate }: Pick<SharedPageProps, 'onNavigate'>) {
 
         <aside className="hero-rail">
           <article className="glass-panel side-panel proof-card">
-            <span className="section-kicker">Identité</span>
+            <span className="section-kicker">Profil</span>
             <h2>Quentin Bouchot</h2>
             <p>
-              Ingénieur logiciel full-stack en alternance. J’aime concevoir des interfaces sobres, solides et
-              compréhensibles.
+              Eleve ingenieur en informatique et reseaux a CPE Lyon, specialise en developpement logiciel, data et IA.
             </p>
             <div className="story-list">
-              <StoryItem label="Rôle actuel" value="Apprenti software engineer chez Renault Trucks" />
-              <StoryItem label="Focus" value="Produits techniques lisibles, fiables, industrialisés" />
+              <StoryItem label="Role actuel" value="Software Engineer Apprentice chez Renault Trucks" />
+              <StoryItem label="Positionnement" value="Produit, qualite logicielle, robustesse" />
               <StoryItem label="Localisation" value="Lyon, France" />
             </div>
           </article>
@@ -395,8 +426,8 @@ function OverviewPage({ onNavigate }: Pick<SharedPageProps, 'onNavigate'>) {
 
       <section className="stacked-section">
         <SectionHeader
-          title="Trois preuves fortes, au lieu de dix blocs concurrents"
-          subtitle="La page d’accueil rassure vite. Le détail des projets et du parcours passe sur une page dédiée."
+          title="Trois axes qui structurent mon profil"
+          subtitle="Une lecture rapide du positionnement avant d'entrer dans les experiences, les projets et les competences."
         />
         <div className="proof-grid">
           {overviewProofs.map((proof) => (
@@ -411,8 +442,8 @@ function OverviewPage({ onNavigate }: Pick<SharedPageProps, 'onNavigate'>) {
       <section className="stacked-section split-section">
         <div className="split-main glass-panel">
           <SectionHeader
-            title="Aperçu des travaux"
-            subtitle="L’accueil ne garde qu’un extrait. Le catalogue complet et le parcours détaillé vivent sur une page distincte."
+            title="Apercu des experiences"
+            subtitle="L'accueil ne garde qu'un extrait. La page carriere detaille ensuite le parcours, la chronologie et les competences."
           />
           <div className="feature-list">
             {projects.map((project) => (
@@ -426,12 +457,12 @@ function OverviewPage({ onNavigate }: Pick<SharedPageProps, 'onNavigate'>) {
             ))}
           </div>
         </div>
-     </section>
+      </section>
 
       <section className="stacked-section">
         <SectionHeader
           title="Contact"
-          subtitle="Des points d’entrée simples, visibles, sans transformer l’accueil en page de directory."
+          subtitle="Des points d'entree directs pour consulter mon profil, mes travaux et mes coordonnees."
         />
         <div className="contact-strip">
           {contact.map((item) => (
@@ -459,24 +490,24 @@ function WorkPage({ timelineEntries }: { timelineEntries: TimelineItem[] }) {
         <div className="glass-panel editorial-hero">
           <div>
             <span className="section-kicker">Travaux & parcours</span>
-            <h1>Les détails vivent ici, avec une lecture plus linéaire.</h1>
+            <h1>Un parcours chronologique centré sur des experiences concretes.</h1>
             <p className="hero-copy">
-              Cette page concentre ce qui était auparavant dispersé sur l’accueil : projets, chronologie, compétences
-              et contexte de livraison. Le contenu devient plus dense, mais aussi mieux organisé.
+              Cette page rassemble les experiences professionnelles, la formation et les competences techniques qui
+              structurent aujourd'hui mon profil d'ingenieur logiciel oriente produit et qualite.
             </p>
           </div>
           <div className="editorial-stats">
-            <StoryItem label="Projets clés" value="3 cas mis en avant" />
-            <StoryItem label="Expériences" value="2 expériences pro + 2 formations" />
-            <StoryItem label="Lecture" value="Plus progressive, moins fragmentée" />
+            <StoryItem label="Poste actuel" value="Software Engineer Apprentice" />
+            <StoryItem label="Entreprise" value="Renault Trucks (Volvo Group)" />
+            <StoryItem label="Experiences" value="Deux alternances en developpement logiciel" />
           </div>
         </div>
       </section>
 
       <section className="stacked-section">
         <SectionHeader
-          title="Projets sélectionnés"
-          subtitle="Des cartes plus larges, moins nombreuses, avec une vraie respiration. On privilégie le sens avant la densité."
+          title="Experiences mises en avant"
+          subtitle="Deux contextes concrets qui montrent a la fois le developpement logiciel, l'ergonomie et les enjeux de qualite."
         />
         <div className="project-stack">
           {projects.map((project) => (
@@ -487,7 +518,7 @@ function WorkPage({ timelineEntries }: { timelineEntries: TimelineItem[] }) {
                   <p>{project.description}</p>
                 </div>
                 <a className="secondary-button inline-action" href={project.link} rel="noreferrer" target="_blank">
-                  Voir le cas <FiExternalLink size={15} />
+                  Voir le contexte <FiExternalLink size={15} />
                 </a>
               </div>
               <div className="pill-row">
@@ -507,7 +538,7 @@ function WorkPage({ timelineEntries }: { timelineEntries: TimelineItem[] }) {
         <div className="split-main glass-panel">
           <SectionHeader
             title="Chronologie"
-            subtitle="Une timeline verticale simple est plus lisible qu’un damier de cartes quand l’information est chronologique."
+            subtitle="Une lecture simple du parcours, des experiences d'alternance jusqu'a la formation d'ingenieur."
           />
           <div className="timeline-list">
             {timelineEntries.map((item, index) => {
@@ -516,12 +547,12 @@ function WorkPage({ timelineEntries }: { timelineEntries: TimelineItem[] }) {
               return (
                 <article
                   className={`timeline-entry timeline-entry-${index % 2 === 0 ? 'left' : 'right'}`}
-                  key={`${item.title}-${item.period}`}
+                  key={`${item.title}-${item.periodStart}`}
                 >
                   <div className="timeline-card-shell">
                     <div className={`timeline-card glass-panel timeline-card-${variant.kind}`}>
                       <div className="timeline-card-top">
-                        <span className="timeline-badge">{item.period}</span>
+                        <span className="timeline-badge">{formatTimelinePeriod(item)}</span>
                         <span className={`timeline-kind timeline-kind-${variant.kind}`}>
                           {variant.icon}
                           {variant.label}
@@ -546,8 +577,8 @@ function WorkPage({ timelineEntries }: { timelineEntries: TimelineItem[] }) {
 
         <aside className="split-rail glass-panel">
           <SectionHeader
-            title="Compétences"
-            subtitle="La stack reste présente, mais sous forme de groupes cohérents plutôt que de badges partout."
+            title="Competences"
+            subtitle="Les outils et domaines que j'utilise aujourd'hui le plus dans un contexte logiciel professionnel."
           />
           <div className="skill-column">
             {skills.map((group) => (
@@ -584,10 +615,10 @@ function CvPage({
         <div className="glass-panel cv-hero">
           <div>
             <span className="section-kicker">CV</span>
-            <h1>Version document, lisible et imprimable.</h1>
+            <h1>Version document, structuree et exploitable.</h1>
             <p className="hero-copy">
-              Le langage liquid glass reste présent, mais la hiérarchie se rapproche d’une page premium plus dense et
-              professionnelle.
+              Une lecture plus dense et plus documentaire du meme profil, avec le meme niveau d'exigence sur la clarte et
+              la hierarchie.
             </p>
           </div>
           <div className="cv-meta">
@@ -595,7 +626,7 @@ function CvPage({
               <FiMapPin size={14} /> Lyon, France
             </span>
             <span className="soft-pill">
-              <FiTrendingUp size={14} /> Alternance full-stack
+              <FiTrendingUp size={14} /> Software engineering
             </span>
           </div>
         </div>
@@ -631,11 +662,7 @@ function StoryItem({ label, value }: { label: string; value: string }) {
 }
 
 function getTimelineVariant(item: TimelineItem) {
-  const educationHints = ['dipl', 'iut', 'but', 'cpe', 'ecole', 'universit']
-  const source = `${item.title} ${item.place}`.toLowerCase()
-  const isEducation = educationHints.some((hint) => source.includes(hint))
-
-  if (isEducation) {
+  if (item.kind === 'education') {
     return {
       kind: 'education' as const,
       label: 'Formation',
@@ -645,7 +672,7 @@ function getTimelineVariant(item: TimelineItem) {
 
   return {
     kind: 'experience' as const,
-    label: 'Expérience',
+    label: 'Experience',
     icon: <LuBriefcaseBusiness size={14} />,
   }
 }

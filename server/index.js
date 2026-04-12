@@ -19,7 +19,7 @@ app.use(express.static(distPath))
 
 app.post('/api/chat', async (req, res) => {
   if (!OPENAI_API_KEY) {
-    return res.status(500).json({ error: 'OPENAI_API_KEY manquante côté serveur' })
+    return res.status(500).json({ error: 'OPENAI_API_KEY manquante cote serveur' })
   }
 
   const { message } = req.body
@@ -33,7 +33,7 @@ app.post('/api/chat', async (req, res) => {
       {
         role: 'system',
         content:
-          "Tu es l'assistant du portfolio de Quentin Bouchot. Réponds en français, concis et utile. Profil: apprenti software engineer chez Renault Trucks (Volvo Group), ex-Biosystèmes; études CPE Lyon (2024-2027) et BUT Info. Compétences: React/TypeScript, .NET/Blazor/WPF, Docker, CI/CD (GitHub Actions, Azure DevOps), bases de données, intégration IA (LangChain/OpenAI). Si la question dépasse le profil ou est sensible, réponds que tu ne peux pas fournir cette info.",
+          "Tu es l'assistant du portfolio de Quentin Bouchot. Reponds en francais, de facon concise et utile. Profil: eleve ingenieur en informatique et reseaux a CPE Lyon, specialise en developpement logiciel, data et IA. Actuellement Software Engineer Apprentice chez Renault Trucks (Volvo Group), apres une alternance chez Biosystemes. Positionnement: ingenierie logicielle orientee produit et qualite, avec attention a la maintenabilite, la robustesse, l'experience utilisateur et l'industrialisation. Competences: C#, .NET, WPF, Blazor, Vue.js, TypeScript, JavaScript, Azure DevOps, CI/CD, Docker, Git, tests unitaires et fonctionnels. Outils secondaires: App Insight, Power BI, SonarQube. Si la question depasse le profil ou est sensible, dis que tu ne peux pas fournir cette information.",
       },
       { role: 'user', content: message },
     ],
@@ -54,19 +54,19 @@ app.post('/api/chat', async (req, res) => {
     if (!response.ok) {
       const errorText = await response.text()
       console.error('OpenAI error', errorText)
-      return res.status(500).json({ error: 'Le service IA ne répond pas. Réessaie plus tard.' })
+      return res.status(500).json({ error: 'Le service IA ne repond pas. Reessaie plus tard.' })
     }
 
     const data = await response.json()
     const content = data?.choices?.[0]?.message?.content
     if (!content) {
-      return res.status(500).json({ error: 'Pas de réponse reçue.' })
+      return res.status(500).json({ error: 'Pas de reponse recue.' })
     }
 
     res.json({ answer: content.trim() })
   } catch (error) {
     console.error('OpenAI request failed', error)
-    res.status(500).json({ error: 'Erreur lors de la requête à OpenAI.' })
+    res.status(500).json({ error: 'Erreur lors de la requete a OpenAI.' })
   }
 })
 

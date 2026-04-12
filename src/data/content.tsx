@@ -2,65 +2,65 @@ import { FiGithub, FiLinkedin, FiMail } from 'react-icons/fi'
 import type { CannedAnswer, ContactItem, Project, Skill, TimelineItem } from '../types'
 
 export const skills: Skill[] = [
-  { title: 'Backend', items: ['C# / ASP.NET', 'Node.js', 'PostgreSQL', 'REST'] },
-  { title: 'Frontend', items: ['React', 'TypeScript', 'Blazor', 'Vue.js'] },
-  { title: 'DevOps & Cloud', items: ['Docker', 'CI/CD (GitHub Actions)', 'Nginx', 'Azure DevOps', 'Linux'] },
-  { title: 'Data & IA', items: ['Python', 'FastAPI', 'LLM integration', 'LangChain', 'ETL'] },
-  { title: 'Soft skills', items: ['Pédagogie', 'Autonomie', 'Leadership technique', 'Gestion produit', 'Mentorat'] },
+  { title: 'Backend', items: ['C#', '.NET', 'ASP.NET', 'API REST', 'Architecture logicielle'] },
+  { title: 'Frontend', items: ['Blazor', 'Vue.js', 'TypeScript', 'JavaScript'] },
+  { title: 'DevOps & outils', items: ['Azure DevOps', 'CI/CD', 'Docker', 'Git'] },
+  { title: 'Qualité logicielle', items: ['Tests unitaires', 'Tests fonctionnels', 'Testabilité', 'Réduction des régressions'] },
 ]
 
 export const projects: Project[] = [
   {
-    title: 'Diagnostic véhicules (Renault Trucks)',
-    description: 'Outils de diagnostic (WPF) et portail web (Blazor) pour véhicules utilitaires.',
-    stack: ['.NET 5/8', 'Blazor', 'WPF', 'Azure DevOps', 'App Insights'],
+    title: 'Outils de diagnostic véhicules',
+    description:
+      'Développement et amélioration d’outils de diagnostic pour véhicules utilitaires Renault Trucks, dans un environnement .NET avec enjeux de maintenabilité et de qualité logicielle.',
+    stack: ['C#', '.NET', 'WPF', 'Blazor', 'Azure DevOps'],
     link: 'https://www.volvogroup.com',
     status: 'En poste',
   },
   {
-    title: 'Générateur de questionnaires',
-    description: 'Applications web pour créer des questionnaires sensoriels à partir de templates.',
-    stack: ['Vue.js', 'TypeScript', 'CI/CD', 'Docker'],
+    title: 'Générateur de questionnaires sensoriels',
+    description:
+      'Conception frontend d’une application web en Vue.js pour générer des questionnaires sensoriels à partir de templates éditables, avec un travail sur l’ergonomie et le Green IT.',
+    stack: ['Vue.js', 'TypeScript', 'JavaScript', 'Bootstrap'],
     link: 'https://www.biosystemes.com/',
     status: 'Livré',
   },
-  {
-    title: 'Assistant IA Portfolio',
-    description: 'Chat temps réel qui répond aux recruteurs sur mon profil et mes projets.',
-    stack: ['React', 'FastAPI', 'LangChain', 'OpenAI', 'Vector DB'],
-    link: 'https://github.com/quentin/ai-portfolio',
-    status: 'R&D',
-  },
 ]
 
-export const experiences: TimelineItem[] = [
+export const timelineItems: TimelineItem[] = [
   {
+    kind: 'experience',
     title: 'Software Engineer Apprentice',
     place: 'Renault Trucks (Volvo Group)',
-    period: 'Sept. 2024 – Présent',
+    periodStart: '2024-09',
+    periodEnd: null,
     detail:
-      'Développement d’outils de diagnostic pour véhicules utilitaires, desktop (WPF) et portail web (Blazor). Maintenance et CI/CD.',
+      'Développement et maintenance d’outils de diagnostic pour véhicules utilitaires. Travail sur les correctifs, les évolutions, la qualité logicielle, les tests et les pipelines CI/CD.',
   },
   {
+    kind: 'education',
+    title: 'CPE Lyon',
+    place: 'Cycle ingénieur - Informatique & Réseaux de Communication',
+    periodStart: '2024-09',
+    periodEnd: '2027-06',
+    detail: 'Spécialisation en développement logiciel, data et intelligence artificielle.',
+  },
+  {
+    kind: 'experience',
     title: 'Developer Apprentice',
     place: 'Biosystèmes',
-    period: 'Sept. 2023 – Août 2024',
-    detail: 'Développement d’applications web (Vue.js) de génération de questionnaires sensoriels depuis des templates.',
-  },
-]
-
-export const educations: TimelineItem[] = [
-  {
-    title: 'CPE Lyon',
-    place: 'Diplôme ingénieur Informatique & Réseaux',
-    period: '2024 – 2027',
-    detail: 'Spécialisation logiciel, data & IA.',
+    periodStart: '2023-09',
+    periodEnd: '2024-08',
+    detail:
+      'Développement frontend d’une application web from scratch en Vue.js pour générer des questionnaires sensoriels depuis des templates éditables.',
   },
   {
+    kind: 'education',
     title: 'IUT Dijon-Auxerre',
     place: 'BUT Informatique',
-    period: '2021 – 2024',
-    detail: 'Algorithmique, bases de données, développement web.',
+    periodStart: '2021-09',
+    periodEnd: '2024-06',
+    detail: 'Formation en algorithmique, bases de données et développement logiciel.',
   },
 ]
 
@@ -72,22 +72,23 @@ export const contact: ContactItem[] = [
 
 export const cannedAnswers: CannedAnswer[] = [
   {
-    keywords: ['stack', 'tech', 'techno'],
+    keywords: ['stack', 'tech', 'techno', 'compétence', 'competence'],
     answer:
-      'Je travaille surtout avec React + TypeScript côté front, .NET/Blazor ou Node côté backend, Docker/Nginx pour le déploiement, et CI/CD via GitHub Actions ou Azure DevOps.',
+      'Je travaille surtout avec C# et .NET côté applicatif, Blazor et Vue.js côté interface, et Azure DevOps / CI-CD / Docker pour l’industrialisation et la qualité logicielle.',
   },
   {
-    keywords: ['exp', 'expérience', 'parcours', 'cv'],
+    keywords: ['exp', 'expérience', 'experience', 'parcours', 'cv'],
     answer:
-      'Apprenti ingénieur software chez Renault Trucks (Volvo Group) depuis 2024, ex-Biosystèmes (2023-2024), actuellement en école CPE Lyon. Projets : outils de diagnostic, apps web et intégration CI/CD.',
+      'Je suis actuellement Software Engineer Apprentice chez Renault Trucks après une alternance chez Biosystèmes. Je suis également élève ingénieur à CPE Lyon, spécialisé en développement logiciel, data et IA.',
   },
   {
-    keywords: ['ia', 'assistant', 'chat'],
+    keywords: ['qualité', 'qualite', 'tests', 'industrialisation', 'ci', 'cd'],
     answer:
-      "L'assistant IA est prévu pour être relié à mon CV et mes projets. Il peut expliquer mes choix techniques ou détailler un livrable.",
+      'Je m’intéresse particulièrement à la qualité logicielle, à la testabilité, à la réduction des régressions et à l’industrialisation via les tests et les pipelines CI/CD.',
   },
   {
-    keywords: ['mission', 'freelance', 'dispo'],
-    answer: 'Je suis ouvert à des missions ponctuelles (soir/week-end) en web, data ou intégrations IA.',
+    keywords: ['projet', 'projets', 'travaux'],
+    answer:
+      'Les deux expériences que je mets le plus en avant sont le développement d’outils de diagnostic chez Renault Trucks et la conception d’un générateur de questionnaires sensoriels chez Biosystèmes.',
   },
 ]

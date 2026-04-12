@@ -5,6 +5,10 @@ type TimelineSectionProps = {
   educations: TimelineItem[]
 }
 
+function formatLegacyPeriod(item: TimelineItem) {
+  return `${item.periodStart} - ${item.periodEnd ?? 'Present'}`
+}
+
 export function TimelineSection({ experiences, educations }: TimelineSectionProps) {
   return (
     <section className="section" id="parcours">
@@ -17,7 +21,7 @@ export function TimelineSection({ experiences, educations }: TimelineSectionProp
           <div className="timeline-card" key={exp.title}>
             <h4 className="timeline-title">{exp.title}</h4>
             <p className="timeline-sub">{exp.place}</p>
-            <p className="timeline-period">{exp.period}</p>
+            <p className="timeline-period">{formatLegacyPeriod(exp)}</p>
             <p className="project-description">{exp.detail}</p>
           </div>
         ))}
@@ -25,7 +29,7 @@ export function TimelineSection({ experiences, educations }: TimelineSectionProp
           <div className="timeline-card" key={edu.title}>
             <h4 className="timeline-title">{edu.title}</h4>
             <p className="timeline-sub">{edu.place}</p>
-            <p className="timeline-period">{edu.period}</p>
+            <p className="timeline-period">{formatLegacyPeriod(edu)}</p>
             <p className="project-description">{edu.detail}</p>
           </div>
         ))}

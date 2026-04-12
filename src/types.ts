@@ -17,9 +17,11 @@ export type Project = {
 }
 
 export type TimelineItem = {
+  kind: 'experience' | 'education'
   title: string
   place: string
-  period: string
+  periodStart: string
+  periodEnd: string | null
   detail: string
 }
 
