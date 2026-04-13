@@ -16,6 +16,12 @@
 		X-Frame-Options "SAMEORIGIN"
 	}
 
+	@umami_script path /stats.js
+	reverse_proxy @umami_script umami:3000
+
+	@umami_collect path /api/send
+	reverse_proxy @umami_collect umami:3000
+
 	reverse_proxy portfolio:80
 }
 
@@ -33,7 +39,7 @@
 {$GRAFANA_DOMAIN} {
 	encode zstd gzip
 
-	basicauth {
+	basic_auth {
 		{$GRAFANA_BASIC_AUTH_USER} {$GRAFANA_BASIC_AUTH_HASH}
 	}
 

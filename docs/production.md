@@ -3,7 +3,7 @@
 ## Target architecture
 - `quentin-bouchot.fr`: public portfolio
 - `www.quentin-bouchot.fr`: redirect to apex domain
-- `analytics.quentin-bouchot.fr`: Umami
+- `analytics.quentin-bouchot.fr`: Umami admin UI
 - `grafana.quentin-bouchot.fr`: Grafana behind Caddy basic auth
 - Loki is internal only
 
@@ -64,7 +64,7 @@ Important values:
 - `GRAFANA_DOMAIN=grafana.quentin-bouchot.fr`
 - `ACME_EMAIL=<your-email>`
 - `GRAFANA_BASIC_AUTH_HASH=<bcrypt hash generated above>`
-- `VITE_UMAMI_SCRIPT_URL=https://analytics.quentin-bouchot.fr/script.js`
+- `VITE_UMAMI_SCRIPT_URL=https://quentin-bouchot.fr/stats.js`
 
 ## First deployment
 ```bash
