@@ -13,6 +13,7 @@ type ChatWidgetProps = {
   onInputChange: (value: string) => void
   onSubmit: (evt: FormEvent<HTMLFormElement>) => void
   onToggle: () => void
+  onNavigate: (path: string) => void
 }
 
 export function ChatWidget({
@@ -24,6 +25,7 @@ export function ChatWidget({
   onInputChange,
   onSubmit,
   onToggle,
+  onNavigate,
 }: ChatWidgetProps) {
   const messagesRef = useRef<HTMLDivElement | null>(null)
 
@@ -58,6 +60,51 @@ export function ChatWidget({
                   </div>
                   <div className={`bubble ${message.from}`}>
                     <div className="bubble-text">{message.text}</div>
+                    {message.from === 'assistant' && message.citations && message.citations.length > 0 && (
+                      <div className="bubble-support">
+                        <p className="bubble-support-label">Sources</p>
+                        <div className="bubble-citation-list">
+                          {message.citations.map((citation, citationIndex) => (
+                            <button
+                              key={`${citation.path}-${citation.title}-${citationIndex}`}
+                              className="bubble-citation"
+                              type="button"
+                              onClick={() => {
+                                onNavigate(citation.path)
+                                onToggle()
+                              }}
+                            >
+                              <span className="bubble-citation-title">{citation.title}</span>
+                              <span className="bubble-citation-meta">
+                                {citation.section} · {citation.path}
+                              </span>
+                              {citation.excerpt ? <span className="bubble-citation-excerpt">{citation.excerpt}</span> : null}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    {message.from === 'assistant' && message.suggestedPaths && message.suggestedPaths.length > 0 && (
+                      <div className="bubble-support">
+                        <p className="bubble-support-label">Pages utiles</p>
+                        <div className="bubble-suggestion-list">
+                          {message.suggestedPaths.map((suggestion, suggestionIndex) => (
+                            <button
+                              key={`${suggestion.path}-${suggestion.label}-${suggestionIndex}`}
+                              className="bubble-suggestion"
+                              type="button"
+                              onClick={() => {
+                                onNavigate(suggestion.path)
+                                onToggle()
+                              }}
+                            >
+                              <span className="bubble-suggestion-label">{suggestion.label}</span>
+                              {suggestion.reason ? <span className="bubble-suggestion-reason">{suggestion.reason}</span> : null}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}

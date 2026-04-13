@@ -9,7 +9,7 @@ import { buildAnalyticsContext, initializeAnalytics, sendAnalyticsEvent } from '
 import { fetchAndRenderMarkdown, printHtmlContent } from './utils/printCv'
 import { ChatWidget } from './components/ChatWidget'
 import { contact, timelineItems, projects, skills, cannedAnswers } from './data/content'
-import type { ChatMessage, TimelineItem } from './types'
+import type { ChatCitation, ChatMessage, ChatSuggestedPath, TimelineItem } from './types'
 
 type Theme = 'dark' | 'light'
 
@@ -43,7 +43,14 @@ const CHAT_STORAGE_KEY = 'quentinbot:messages'
 const THEME_STORAGE_KEY = 'portfolio:theme'
 
 const defaultMessages: ChatMessage[] = [
-  { from: 'assistant', text: 'Salut, je suis QuentinBot. Je peux presenter le parcours, les competences et les experiences de Quentin.' },
+  {
+    from: 'assistant',
+    text: "Salut, je suis QuentinBot. Je peux t'aider a comprendre le parcours de Quentin, ses competences, les pages du site et te rediriger vers les sections utiles.",
+    suggestedPaths: [
+      { label: 'Voir la page Carriere', path: '/work', reason: 'pour consulter la chronologie, les experiences et les competences' },
+      { label: 'Voir la page CV', path: '/cv', reason: 'pour lire et telecharger le CV' },
+    ],
+  },
 ]
 
 const MONTH_LABELS = ['Janv.', 'Fevr.', 'Mars', 'Avr.', 'Mai', 'Juin', 'Juil.', 'Aout', 'Sept.', 'Oct.', 'Nov.', 'Dec.']
@@ -239,7 +246,11 @@ function App() {
     return "Je note ta question. L'API distante n'est pas branchee ici, mais je peux te parler du parcours, des competences et des experiences de Quentin."
   }
 
-  const streamAnswer = (answer: string, analyticsContext: Record<string, unknown>) => {
+  const streamAnswer = (
+    answer: string,
+    analyticsContext: Record<string, unknown>,
+    metadata?: { citations?: ChatCitation[]; suggestedPaths?: ChatSuggestedPath[] },
+  ) => {
     if (typingRef.current) {
       window.clearInterval(typingRef.current)
     }
@@ -261,7 +272,15 @@ function App() {
           ...analyticsContext,
           answerLength: answer.length,
         })
-        setMessages((prev) => [...prev, { from: 'assistant', text: answer }])
+        setMessages((prev) => [
+          ...prev,
+          {
+            from: 'assistant',
+            text: answer,
+            citations: metadata?.citations,
+            suggestedPaths: metadata?.suggestedPaths,
+          },
+        ])
       }
     }, 12)
   }
@@ -287,7 +306,12 @@ function App() {
   const fetchAiAnswer = async (
     question: string,
     analyticsContext: Record<string, unknown>,
-  ): Promise<{ answer: string; usage: { promptTokens: number | null; completionTokens: number | null; totalTokens: number | null } | null }> => {
+  ): Promise<{
+    answer: string
+    citations?: ChatCitation[]
+    suggestedPaths?: ChatSuggestedPath[]
+    usage: { promptTokens: number | null; completionTokens: number | null; totalTokens: number | null } | null
+  }> => {
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
@@ -300,6 +324,8 @@ function App() {
         console.error('Chat API error', errText)
         return {
           answer: 'Le service IA ne repond pas. Reessaie plus tard.',
+          citations: [],
+          suggestedPaths: [],
           usage: null,
         }
       }
@@ -309,18 +335,24 @@ function App() {
       if (!content) {
         return {
           answer: 'Pas de reponse recue. Reessaie plus tard.',
+          citations: [],
+          suggestedPaths: [],
           usage: null,
         }
       }
 
       return {
         answer: content.trim(),
+        citations: Array.isArray(data?.citations) ? data.citations : [],
+        suggestedPaths: Array.isArray(data?.suggestedPaths) ? data.suggestedPaths : [],
         usage: data?.usage || null,
       }
     } catch (error) {
       console.error('Chat API request failed', error)
       return {
         answer: "Une erreur est survenue avec l'IA. Reessaie plus tard.",
+        citations: [],
+        suggestedPaths: [],
         usage: null,
       }
     }
@@ -344,7 +376,10 @@ function App() {
 
     fetchAiAnswer(value, analyticsContext).then((response) => {
       const finalAnswer = response.answer || pickAnswer(value)
-      streamAnswer(finalAnswer, analyticsContext)
+      streamAnswer(finalAnswer, analyticsContext, {
+        citations: response.citations,
+        suggestedPaths: response.suggestedPaths,
+      })
     })
   }
 
@@ -408,6 +443,7 @@ function App() {
         input={input}
         onInputChange={setInput}
         onSubmit={handleSubmit}
+        onNavigate={navTo}
         onToggle={() =>
           setChatOpen((current) => {
             const next = !current

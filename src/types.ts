@@ -1,6 +1,21 @@
 export type ChatMessage = {
   from: 'user' | 'assistant'
   text: string
+  citations?: ChatCitation[]
+  suggestedPaths?: ChatSuggestedPath[]
+}
+
+export type ChatCitation = {
+  title: string
+  path: string
+  section: string
+  excerpt: string
+}
+
+export type ChatSuggestedPath = {
+  label: string
+  path: string
+  reason: string
 }
 
 export type Skill = {

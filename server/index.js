@@ -2,6 +2,7 @@ import crypto from 'crypto'
 import express from 'express'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { buildKnowledgeContext, retrieveKnowledge } from './siteKnowledge.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -96,6 +97,94 @@ function logStructuredEvent(type, payload, req) {
   console.log(JSON.stringify(entry))
 }
 
+function parseJsonResponse(value) {
+  if (!value || typeof value !== 'string') return null
+
+  try {
+    return JSON.parse(value)
+  } catch {
+    const match = value.match(/\{[\s\S]*\}/)
+    if (!match) return null
+
+    try {
+      return JSON.parse(match[0])
+    } catch {
+      return null
+    }
+  }
+}
+
+function extractJsonStringField(source, fieldName) {
+  if (!source || typeof source !== 'string') return null
+
+  const fieldIndex = source.indexOf(`"${fieldName}"`)
+  if (fieldIndex === -1) return null
+
+  const colonIndex = source.indexOf(':', fieldIndex)
+  if (colonIndex === -1) return null
+
+  const firstQuoteIndex = source.indexOf('"', colonIndex)
+  if (firstQuoteIndex === -1) return null
+
+  let escaped = false
+  let result = ''
+  for (let index = firstQuoteIndex + 1; index < source.length; index += 1) {
+    const char = source[index]
+
+    if (escaped) {
+      result += `\\${char}`
+      escaped = false
+      continue
+    }
+
+    if (char === '\\') {
+      escaped = true
+      continue
+    }
+
+    if (char === '"') {
+      try {
+        return JSON.parse(`"${result}"`)
+      } catch {
+        return result
+      }
+    }
+
+    result += char
+  }
+
+  return null
+}
+
+function sanitizeCitations(citations) {
+  if (!Array.isArray(citations)) return []
+
+  return citations
+    .filter((citation) => citation && typeof citation === 'object')
+    .map((citation) => ({
+      title: typeof citation.title === 'string' ? citation.title.trim() : '',
+      path: typeof citation.path === 'string' ? citation.path.trim() : '',
+      section: typeof citation.section === 'string' ? citation.section.trim() : '',
+      excerpt: typeof citation.excerpt === 'string' ? citation.excerpt.trim() : '',
+    }))
+    .filter((citation) => citation.title && citation.path)
+    .slice(0, 3)
+}
+
+function sanitizeSuggestedPaths(suggestedPaths) {
+  if (!Array.isArray(suggestedPaths)) return []
+
+  return suggestedPaths
+    .filter((item) => item && typeof item === 'object')
+    .map((item) => ({
+      label: typeof item.label === 'string' ? item.label.trim() : '',
+      path: typeof item.path === 'string' ? item.path.trim() : '',
+      reason: typeof item.reason === 'string' ? item.reason.trim() : '',
+    }))
+    .filter((item) => item.label && item.path.startsWith('/'))
+    .slice(0, 3)
+}
+
 app.get('/api/profile', (req, res) => {
   res.json({
     currentAge: getCurrentAge(PROFILE_BIRTHDATE),
@@ -113,6 +202,8 @@ app.post('/api/chat', async (req, res) => {
   }
 
   const analyticsPayload = analytics && typeof analytics === 'object' ? analytics : {}
+  const knowledgeEntries = retrieveKnowledge(message, 6)
+  const knowledgeContext = buildKnowledgeContext(knowledgeEntries)
 
   logStructuredEvent(
     'chat_user_message',
@@ -129,12 +220,42 @@ app.post('/api/chat', async (req, res) => {
     messages: [
       {
         role: 'system',
-        content: CHATBOT_SYSTEM_PROMPT,
+        content: `${CHATBOT_SYSTEM_PROMPT}
+
+Tu aides les visiteurs a comprendre le profil de Quentin Bouchot et a se reperer dans le site.
+Tu dois repondre en francais, de facon concrete, concise et fiable.
+Tu dois t'appuyer uniquement sur les informations fournies dans le contexte du site. Si une information n'est pas presente, dis-le clairement.
+Quand c'est utile, propose une redirection vers une page du site.
+Quand tu affirmes un fait, cite la page ou la section d'ou il provient.
+Reponds STRICTEMENT en JSON valide avec cette structure :
+{
+  "answer": "reponse pour l'utilisateur",
+  "citations": [
+    {
+      "title": "titre de la source",
+      "path": "/work",
+      "section": "Experience",
+      "excerpt": "court extrait ou reformulation tres proche"
+    }
+  ],
+  "suggestedPaths": [
+    {
+      "label": "Voir la page Carriere",
+      "path": "/work",
+      "reason": "pour voir la chronologie et les experiences detaillees"
+    }
+  ]
+}`,
+      },
+      {
+        role: 'system',
+        content: `Contexte du site:\n${knowledgeContext}`,
       },
       { role: 'user', content: message },
     ],
-    max_tokens: 256,
-    temperature: 0.5,
+    max_tokens: 420,
+    temperature: 0.2,
+    response_format: { type: 'json_object' },
   }
 
   const startedAt = Date.now()
@@ -174,6 +295,17 @@ app.post('/api/chat', async (req, res) => {
       return res.status(500).json({ error: 'Pas de reponse recue.' })
     }
 
+    const parsed = parseJsonResponse(content)
+    const extractedAnswer = extractJsonStringField(content, 'answer')
+    const answer =
+      parsed && typeof parsed.answer === 'string' && parsed.answer.trim()
+        ? parsed.answer.trim()
+        : typeof extractedAnswer === 'string' && extractedAnswer.trim()
+          ? extractedAnswer.trim()
+          : content.trim()
+    const citations = sanitizeCitations(parsed?.citations)
+    const suggestedPaths = sanitizeSuggestedPaths(parsed?.suggestedPaths)
+
     const usage = data?.usage || {}
 
     logStructuredEvent(
@@ -182,7 +314,9 @@ app.post('/api/chat', async (req, res) => {
         ...analyticsPayload,
         model: OPENAI_MODEL,
         message,
-        answer: content.trim(),
+        answer,
+        citations,
+        suggestedPaths,
         promptTokens: typeof usage.prompt_tokens === 'number' ? usage.prompt_tokens : null,
         completionTokens: typeof usage.completion_tokens === 'number' ? usage.completion_tokens : null,
         totalTokens: typeof usage.total_tokens === 'number' ? usage.total_tokens : null,
@@ -192,7 +326,9 @@ app.post('/api/chat', async (req, res) => {
     )
 
     res.json({
-      answer: content.trim(),
+      answer,
+      citations,
+      suggestedPaths,
       usage: {
         promptTokens: typeof usage.prompt_tokens === 'number' ? usage.prompt_tokens : null,
         completionTokens: typeof usage.completion_tokens === 'number' ? usage.completion_tokens : null,
