@@ -40,6 +40,7 @@ const overviewProofs = [
 ]
 
 const CHAT_STORAGE_KEY = 'quentinbot:messages'
+const THEME_STORAGE_KEY = 'portfolio:theme'
 
 const defaultMessages: ChatMessage[] = [
   { from: 'assistant', text: 'Salut, je suis QuentinBot. Je peux presenter le parcours, les competences et les experiences de Quentin.' },
@@ -108,6 +109,25 @@ function readStoredMessages(): ChatMessage[] {
   }
 }
 
+function getSystemTheme(): Theme {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+    return 'dark'
+  }
+
+  return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+}
+
+function readThemePreference(): Theme | null {
+  if (typeof window === 'undefined') return null
+
+  const stored = window.localStorage.getItem(THEME_STORAGE_KEY)
+  return stored === 'light' || stored === 'dark' ? stored : null
+}
+
+function getInitialTheme(): Theme {
+  return readThemePreference() ?? getSystemTheme()
+}
+
 function App() {
   const cvPdfUrl = import.meta.env.VITE_CV_PDF_URL || '/cv.pdf'
   const cvMarkdownUrl =
@@ -123,7 +143,7 @@ function App() {
   const [isTyping, setIsTyping] = useState(false)
   const [chatOpen, setChatOpen] = useState(false)
   const [currentAge, setCurrentAge] = useState<number | null>(null)
-  const [theme, setTheme] = useState<Theme>('dark')
+  const [theme, setTheme] = useState<Theme>(() => getInitialTheme())
   const typingRef = useRef<number | null>(null)
   const navigate = useNavigate()
   const location = useLocation()
@@ -178,7 +198,29 @@ function App() {
 
   useEffect(() => {
     document.body.classList.toggle('light', theme === 'light')
+    document.documentElement.style.colorScheme = theme
   }, [theme])
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+      return
+    }
+
+    if (readThemePreference()) {
+      return
+    }
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: light)')
+    const handleChange = (event: MediaQueryListEvent) => {
+      setTheme(event.matches ? 'light' : 'dark')
+    }
+
+    mediaQuery.addEventListener('change', handleChange)
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleChange)
+    }
+  }, [])
 
   useEffect(() => {
     window.localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(messages))
@@ -311,6 +353,7 @@ function App() {
     onToggleTheme: () =>
       setTheme((current) => {
         const next = current === 'dark' ? 'light' : 'dark'
+        window.localStorage.setItem(THEME_STORAGE_KEY, next)
         sendAnalyticsEvent('theme_toggled', {
           ...buildAnalyticsContext(location.pathname, next),
           theme: next,
