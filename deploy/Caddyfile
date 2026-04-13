@@ -16,13 +16,18 @@
 		X-Frame-Options "SAMEORIGIN"
 	}
 
-	@umami_script path /stats.js
-	reverse_proxy @umami_script umami:3000
+	handle /stats.js {
+		uri replace /stats.js /script.js
+		reverse_proxy umami:3000
+	}
 
-	@umami_collect path /api/send
-	reverse_proxy @umami_collect umami:3000
+	handle /api/send* {
+		reverse_proxy umami:3000
+	}
 
-	reverse_proxy portfolio:80
+	handle {
+		reverse_proxy portfolio:80
+	}
 }
 
 {$UMAMI_DOMAIN} {
