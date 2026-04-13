@@ -734,10 +734,10 @@ function CvPage({
         <div className="glass-panel cv-hero">
           <div>
             <span className="section-kicker">CV</span>
-            <h1>Version document, structuree et exploitable.</h1>
+            <h1>Mon CV, consultable ici et synchronise avec GitHub.</h1>
             <p className="hero-copy">
-              Une lecture plus dense et plus documentaire du meme profil, avec le meme niveau d'exigence sur la clarte et
-              la hierarchie.
+              Cette page presente une version lisible de mon CV. Le contenu est synchronise avec mon profil GitHub, et
+              tu peux aussi le telecharger directement depuis cette page.
             </p>
           </div>
           <div className="cv-meta">

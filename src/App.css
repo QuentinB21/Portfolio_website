@@ -1228,6 +1228,10 @@ body.light .chat-messages::-webkit-scrollbar-thumb:hover {
     font-size: 2.35rem;
   }
 
+  .cv-meta {
+    display: none;
+  }
+
   .hero-actions,
   .cv-meta,
   .project-feature-head,
