@@ -1,0 +1,46 @@
+{
+	email {$ACME_EMAIL}
+}
+
+{$WWW_DOMAIN} {
+	redir https://{$PRIMARY_DOMAIN}{uri} permanent
+}
+
+{$PRIMARY_DOMAIN} {
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		X-Frame-Options "SAMEORIGIN"
+	}
+
+	reverse_proxy portfolio:80
+}
+
+{$UMAMI_DOMAIN} {
+	encode zstd gzip
+
+	header {
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+	}
+
+	reverse_proxy umami:3000
+}
+
+{$GRAFANA_DOMAIN} {
+	encode zstd gzip
+
+	basicauth {
+		{$GRAFANA_BASIC_AUTH_USER} {$GRAFANA_BASIC_AUTH_HASH}
+	}
+
+	header {
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+	}
+
+	reverse_proxy grafana:3000
+}

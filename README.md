@@ -31,6 +31,20 @@ Services exposes :
 - Grafana : `http://127.0.0.1:3002`
 - Loki : `http://127.0.0.1:3100`
 
+## Production
+Production files are prepared for a single VPS deployment with Caddy:
+- `docker-compose.prod.yml`
+- `deploy/Caddyfile`
+- `.env.prod.example`
+- `.github/workflows/deploy-production.yml`
+- `docs/production.md`
+
+Expected domains:
+- `quentin-bouchot.fr`
+- `www.quentin-bouchot.fr`
+- `analytics.quentin-bouchot.fr`
+- `grafana.quentin-bouchot.fr`
+
 ## Structure
 - `src/App.tsx` : pages principales et logique front
 - `src/data/content.tsx` : contenu editorial du portfolio
