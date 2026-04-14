@@ -19,23 +19,23 @@ type NavItem = {
 }
 
 const navItems: NavItem[] = [
-  { label: 'Overview', path: '/' },
-  { label: 'Carriere', path: '/work' },
+  { label: 'Présentation', path: '/' },
+  { label: 'Carrière', path: '/work' },
   { label: 'CV', path: '/cv' },
 ]
 
 const overviewProofs = [
   {
-    title: 'Qualite logicielle',
-    body: 'Tests, maintenance et reduction des regressions structurent ma maniere de faire evoluer des applications reelles.',
+    title: 'Qualité logiciel',
+    body: 'Tests, maintenance et réduction des régressions structurent ma manière de faire évoluer des applications réelles.',
   },
   {
     title: 'Vision produit',
-    body: "Je concois des applications utiles, lisibles et robustes, avec une vraie attention portee a l'experience utilisateur.",
+    body: "Je concois des applications utiles, lisibles et robustes, avec une vraie attention portée à l'experience utilisateur.",
   },
   {
     title: 'Industrialisation progressive',
-    body: 'CI/CD, qualite logicielle et testabilite ne sont pas accessoires : ils servent a faire grandir un produit proprement.',
+    body: 'CI/CD, qualité logiciel et testabilité ne sont pas accessoires : ils servent a faire grandir un produit proprement.',
   },
 ]
 
@@ -45,10 +45,10 @@ const THEME_STORAGE_KEY = 'portfolio:theme'
 const defaultMessages: ChatMessage[] = [
   {
     from: 'assistant',
-    text: "Salut, je suis QuentinBot. Je peux t'aider a comprendre le parcours de Quentin, ses competences, les pages du site et te rediriger vers les sections utiles.",
+    text: "Salut, je suis QuentinBot. Je peux t'aider a comprendre le parcours de Quentin, ses compétences, les pages du site et te rediriger vers les sections utiles.",
     suggestedPaths: [
-      { label: 'Voir la page Carriere', path: '/work', reason: 'pour consulter la chronologie, les experiences et les competences' },
-      { label: 'Voir la page CV', path: '/cv', reason: 'pour lire et telecharger le CV' },
+      { label: 'Voir la page Carrière', path: '/work', reason: 'pour consulter la chronologie, les experiences et les compétences' },
+      { label: 'Voir la page CV', path: '/cv', reason: 'pour lire et télécharger le CV' },
     ],
   },
 ]
@@ -170,7 +170,7 @@ function App() {
         const { html } = await fetchAndRenderMarkdown(cvMarkdownUrl)
         setCvHtml(html)
       } catch {
-        setCvError("Le CV n'a pas pu etre charge depuis GitHub.")
+        setCvError("Le CV n'a pas pu etre chargé depuis GitHub.")
       } finally {
         setCvLoading(false)
       }
@@ -243,7 +243,7 @@ function App() {
     const normalized = question.toLowerCase()
     const found = cannedAnswers.find((entry) => entry.keywords.some((keyword) => normalized.includes(keyword)))
     if (found) return found.answer
-    return "Je note ta question. L'API distante n'est pas branchee ici, mais je peux te parler du parcours, des competences et des experiences de Quentin."
+    return "Je note ta question. L'API distante n'est pas branchée ici, mais je peux te parler du parcours, des competences et des experiences de Quentin."
   }
 
   const streamAnswer = (
@@ -323,7 +323,7 @@ function App() {
         const errText = await res.text()
         console.error('Chat API error', errText)
         return {
-          answer: 'Le service IA ne repond pas. Reessaie plus tard.',
+          answer: 'Le service IA ne repond pas. Réessaie plus tard.',
           citations: [],
           suggestedPaths: [],
           usage: null,
@@ -334,7 +334,7 @@ function App() {
       const content = data?.answer
       if (!content) {
         return {
-          answer: 'Pas de reponse recue. Reessaie plus tard.',
+          answer: 'Pas de reponse recue. Réessaie plus tard.',
           citations: [],
           suggestedPaths: [],
           usage: null,
@@ -350,7 +350,7 @@ function App() {
     } catch (error) {
       console.error('Chat API request failed', error)
       return {
-        answer: "Une erreur est survenue avec l'IA. Reessaie plus tard.",
+        answer: "Une erreur est survenue avec l'IA. Réessaie plus tard.",
         citations: [],
         suggestedPaths: [],
         usage: null,
@@ -407,7 +407,7 @@ function App() {
     location.pathname === '/cv' ? (
       <button className="primary-button" onClick={() => void handleDownloadCv()} type="button">
         <LuDownload size={16} />
-        <span className="cta-label">Telecharger le PDF</span>
+        <span className="cta-label">Télécharger le PDF</span>
       </button>
     ) : undefined
 
@@ -538,17 +538,17 @@ function OverviewPage({
       <section className="hero-layout">
         <article className="glass-panel hero-panel">
           <span className="eyebrow-pill">
-            <LuSparkles size={14} /> Eleve ingenieur · logiciel, data & IA
+            <LuSparkles size={14} /> Elève ingenieur · logiciel, data & IA
           </span>
-          <h1>Ingenierie logicielle orientee produit, qualite et robustesse.</h1>
+          <h1>Ingenierie logiciel orientée produit, qualité et robustesse.</h1>
           <p className="hero-copy">
-            Eleve ingenieur en informatique et reseaux a CPE Lyon, je developpe aujourd'hui des outils de diagnostic
-            chez Renault Trucks. Mon approche met l'accent sur la maintenabilite du code, la fiabilite des applications,
-            l'experience utilisateur et l'industrialisation logicielle.
+            Elève ingenieur en informatique et réseaux a CPE Lyon, je developpe aujourd'hui des outils de diagnostic
+            chez Renault Trucks. Mon approche met l'accent sur la maintenabilité du code, la fiabilité des applications,
+            l'experience utilisateur et l'industrialisation logiciel.
           </p>
           <div className="hero-actions">
             <button className="primary-button" onClick={() => onNavigate('/work')} type="button">
-              Voir la carriere <FiArrowRight size={16} />
+              Voir la carrière <FiArrowRight size={16} />
             </button>
             <button className="secondary-button" onClick={() => onNavigate('/cv')} type="button">
               Consulter le CV
@@ -568,11 +568,11 @@ function OverviewPage({
             <span className="section-kicker">Profil</span>
             <h2>{currentAge !== null ? <>Quentin Bouchot <span className="inline-muted">· {currentAge} ans</span></> : 'Quentin Bouchot'}</h2>
             <p>
-              Eleve ingenieur en informatique et reseaux a CPE Lyon, specialise en developpement logiciel, data et IA.
+              Eleve ingenieur en informatique et reseaux a CPE Lyon, specialisé en developpement logiciel, data et IA.
             </p>
             <div className="story-list">
               <StoryItem label="Role actuel" value="Software Engineer Apprentice chez Renault Trucks" />
-              <StoryItem label="Positionnement" value="Produit, qualite logicielle, robustesse" />
+              <StoryItem label="Positionnement" value="Produit, qualité logiciel, robustesse" />
               <StoryItem label="Localisation" value="Lyon, France" />
             </div>
           </article>
@@ -582,7 +582,7 @@ function OverviewPage({
       <section className="stacked-section">
         <SectionHeader
           title="Trois axes qui structurent mon profil"
-          subtitle="Une lecture rapide du positionnement avant d'entrer dans les experiences, les projets et les competences."
+          subtitle="Une lecture rapide du positionnement avant d'entrer dans les experiences, les projets et les compétences."
         />
         <div className="proof-grid">
           {overviewProofs.map((proof) => (
@@ -597,8 +597,8 @@ function OverviewPage({
       <section className="stacked-section split-section">
         <div className="split-main glass-panel">
           <SectionHeader
-            title="Apercu des experiences"
-            subtitle="L'accueil ne garde qu'un extrait. La page carriere detaille ensuite le parcours, la chronologie et les competences."
+            title="Aperçu des expériences"
+            subtitle="L'accueil ne garde qu'un extrait. La page carrière detaille ensuite le parcours, la chronologie et les compétences."
           />
           <div className="feature-list">
             {projects.map((project) => (
@@ -617,7 +617,7 @@ function OverviewPage({
       <section className="stacked-section">
         <SectionHeader
           title="Contact"
-          subtitle="Des points d'entree directs pour consulter mon profil, mes travaux et mes coordonnees."
+          subtitle="Des points d'entrée directs pour consulter mon profil, mes travaux et mes coordonnées."
         />
         <div className="contact-strip">
           {contact.map((item) => (
@@ -647,8 +647,8 @@ function WorkPage({ timelineEntries }: { timelineEntries: TimelineItem[] }) {
             <span className="section-kicker">Travaux & parcours</span>
             <h1>Un parcours chronologique centré sur des experiences concretes.</h1>
             <p className="hero-copy">
-              Cette page rassemble les experiences professionnelles, la formation et les competences techniques qui
-              structurent aujourd'hui mon profil d'ingenieur logiciel oriente produit et qualite.
+              Cette page rassemble les experiences professionnelles, la formation et les compétences techniques qui
+              structurent aujourd'hui mon profil d'ingénieur logiciel orienté produit et qualité.
             </p>
           </div>
           <div className="editorial-stats">
@@ -662,7 +662,7 @@ function WorkPage({ timelineEntries }: { timelineEntries: TimelineItem[] }) {
       <section className="stacked-section">
         <SectionHeader
           title="Experiences mises en avant"
-          subtitle="Deux contextes concrets qui montrent a la fois le developpement logiciel, l'ergonomie et les enjeux de qualite."
+          subtitle="Deux contextes concrets qui montrent à la fois le developpement logiciel, l'ergonomie et les enjeux de qualité."
         />
         <div className="project-stack">
           {projects.map((project) => (
@@ -693,7 +693,7 @@ function WorkPage({ timelineEntries }: { timelineEntries: TimelineItem[] }) {
         <div className="split-main glass-panel">
           <SectionHeader
             title="Chronologie"
-            subtitle="Une lecture simple du parcours, des experiences d'alternance jusqu'a la formation d'ingenieur."
+            subtitle="Une lecture simple du parcours, des experiences d'alternance jusqu'à la formation d'ingénieur."
           />
           <div className="timeline-list">
             {timelineEntries.map((item, index) => {
@@ -732,7 +732,7 @@ function WorkPage({ timelineEntries }: { timelineEntries: TimelineItem[] }) {
 
         <aside className="split-rail glass-panel">
           <SectionHeader
-            title="Competences"
+            title="Compétences"
             subtitle="Les outils et domaines que j'utilise aujourd'hui le plus dans un contexte logiciel professionnel."
           />
           <div className="skill-column">
@@ -770,10 +770,10 @@ function CvPage({
         <div className="glass-panel cv-hero">
           <div>
             <span className="section-kicker">CV</span>
-            <h1>Mon CV, consultable ici et synchronise avec GitHub.</h1>
+            <h1>Mon CV, consultable ici et synchronisé avec GitHub.</h1>
             <p className="hero-copy">
-              Cette page presente une version lisible de mon CV. Le contenu est synchronise avec mon profil GitHub, et
-              tu peux aussi le telecharger directement depuis cette page.
+              Cette page présente une version lisible de mon CV. Le contenu est synchronisé avec mon profil GitHub, et
+              peut aussi être téléchargé directement depuis cette page.
             </p>
           </div>
           <div className="cv-meta">
