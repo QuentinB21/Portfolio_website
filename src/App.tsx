@@ -538,7 +538,7 @@ function OverviewPage({
       <section className="hero-layout">
         <article className="glass-panel hero-panel">
           <span className="eyebrow-pill">
-            <LuSparkles size={14} /> Elève ingenieur · logiciel, data & IA
+            <LuSparkles size={14} /> Elève ingénieur · logiciel, data & IA
           </span>
           <h1>Ingénierie logiciel orientée produit, qualité et robustesse.</h1>
           <p className="hero-copy">
@@ -568,7 +568,7 @@ function OverviewPage({
             <span className="section-kicker">Profil</span>
             <h2>{currentAge !== null ? <>Quentin Bouchot <span className="inline-muted">· {currentAge} ans</span></> : 'Quentin Bouchot'}</h2>
             <p>
-              Elève ingénieur en informatique et réseaux à CPE Lyon, specialisé en développement logiciel, data et IA.
+              Elève ingénieur en informatique et réseaux à CPE Lyon, spécialisé en développement logiciel, data et IA.
             </p>
             <div className="story-list">
               <StoryItem label="Rôle actuel" value="Software Engineer Apprentice chez Renault Trucks" />
@@ -654,7 +654,7 @@ function WorkPage({ timelineEntries }: { timelineEntries: TimelineItem[] }) {
           <div className="editorial-stats">
             <StoryItem label="Poste actuel" value="Software Engineer Apprentice" />
             <StoryItem label="Entreprise" value="Renault Trucks (Volvo Group)" />
-            <StoryItem label="Experiences" value="Deux alternances en developpement logiciel" />
+            <StoryItem label="Expériences" value="Deux alternances en développement logiciel" />
           </div>
         </div>
       </section>
