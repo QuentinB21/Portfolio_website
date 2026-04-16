@@ -31,11 +31,11 @@ const overviewProofs = [
   },
   {
     title: 'Vision produit',
-    body: "Je concois des applications utiles, lisibles et robustes, avec une vraie attention portée à l'experience utilisateur.",
+    body: "Je conçois des applications utiles, lisibles et robustes, avec une vraie attention portée à l'expérience utilisateur.",
   },
   {
     title: 'Industrialisation progressive',
-    body: 'CI/CD, qualité logiciel et testabilité ne sont pas accessoires : ils servent a faire grandir un produit proprement.',
+    body: 'CI/CD, qualité logiciel et testabilité ne sont pas accessoires : ils servent à faire grandir un produit proprement.',
   },
 ]
 
@@ -540,11 +540,11 @@ function OverviewPage({
           <span className="eyebrow-pill">
             <LuSparkles size={14} /> Elève ingenieur · logiciel, data & IA
           </span>
-          <h1>Ingenierie logiciel orientée produit, qualité et robustesse.</h1>
+          <h1>Ingénierie logiciel orientée produit, qualité et robustesse.</h1>
           <p className="hero-copy">
-            Elève ingenieur en informatique et réseaux a CPE Lyon, je developpe aujourd'hui des outils de diagnostic
+            Elève ingénieur en informatique et réseaux à CPE Lyon, je développe aujourd'hui des outils de diagnostic
             chez Renault Trucks. Mon approche met l'accent sur la maintenabilité du code, la fiabilité des applications,
-            l'experience utilisateur et l'industrialisation logiciel.
+            l'expérience utilisateur et l'industrialisation logiciel.
           </p>
           <div className="hero-actions">
             <button className="primary-button" onClick={() => onNavigate('/work')} type="button">
@@ -568,10 +568,10 @@ function OverviewPage({
             <span className="section-kicker">Profil</span>
             <h2>{currentAge !== null ? <>Quentin Bouchot <span className="inline-muted">· {currentAge} ans</span></> : 'Quentin Bouchot'}</h2>
             <p>
-              Eleve ingenieur en informatique et reseaux a CPE Lyon, specialisé en developpement logiciel, data et IA.
+              Elève ingénieur en informatique et réseaux à CPE Lyon, specialisé en développement logiciel, data et IA.
             </p>
             <div className="story-list">
-              <StoryItem label="Role actuel" value="Software Engineer Apprentice chez Renault Trucks" />
+              <StoryItem label="Rôle actuel" value="Software Engineer Apprentice chez Renault Trucks" />
               <StoryItem label="Positionnement" value="Produit, qualité logiciel, robustesse" />
               <StoryItem label="Localisation" value="Lyon, France" />
             </div>
@@ -582,7 +582,7 @@ function OverviewPage({
       <section className="stacked-section">
         <SectionHeader
           title="Trois axes qui structurent mon profil"
-          subtitle="Une lecture rapide du positionnement avant d'entrer dans les experiences, les projets et les compétences."
+          subtitle="Une lecture rapide du positionnement avant d'entrer dans les expériences, les projets et les compétences."
         />
         <div className="proof-grid">
           {overviewProofs.map((proof) => (
@@ -598,7 +598,7 @@ function OverviewPage({
         <div className="split-main glass-panel">
           <SectionHeader
             title="Aperçu des expériences"
-            subtitle="L'accueil ne garde qu'un extrait. La page carrière detaille ensuite le parcours, la chronologie et les compétences."
+            subtitle="L'accueil ne garde qu'un extrait. La page carrière détaille ensuite le parcours, la chronologie et les compétences."
           />
           <div className="feature-list">
             {projects.map((project) => (
@@ -661,8 +661,8 @@ function WorkPage({ timelineEntries }: { timelineEntries: TimelineItem[] }) {
 
       <section className="stacked-section">
         <SectionHeader
-          title="Experiences mises en avant"
-          subtitle="Deux contextes concrets qui montrent à la fois le developpement logiciel, l'ergonomie et les enjeux de qualité."
+          title="Expériences mises en avant"
+          subtitle="Deux contextes concrets qui montrent à la fois le développement logiciel, l'ergonomie et les enjeux de qualité."
         />
         <div className="project-stack">
           {projects.map((project) => (

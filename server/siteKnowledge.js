@@ -6,7 +6,7 @@ export const siteKnowledge = [
     section: 'Profil',
     title: 'Profil de Quentin Bouchot',
     content:
-      "Quentin Bouchot est eleve ingenieur en informatique et reseaux a CPE Lyon, specialise en developpement logiciel, data et intelligence artificielle. Il se positionne comme un ingenieur logiciel oriente produit, qualite logicielle, robustesse et experience utilisateur.",
+      "Quentin Bouchot est élève ingénieur en informatique et réseaux à CPE Lyon, spécialisé en développement logiciel, data et intelligence artificielle. Il se positionne comme un ingénieur logiciel orienté produit, qualité logicielle, robustesse et expérience utilisateur.",
     keywords: ['profil', 'quentin', 'cpe', 'ingenieur', 'data', 'ia', 'positionnement'],
   },
   {
@@ -16,8 +16,8 @@ export const siteKnowledge = [
     section: 'Axes',
     title: 'Axes de travail',
     content:
-      "Les trois axes mis en avant sur la page d'accueil sont la qualite logicielle, la vision produit et l'industrialisation progressive. Le site insiste sur la maintenabilite, la fiabilite, l'experience utilisateur, les tests et le CI/CD.",
-    keywords: ['qualite', 'produit', 'industrialisation', 'tests', 'cicd', 'vision'],
+      "Les trois axes mis en avant sur la page d'accueil sont la qualité logicielle, la vision produit et l'industrialisation progressive. Le site insiste sur la maintenabilité, la fiabilité, l'expérience utilisateur, les tests et le CI/CD.",
+    keywords: ['qualité', 'produit', 'industrialisation', 'tests', 'cicd', 'vision'],
   },
   {
     id: 'work-renault',
@@ -36,7 +36,7 @@ export const siteKnowledge = [
     section: 'Experience',
     title: 'Developer Apprentice chez Biosystemes',
     content:
-      "De septembre 2023 a aout 2024, Quentin a ete Developer Apprentice chez Biosystemes. Il y a concu le frontend d'une application web en Vue.js pour generer des questionnaires sensoriels a partir de templates editables, avec un travail sur l'ergonomie et le Green IT.",
+      "De septembre 2023 à aout 2024, Quentin à été Developer Apprentice chez Biosystemes. Il y a conçu le frontend d'une application web en Vue.js from scratch pour générer des questionnaires sensoriels a partir de templates éditables, avec un travail sur l'ergonomie et le Green IT.",
     keywords: ['biosystemes', 'vue', 'questionnaires', 'frontend', 'green it', 'ergonomie'],
   },
   {
