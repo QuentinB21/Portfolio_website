@@ -645,9 +645,9 @@ function WorkPage({ timelineEntries }: { timelineEntries: TimelineItem[] }) {
         <div className="glass-panel editorial-hero">
           <div>
             <span className="section-kicker">Travaux & parcours</span>
-            <h1>Un parcours chronologique centré sur des experiences concretes.</h1>
+            <h1>Un parcours chronologique centré sur des expériences concretes.</h1>
             <p className="hero-copy">
-              Cette page rassemble les experiences professionnelles, la formation et les compétences techniques qui
+              Cette page rassemble les expériences professionnelles, la formation et les compétences techniques qui
               structurent aujourd'hui mon profil d'ingénieur logiciel orienté produit et qualité.
             </p>
           </div>
