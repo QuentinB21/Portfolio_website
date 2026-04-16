@@ -1,8 +1,22 @@
+import type { ReactNode } from 'react'
+
 export type ChatMessage = {
   from: 'user' | 'assistant'
   text: string
   citations?: ChatCitation[]
   suggestedPaths?: ChatSuggestedPath[]
+}
+
+export type Theme = 'dark' | 'light'
+
+export type NavItem = {
+  label: string
+  path: string
+}
+
+export type ProofItem = {
+  title: string
+  body: string
 }
 
 export type ChatCitation = {
@@ -50,4 +64,3 @@ export type CannedAnswer = {
   keywords: string[]
   answer: string
 }
-import type { ReactNode } from 'react'
