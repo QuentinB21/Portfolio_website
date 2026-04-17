@@ -291,6 +291,61 @@
       "fieldConfig": {
         "defaults": {
           "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "yellow",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 0
+      },
+      "id": 10,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "11.1.0",
+      "targets": [
+        {
+          "datasource": "Loki",
+          "editorMode": "code",
+          "expr": "sum(count_over_time({stack=\"portfolio\",compose_service=\"portfolio\"} | json | type=\"chat_completion\" | payload_isRefusal=true [$__range]))",
+          "legendFormat": "",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Reponses de refus",
+      "type": "stat"
+    },
+    {
+      "datasource": "Loki",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
             "mode": "palette-classic"
           },
           "custom": {
@@ -507,12 +562,12 @@
         {
           "datasource": "Loki",
           "editorMode": "code",
-          "expr": "{stack=\"portfolio\",compose_service=\"portfolio\"} | json | type=~\"chat_user_message|chat_completion\"",
+          "expr": "{stack=\"portfolio\",compose_service=\"portfolio\"} | json | type=\"chat_conversation_closed\"",
           "queryType": "range",
           "refId": "A"
         }
       ],
-      "title": "Conversations récentes",
+      "title": "Conversations consolidees",
       "type": "logs"
     }
   ],

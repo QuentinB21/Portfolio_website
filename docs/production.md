@@ -65,6 +65,7 @@ Important values:
 - `ACME_EMAIL=<your-email>`
 - `GRAFANA_BASIC_AUTH_HASH=<bcrypt hash generated above>`
 - `VITE_UMAMI_SCRIPT_URL=https://quentin-bouchot.fr/stats.js`
+- `CHAT_CONVERSATION_IDLE_MS=90000` to consolidate chatbot activity into one conversation event after 90 seconds of inactivity
 
 ## First deployment
 ```bash
@@ -121,3 +122,19 @@ docker compose --env-file .env.prod -f docker-compose.prod.yml logs -f umami
 ```
 
 Loki production retention is set to 14 days in `observability/loki-config.prod.yml`.
+
+## Chatbot monitoring
+The backend emits these structured chatbot events to Loki:
+- `chat_user_message`
+- `chat_completion`
+- `chat_completion_error`
+- `chat_conversation_closed`
+
+`chat_completion` includes `payload_isRefusal=true` when the assistant answers with `Je ne peux pas fournir cette information.`.
+
+`chat_conversation_closed` is emitted only after a period of inactivity. It is the best signal to drive mobile alerts, because it consolidates a conversation instead of notifying once per message.
+
+Recommended alerting setup in Grafana:
+- use a Telegram or Discord contact point for mobile notifications
+- create the alert from `chat_conversation_closed`, not from `chat_user_message`
+- set a notification policy with grouping enabled so one conversation stays one alert

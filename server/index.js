@@ -18,6 +18,10 @@ const CHATBOT_SYSTEM_PROMPT =
   "Tu es l'assistant du portfolio de Quentin Bouchot. Reponds en francais, de facon concise et utile."
 const PROFILE_BIRTHDATE = process.env.PROFILE_BIRTHDATE
 const MONITORING_IP_HASH_SALT = process.env.MONITORING_IP_HASH_SALT || 'portfolio-monitoring'
+const CHAT_CONVERSATION_IDLE_MS = Number(process.env.CHAT_CONVERSATION_IDLE_MS || 90000)
+
+const REFUSAL_MESSAGE = 'Je ne peux pas fournir cette information.'
+const conversationStore = new Map()
 
 app.use(express.json({ limit: '1mb' }))
 
@@ -87,14 +91,156 @@ function getRequestContext(req) {
 }
 
 function logStructuredEvent(type, payload, req) {
+  logStructuredEventWithContext(type, payload, getRequestContext(req))
+}
+
+function logStructuredEventWithContext(type, payload, requestContext) {
   const entry = {
     ts: new Date().toISOString(),
     type,
     payload,
-    request: getRequestContext(req),
+    request: requestContext,
   }
 
   console.log(JSON.stringify(entry))
+}
+
+function truncateForLog(value, maxLength = 320) {
+  if (typeof value !== 'string') return ''
+  return value.length > maxLength ? `${value.slice(0, maxLength - 1)}…` : value
+}
+
+function isRefusalAnswer(answer) {
+  return typeof answer === 'string' && answer.includes(REFUSAL_MESSAGE)
+}
+
+function getConversationKey(requestContext, analyticsPayload) {
+  return analyticsPayload.sessionId || analyticsPayload.visitorId || requestContext.ipHash || null
+}
+
+function upsertConversationEntry(requestContext, analyticsPayload) {
+  const conversationKey = getConversationKey(requestContext, analyticsPayload)
+  if (!conversationKey) return null
+
+  const now = Date.now()
+  const existing = conversationStore.get(conversationKey)
+  if (existing) {
+    existing.lastActivityAt = now
+    existing.requestContext = requestContext
+    existing.sessionId = analyticsPayload.sessionId || existing.sessionId
+    existing.visitorId = analyticsPayload.visitorId || existing.visitorId
+    existing.path = analyticsPayload.path || existing.path
+    return { conversationKey, conversation: existing }
+  }
+
+  const created = {
+    conversationKey,
+    sessionId: analyticsPayload.sessionId || null,
+    visitorId: analyticsPayload.visitorId || null,
+    path: analyticsPayload.path || null,
+    startedAt: now,
+    lastActivityAt: now,
+    requestContext,
+    userMessages: [],
+    assistantMessages: [],
+    citedPaths: [],
+    suggestedPaths: [],
+    refusalCount: 0,
+    timer: null,
+  }
+
+  conversationStore.set(conversationKey, created)
+  return { conversationKey, conversation: created }
+}
+
+function resetConversationTimer(conversationKey) {
+  const conversation = conversationStore.get(conversationKey)
+  if (!conversation) return
+
+  if (conversation.timer) {
+    clearTimeout(conversation.timer)
+  }
+
+  conversation.timer = setTimeout(() => {
+    flushConversation(conversationKey)
+  }, CHAT_CONVERSATION_IDLE_MS)
+}
+
+function flushConversation(conversationKey) {
+  const conversation = conversationStore.get(conversationKey)
+  if (!conversation) return
+
+  if (conversation.timer) {
+    clearTimeout(conversation.timer)
+  }
+
+  const uniqueCitedPaths = [...new Set(conversation.citedPaths)]
+  const uniqueSuggestedPaths = [...new Set(conversation.suggestedPaths)]
+  const transcript = []
+
+  const maxTurns = Math.max(conversation.userMessages.length, conversation.assistantMessages.length)
+  for (let index = 0; index < maxTurns; index += 1) {
+    const userMessage = conversation.userMessages[index]
+    const assistantMessage = conversation.assistantMessages[index]
+
+    if (userMessage) {
+      transcript.push({
+        from: 'user',
+        text: truncateForLog(userMessage),
+      })
+    }
+
+    if (assistantMessage) {
+      transcript.push({
+        from: 'assistant',
+        text: truncateForLog(assistantMessage),
+      })
+    }
+  }
+
+  logStructuredEventWithContext(
+    'chat_conversation_closed',
+    {
+      sessionId: conversation.sessionId,
+      visitorId: conversation.visitorId,
+      path: conversation.path,
+      userMessageCount: conversation.userMessages.length,
+      assistantMessageCount: conversation.assistantMessages.length,
+      refusalCount: conversation.refusalCount,
+      containsRefusal: conversation.refusalCount > 0,
+      firstUserMessage: conversation.userMessages[0] ? truncateForLog(conversation.userMessages[0]) : null,
+      lastUserMessage: conversation.userMessages.at(-1) ? truncateForLog(conversation.userMessages.at(-1)) : null,
+      lastAssistantAnswer: conversation.assistantMessages.at(-1)
+        ? truncateForLog(conversation.assistantMessages.at(-1))
+        : null,
+      citedPaths: uniqueCitedPaths,
+      suggestedPaths: uniqueSuggestedPaths,
+      durationMs: conversation.lastActivityAt - conversation.startedAt,
+      transcript,
+    },
+    conversation.requestContext,
+  )
+
+  conversationStore.delete(conversationKey)
+}
+
+function trackConversationUserMessage(requestContext, analyticsPayload, message) {
+  const entry = upsertConversationEntry(requestContext, analyticsPayload)
+  if (!entry) return
+
+  entry.conversation.userMessages.push(message)
+  resetConversationTimer(entry.conversationKey)
+}
+
+function trackConversationAssistantMessage(requestContext, analyticsPayload, answer, citations, suggestedPaths) {
+  const entry = upsertConversationEntry(requestContext, analyticsPayload)
+  if (!entry) return
+
+  entry.conversation.assistantMessages.push(answer)
+  entry.conversation.refusalCount += isRefusalAnswer(answer) ? 1 : 0
+  entry.conversation.citedPaths.push(...citations.map((citation) => citation.path).filter(Boolean))
+  entry.conversation.suggestedPaths.push(...suggestedPaths.map((item) => item.path).filter(Boolean))
+  resetConversationTimer(entry.conversationKey)
 }
 
 function parseJsonResponse(value) {
@@ -204,16 +350,18 @@ app.post('/api/chat', async (req, res) => {
   const analyticsPayload = analytics && typeof analytics === 'object' ? analytics : {}
   const knowledgeEntries = retrieveKnowledge(message, 6)
   const knowledgeContext = buildKnowledgeContext(knowledgeEntries)
+  const requestContext = getRequestContext(req)
 
-  logStructuredEvent(
+  logStructuredEventWithContext(
     'chat_user_message',
     {
       ...analyticsPayload,
       message,
       messageLength: message.length,
     },
-    req,
+    requestContext,
   )
+  trackConversationUserMessage(requestContext, analyticsPayload, message)
 
   const body = {
     model: OPENAI_MODEL,
@@ -274,7 +422,7 @@ Reponds STRICTEMENT en JSON valide avec cette structure :
       const errorText = await response.text()
       console.error('OpenAI error', errorText)
 
-      logStructuredEvent(
+      logStructuredEventWithContext(
         'chat_completion_error',
         {
           ...analyticsPayload,
@@ -283,7 +431,7 @@ Reponds STRICTEMENT en JSON valide avec cette structure :
           error: errorText,
           durationMs: Date.now() - startedAt,
         },
-        req,
+        requestContext,
       )
 
       return res.status(500).json({ error: 'Le service IA ne repond pas. Reessaie plus tard.' })
@@ -305,10 +453,11 @@ Reponds STRICTEMENT en JSON valide avec cette structure :
           : content.trim()
     const citations = sanitizeCitations(parsed?.citations)
     const suggestedPaths = sanitizeSuggestedPaths(parsed?.suggestedPaths)
+    const refusal = isRefusalAnswer(answer)
 
     const usage = data?.usage || {}
 
-    logStructuredEvent(
+    logStructuredEventWithContext(
       'chat_completion',
       {
         ...analyticsPayload,
@@ -317,13 +466,15 @@ Reponds STRICTEMENT en JSON valide avec cette structure :
         answer,
         citations,
         suggestedPaths,
+        isRefusal: refusal,
         promptTokens: typeof usage.prompt_tokens === 'number' ? usage.prompt_tokens : null,
         completionTokens: typeof usage.completion_tokens === 'number' ? usage.completion_tokens : null,
         totalTokens: typeof usage.total_tokens === 'number' ? usage.total_tokens : null,
         durationMs: Date.now() - startedAt,
       },
-      req,
+      requestContext,
     )
+    trackConversationAssistantMessage(requestContext, analyticsPayload, answer, citations, suggestedPaths)
 
     res.json({
       answer,
@@ -338,7 +489,7 @@ Reponds STRICTEMENT en JSON valide avec cette structure :
   } catch (error) {
     console.error('OpenAI request failed', error)
 
-    logStructuredEvent(
+    logStructuredEventWithContext(
       'chat_completion_error',
       {
         ...analyticsPayload,
@@ -347,7 +498,7 @@ Reponds STRICTEMENT en JSON valide avec cette structure :
         error: error instanceof Error ? error.message : 'Unknown error',
         durationMs: Date.now() - startedAt,
       },
-      req,
+      requestContext,
     )
 
     res.status(500).json({ error: 'Erreur lors de la requete a OpenAI.' })
