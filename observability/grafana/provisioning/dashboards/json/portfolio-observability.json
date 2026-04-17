@@ -332,7 +332,7 @@
         {
           "datasource": "Loki",
           "editorMode": "code",
-          "expr": "sum(count_over_time({stack=\"portfolio\",compose_service=\"portfolio\"} | json | type=\"chat_completion\" | payload_isRefusal=true [$__range]))",
+          "expr": "sum(count_over_time({stack=\"portfolio\",compose_service=\"portfolio\"} | json | type=\"chat_completion\" | payload_isRefusal=\"true\" [$__range]))",
           "legendFormat": "",
           "queryType": "range",
           "refId": "A"
