@@ -1,0 +1,10 @@
+FROM node:20-alpine
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci --omit=dev
+
+COPY notifications ./notifications
+
+EXPOSE 8081
+CMD ["node", "notifications/index.js"]

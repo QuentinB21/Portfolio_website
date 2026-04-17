@@ -201,9 +201,12 @@ function flushConversation(conversationKey) {
   logStructuredEventWithContext(
     'chat_conversation_closed',
     {
+      conversationKey: conversation.conversationKey,
       sessionId: conversation.sessionId,
       visitorId: conversation.visitorId,
       path: conversation.path,
+      startedAt: new Date(conversation.startedAt).toISOString(),
+      endedAt: new Date(conversation.lastActivityAt).toISOString(),
       userMessageCount: conversation.userMessages.length,
       assistantMessageCount: conversation.assistantMessages.length,
       refusalCount: conversation.refusalCount,

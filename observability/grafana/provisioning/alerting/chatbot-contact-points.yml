@@ -1,0 +1,13 @@
+apiVersion: 1
+
+contactPoints:
+  - orgId: 1
+    name: chatbot-discord-relay
+    receivers:
+      - uid: chatbot-discord-relay-webhook
+        type: webhook
+        disableResolveMessage: true
+        settings:
+          url: http://notifications:8081/webhooks/grafana/discord
+          httpMethod: POST
+          maxAlerts: 10

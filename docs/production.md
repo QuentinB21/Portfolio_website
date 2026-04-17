@@ -138,3 +138,78 @@ Recommended alerting setup in Grafana:
 - use a Telegram or Discord contact point for mobile notifications
 - create the alert from `chat_conversation_closed`, not from `chat_user_message`
 - set a notification policy with grouping enabled so one conversation stays one alert
+
+## Discord conversation relay
+This repository includes an internal `notifications` service so the flow becomes:
+
+`Grafana -> internal webhook -> Discord bot`
+
+### Discord target model
+When a chatbot conversation ends, the relay creates a **new text channel** inside your Discord category `Conversations`.
+
+Then it republishes the transcript turn by turn:
+- one user message in the chatbot = one Discord message
+- one assistant reply in the chatbot = one Discord message
+
+Conversation metadata is stored in the Discord channel topic.
+
+### Discord IDs to provide
+Store these values in `.env.prod`:
+
+```env
+DISCORD_GUILD_ID=123456789012345678
+DISCORD_CATEGORY_ID=123456789012345678
+DISCORD_CHANNEL_NAME_PREFIX=chatbot
+```
+
+To copy IDs, enable **Developer Mode** in Discord, then right-click:
+- the server -> **Copy Server ID**
+- the category `Conversations` -> **Copy Channel ID**
+
+### Discord bot setup
+1. Open the Discord Developer Portal
+2. Create an application and a bot
+3. Copy the bot token into:
+
+```env
+DISCORD_BOT_TOKEN=...
+```
+
+4. Invite the bot to your server with these permissions on the parent text channel:
+   - View Channel
+   - Send Messages
+   - Manage Channels
+   - Read Message History
+
+The relay queries Loki for the corresponding `chat_conversation_closed` event, creates one dedicated Discord text channel per conversation, and posts the full transcript into it.
+
+### Grafana contact point
+The contact point `chatbot-discord-relay` is provisioned automatically and points to the internal webhook:
+
+```text
+http://notifications:8081/webhooks/grafana/discord
+```
+
+### Grafana alert rule
+Create a Grafana-managed alert rule with:
+
+- datasource: `Loki`
+- query:
+
+```logql
+sum by (payload_sessionId, payload_visitorId) (
+  count_over_time(
+    {stack="portfolio",compose_service="portfolio"}
+    | json
+    | type="chat_conversation_closed"
+    | payload_sessionId!=""
+    [2m]
+  )
+)
+```
+
+- condition: alert when the reduced value is `> 0`
+- contact point: `chatbot-discord-relay`
+- send firing notifications only
+
+This keeps one notification per closed conversation instead of one notification per chatbot turn.

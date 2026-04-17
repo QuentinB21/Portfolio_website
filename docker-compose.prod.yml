@@ -49,6 +49,23 @@ services:
       - alloy
       - grafana
 
+  notifications:
+    build:
+      context: .
+      dockerfile: Dockerfile.notifications
+    restart: unless-stopped
+    expose:
+      - '8081'
+    environment:
+      PORT: 8081
+      LOKI_INTERNAL_URL: ${LOKI_INTERNAL_URL:-http://loki:3100}
+      DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN}
+      DISCORD_GUILD_ID: ${DISCORD_GUILD_ID}
+      DISCORD_CATEGORY_ID: ${DISCORD_CATEGORY_ID}
+      DISCORD_CHANNEL_NAME_PREFIX: ${DISCORD_CHANNEL_NAME_PREFIX:-chatbot}
+    depends_on:
+      - loki
+
   umami-db:
     image: postgres:16-alpine
     restart: unless-stopped
@@ -110,6 +127,7 @@ services:
       - grafana-data:/var/lib/grafana
     depends_on:
       - loki
+      - notifications
 
 volumes:
   caddy-data:
