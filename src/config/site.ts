@@ -1,7 +1,9 @@
 import type { ChatMessage, NavItem, ProofItem } from '../types'
 
+export const CHATBOT_ENABLED = false
+
 export const navItems: NavItem[] = [
-  { label: 'Présentation', path: '/' },
+  { label: 'Accueil', path: '/' },
   { label: 'Carrière', path: '/work' },
   { label: 'CV', path: '/cv' },
 ]

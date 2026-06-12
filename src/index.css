@@ -14,8 +14,8 @@
   --text-body: #d6dfeb;
   --text-muted: #92a3b8;
   --text-subtle: #718197;
-  --glass-fill: rgba(17, 24, 38, 0.54);
-  --topbar-fill: rgba(15, 22, 37, 0.58);
+  --glass-fill: rgba(17, 24, 38, 0.10);
+  --topbar-fill: rgba(17, 24, 38, 0.10);
   --panel-soft-fill: rgba(17, 24, 38, 0.4);
   --button-secondary-fill: rgba(21, 34, 53, 0.74);
   --chat-fill: rgba(13, 20, 32, 0.74);
@@ -61,8 +61,8 @@ body.light {
   --text-body: #334155;
   --text-muted: #66758a;
   --text-subtle: #7e8a9c;
-  --glass-fill: rgba(255, 255, 255, 0.62);
-  --topbar-fill: rgba(255, 255, 255, 0.74);
+  --glass-fill: rgba(255, 255, 255, 0.10);
+  --topbar-fill: rgba(255, 255, 255, 0.10);
   --panel-soft-fill: rgba(255, 255, 255, 0.46);
   --button-secondary-fill: rgba(238, 244, 251, 1);
   --chat-fill: rgba(255, 255, 255, 0.78);

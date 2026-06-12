@@ -4,6 +4,7 @@ import { LuDownload } from 'react-icons/lu'
 import './App.css'
 import { ChatWidget } from './components/ChatWidget'
 import { SiteChrome } from './components/SiteChrome'
+import { CHATBOT_ENABLED } from './config/site'
 import { timelineItems } from './data/content'
 import { useChatbot } from './hooks/useChatbot'
 import { useCvContent } from './hooks/useCvContent'
@@ -91,17 +92,19 @@ function App() {
         </SiteChrome>
       </div>
 
-      <ChatWidget
-        open={chatOpen}
-        messages={messages}
-        isTyping={isTyping}
-        typingText={typingText}
-        input={input}
-        onInputChange={setInput}
-        onSubmit={handleSubmit}
-        onNavigate={handleNavigate}
-        onToggle={toggleChat}
-      />
+      {CHATBOT_ENABLED ? (
+        <ChatWidget
+          open={chatOpen}
+          messages={messages}
+          isTyping={isTyping}
+          typingText={typingText}
+          input={input}
+          onInputChange={setInput}
+          onSubmit={handleSubmit}
+          onNavigate={handleNavigate}
+          onToggle={toggleChat}
+        />
+      ) : null}
     </>
   )
 }
