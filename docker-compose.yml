@@ -17,12 +17,8 @@ services:
       OPENAI_BASE_URL: ${OPENAI_BASE_URL:-https://api.openai.com/v1}
       PROFILE_BIRTHDATE: ${PROFILE_BIRTHDATE:-}
       CHATBOT_SYSTEM_PROMPT: ${CHATBOT_SYSTEM_PROMPT:-}
-      MONITORING_IP_HASH_SALT: ${MONITORING_IP_HASH_SALT:-}
     depends_on:
       - umami
-      - loki
-      - grafana
-      - alloy
 
   umami-db:
     image: postgres:16-alpine
@@ -46,44 +42,5 @@ services:
     depends_on:
       - umami-db
 
-  loki:
-    image: grafana/loki:latest
-    restart: unless-stopped
-    ports:
-      - '127.0.0.1:3100:3100'
-    command: ['-config.file=/etc/loki/config.yml']
-    volumes:
-      - ./observability/loki-config.yml:/etc/loki/config.yml:ro
-      - loki-data:/loki
-
-  alloy:
-    image: grafana/alloy:latest
-    restart: unless-stopped
-    command:
-      - run
-      - /etc/alloy/config.alloy
-    volumes:
-      - ./observability/alloy/config.alloy:/etc/alloy/config.alloy:ro
-      - /var/run/docker.sock:/var/run/docker.sock
-    depends_on:
-      - loki
-
-  grafana:
-    image: grafana/grafana-oss:latest
-    restart: unless-stopped
-    ports:
-      - '127.0.0.1:3002:3000'
-    environment:
-      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
-      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
-      GF_USERS_ALLOW_SIGN_UP: 'false'
-    volumes:
-      - ./observability/grafana/provisioning:/etc/grafana/provisioning:ro
-      - grafana-data:/var/lib/grafana
-    depends_on:
-      - loki
-
 volumes:
   umami-db-data:
-  loki-data:
-  grafana-data:
