@@ -47,4 +47,14 @@ jobs:
           SSH_USER: ${{ secrets.SSH_USER }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
-          ssh -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" "cd '$DEPLOY_PATH' && git fetch --all && git checkout main && git pull --ff-only origin main && docker compose --env-file .env.prod -f docker-compose.prod.yml up -d --build --remove-orphans"
+          ssh -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" "
+            set -e
+            cd '$DEPLOY_PATH'
+            git fetch --all
+            git checkout main
+            git pull --ff-only origin main
+            if ! docker network inspect public-proxy >/dev/null 2>&1; then
+              docker network create public-proxy >/dev/null
+            fi
+            docker compose --env-file .env.prod -f docker-compose.prod.yml up -d --build --remove-orphans
+          "
