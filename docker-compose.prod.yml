@@ -12,6 +12,9 @@ services:
       PRIMARY_DOMAIN: ${PRIMARY_DOMAIN}
       WWW_DOMAIN: ${WWW_DOMAIN}
       UMAMI_DOMAIN: ${UMAMI_DOMAIN}
+      TRADECOPILOT_FRONTEND_UPSTREAM: ${TRADECOPILOT_FRONTEND_UPSTREAM:-tradecopilot-client:80}
+      TRADECOPILOT_API_UPSTREAM: ${TRADECOPILOT_API_UPSTREAM:-tradecopilot-api:8080}
+      TRADECOPILOT_AUTH_UPSTREAM: ${TRADECOPILOT_AUTH_UPSTREAM:-tradecopilot-keycloak:8080}
     volumes:
       - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy-data:/data
@@ -19,6 +22,9 @@ services:
     depends_on:
       - portfolio
       - umami
+    networks:
+      - default
+      - public-proxy
 
   portfolio:
     build:
@@ -67,3 +73,7 @@ volumes:
   caddy-data:
   caddy-config:
   umami-db-data:
+
+networks:
+  public-proxy:
+    external: true

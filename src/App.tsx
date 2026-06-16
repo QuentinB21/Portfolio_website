@@ -12,6 +12,7 @@ import { useProfileAge } from './hooks/useProfileAge'
 import { useThemePreference } from './hooks/useThemePreference'
 import { CvPage } from './pages/CvPage'
 import { OverviewPage } from './pages/OverviewPage'
+import { ProjectsPage } from './pages/ProjectsPage'
 import { WorkPage } from './pages/WorkPage'
 import { buildAnalyticsContext, initializeAnalytics, sendAnalyticsEvent } from './utils/analytics'
 import { printHtmlContent } from './utils/printCv'
@@ -87,6 +88,7 @@ function App() {
           <Routes>
             <Route path="/" element={<OverviewPage onNavigate={handleNavigate} currentAge={currentAge} />} />
             <Route path="/work" element={<WorkPage timelineEntries={timelineEntries} />} />
+            <Route path="/projets" element={<ProjectsPage />} />
             <Route path="/cv" element={<CvPage cvHtml={cvHtml} cvLoading={cvLoading} cvError={cvError} />} />
           </Routes>
         </SiteChrome>

@@ -25,6 +25,42 @@
 		reverse_proxy umami:3000
 	}
 
+	# TradeCopilot is published under a sub-path of the main domain while
+	# staying deployed from its own repository and compose stack.
+	redir /projets/TradeCopilot /projets/TradeCopilot/ 308
+
+	@tradecopilot_auth_callback path /projets/TradeCopilot/auth/callback*
+	handle @tradecopilot_auth_callback {
+		uri strip_prefix /projets/TradeCopilot
+		reverse_proxy {$TRADECOPILOT_FRONTEND_UPSTREAM} {
+			header_up X-Forwarded-Prefix /projets/TradeCopilot
+		}
+	}
+
+	@tradecopilot_api path /projets/TradeCopilot/api/*
+	handle @tradecopilot_api {
+		uri strip_prefix /projets/TradeCopilot
+		reverse_proxy {$TRADECOPILOT_API_UPSTREAM} {
+			header_up X-Forwarded-Prefix /projets/TradeCopilot
+		}
+	}
+
+	@tradecopilot_auth path /projets/TradeCopilot/auth/*
+	handle @tradecopilot_auth {
+		uri strip_prefix /projets/TradeCopilot
+		reverse_proxy {$TRADECOPILOT_AUTH_UPSTREAM} {
+			header_up X-Forwarded-Prefix /projets/TradeCopilot
+		}
+	}
+
+	@tradecopilot_front path /projets/TradeCopilot/* /projets/TradeCopilot
+	handle @tradecopilot_front {
+		uri strip_prefix /projets/TradeCopilot
+		reverse_proxy {$TRADECOPILOT_FRONTEND_UPSTREAM} {
+			header_up X-Forwarded-Prefix /projets/TradeCopilot
+		}
+	}
+
 	handle {
 		reverse_proxy portfolio:80
 	}

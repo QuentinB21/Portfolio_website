@@ -4,6 +4,7 @@
 - `quentin-bouchot.fr` : portfolio public
 - `www.quentin-bouchot.fr` : redirection vers le domaine principal
 - `analytics.quentin-bouchot.fr` : interface Umami
+- `quentin-bouchot.fr/projets/TradeCopilot/*` : application TradeCopilot exposée via le Caddy du portfolio
 
 ## DNS
 Créer les enregistrements `A` suivants dans OVH DNS :
@@ -36,17 +37,38 @@ sudo usermod -aG docker $USER
 
 Reconnecte-toi après l'ajout au groupe `docker`.
 
+## Shared reverse-proxy network
+Le portfolio et TradeCopilot doivent partager un réseau Docker externe, sans partager leurs bases de données.
+
+Création initiale :
+```bash
+docker network create public-proxy
+```
+
+Vérification :
+```bash
+docker network inspect public-proxy
+```
+
 ## Repo layout on server
 Exemple :
 ```bash
 sudo mkdir -p /opt/portfolio_website
 sudo chown -R $USER:$USER /opt/portfolio_website
 cd /opt/portfolio_website
-git clone <your-repo-url> .
+git clone <portfolio-repo-url> .
 cp .env.prod.example .env.prod
 ```
 
-## Production environment
+TradeCopilot reste dans un autre dossier, par exemple :
+```bash
+sudo mkdir -p /opt/tradecopilot
+sudo chown -R $USER:$USER /opt/tradecopilot
+cd /opt/tradecopilot
+git clone <tradecopilot-repo-url> .
+```
+
+## Portfolio environment
 Édite `.env.prod` sur le serveur.
 
 Valeurs importantes :
@@ -55,16 +77,75 @@ Valeurs importantes :
 - `UMAMI_DOMAIN=analytics.quentin-bouchot.fr`
 - `ACME_EMAIL=<your-email>`
 - `VITE_UMAMI_SCRIPT_URL=https://quentin-bouchot.fr/stats.js`
+- `TRADECOPILOT_FRONTEND_UPSTREAM=tradecopilot-client:80`
+- `TRADECOPILOT_API_UPSTREAM=tradecopilot-api:8080`
+- `TRADECOPILOT_AUTH_UPSTREAM=tradecopilot-keycloak:8080`
 - `OPENAI_API_KEY=...`
 - `OPENAI_MODEL=...`
 - `OPENAI_BASE_URL=...`
 - `PROFILE_BIRTHDATE=...`
 - `CHATBOT_SYSTEM_PROMPT=...`
 
-## First deployment
+Les trois variables `TRADECOPILOT_*_UPSTREAM` doivent correspondre à des aliases DNS réellement exposés par le compose TradeCopilot sur le réseau `public-proxy`.
+
+## First portfolio deployment
 ```bash
+cd /opt/portfolio_website
 docker compose --env-file .env.prod -f docker-compose.prod.yml up -d --build
 ```
+
+## TradeCopilot requirements
+Le repo TradeCopilot doit respecter ces règles avant d'être branché derrière le Caddy du portfolio :
+
+1. Le frontend doit fonctionner publiquement sous `/projets/TradeCopilot/`.
+2. L'API doit être exposée publiquement sous `/projets/TradeCopilot/api/*`.
+3. Keycloak doit être exposé publiquement sous `/projets/TradeCopilot/auth/*`.
+4. Le callback OIDC `/projets/TradeCopilot/auth/callback` doit être servi par le frontend TradeCopilot, pas par Keycloak.
+5. Le frontend doit connaître son base path :
+   - Vite : `base: '/projets/TradeCopilot/'`
+   - React Router : `basename="/projets/TradeCopilot"`
+6. Les appels frontend vers l'API ne doivent pas viser `/api` à la racine du domaine.
+   Ils doivent viser `/projets/TradeCopilot/api/...` ou une variable dédiée.
+7. Keycloak doit être configuré avec le bon chemin externe :
+   - hostname public : `quentin-bouchot.fr`
+   - chemin relatif : `/projets/TradeCopilot/auth`
+   - redirect URIs et web origins alignées sur ce sous-chemin
+8. Les services `client`, `api` et `keycloak` doivent rejoindre le réseau Docker externe `public-proxy`.
+9. Les bases Postgres de TradeCopilot et du portfolio doivent rester uniquement sur leurs réseaux internes respectifs.
+
+## TradeCopilot compose expectations
+Le compose TradeCopilot doit exposer des aliases explicites sur `public-proxy`, par exemple :
+
+```yaml
+networks:
+  default:
+  public-proxy:
+    external: true
+
+services:
+  client:
+    networks:
+      default:
+      public-proxy:
+        aliases:
+          - tradecopilot-client
+
+  api:
+    networks:
+      default:
+      public-proxy:
+        aliases:
+          - tradecopilot-api
+
+  keycloak:
+    networks:
+      default:
+      public-proxy:
+        aliases:
+          - tradecopilot-keycloak
+```
+
+Les services Postgres ne doivent pas être connectés à `public-proxy`.
 
 ## Umami
 1. Ouvre `https://analytics.quentin-bouchot.fr`
@@ -95,21 +176,21 @@ Exemple attendu pour `DEPLOY_PATH` :
 /opt/portfolio_website
 ```
 
-## Deploy flow
-Sur push vers `main`, GitHub Actions :
-1. installe les dépendances
-2. build l'application
-3. se connecte au VPS via SSH
-4. exécute :
-```bash
-docker compose --env-file .env.prod -f docker-compose.prod.yml up -d --build
-```
-
 ## Operations
 Commandes utiles sur le VPS :
 ```bash
+cd /opt/portfolio_website
 docker compose --env-file .env.prod -f docker-compose.prod.yml ps
-docker compose --env-file .env.prod -f docker-compose.prod.yml logs -f portfolio
 docker compose --env-file .env.prod -f docker-compose.prod.yml logs -f caddy
+docker compose --env-file .env.prod -f docker-compose.prod.yml logs -f portfolio
 docker compose --env-file .env.prod -f docker-compose.prod.yml logs -f umami
+```
+
+Pour TradeCopilot :
+```bash
+cd /opt/tradecopilot
+docker compose -f docker-compose.prod.yml ps
+docker compose -f docker-compose.prod.yml logs -f frontend
+docker compose -f docker-compose.prod.yml logs -f api
+docker compose -f docker-compose.prod.yml logs -f keycloak
 ```

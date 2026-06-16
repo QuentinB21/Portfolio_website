@@ -1,5 +1,5 @@
 import { FiGithub, FiLinkedin, FiMail } from 'react-icons/fi'
-import type { CannedAnswer, ContactItem, Project, Skill, TimelineItem } from '../types'
+import type { CannedAnswer, ContactItem, Project, ShowcaseProject, Skill, TimelineItem } from '../types'
 
 export const skills: Skill[] = [
   { title: 'Backend', items: ['C#', '.NET', 'ASP.NET', 'API REST', 'Architecture logicielle'] },
@@ -12,7 +12,7 @@ export const projects: Project[] = [
   {
     title: 'Outils de diagnostic véhicules',
     description:
-      'Développement et amélioration d’outils de diagnostic pour véhicules utilitaires Renault Trucks, dans un environnement .NET avec enjeux de maintenabilité et de qualité logicielle.',
+      "Développement et amélioration d'outils de diagnostic pour véhicules utilitaires Renault Trucks, dans un environnement .NET avec des enjeux de maintenabilité et de qualité logicielle.",
     stack: ['C#', '.NET', 'WPF', 'Blazor', 'Azure DevOps'],
     link: 'https://www.volvogroup.com',
     status: 'En poste',
@@ -20,10 +20,23 @@ export const projects: Project[] = [
   {
     title: 'Générateur de questionnaires sensoriels',
     description:
-      'Conception frontend d’une application web en Vue.js pour générer des questionnaires sensoriels à partir de templates éditables, avec un travail sur l’ergonomie et le Green IT.',
+      "Conception frontend d'une application web en Vue.js pour générer des questionnaires sensoriels à partir de templates éditables, avec un travail sur l'ergonomie et le Green IT.",
     stack: ['Vue.js', 'TypeScript', 'JavaScript', 'Bootstrap'],
     link: 'https://www.biosystemes.com/',
     status: 'Livré',
+  },
+]
+
+export const showcaseProjects: ShowcaseProject[] = [
+  {
+    title: 'TradeCopilot',
+    description:
+      "Application dédiée au trading et à l'assistance opérationnelle, déployée sur le même VPS que le portfolio tout en restant dans son propre dépôt, avec sa propre API, sa base Postgres et son Keycloak.",
+    stack: ['React', 'API dédiée', 'PostgreSQL', 'Keycloak', 'Docker Compose'],
+    href: '/projets/TradeCopilot/',
+    status: 'À connecter',
+    ctaLabel: 'Ouvrir TradeCopilot',
+    note: "Le portfolio agit uniquement comme point d'entrée et reverse proxy. Le déploiement de TradeCopilot reste autonome.",
   },
 ]
 
@@ -35,7 +48,7 @@ export const timelineItems: TimelineItem[] = [
     periodStart: '2024-09',
     periodEnd: null,
     detail:
-      'Développement et maintenance d’outils de diagnostic pour véhicules utilitaires. Travail sur les correctifs, les évolutions, la qualité logicielle, les tests et les pipelines CI/CD.',
+      "Développement et maintenance d'outils de diagnostic pour véhicules utilitaires. Travail sur les correctifs, les évolutions, la qualité logicielle, les tests et les pipelines CI/CD.",
   },
   {
     kind: 'education',
@@ -52,7 +65,7 @@ export const timelineItems: TimelineItem[] = [
     periodStart: '2023-09',
     periodEnd: '2024-08',
     detail:
-      'Développement frontend d’une application web from scratch en Vue.js pour générer des questionnaires sensoriels depuis des templates éditables.',
+      "Développement frontend d'une application web from scratch en Vue.js pour générer des questionnaires sensoriels depuis des templates éditables.",
   },
   {
     kind: 'education',
@@ -74,7 +87,7 @@ export const cannedAnswers: CannedAnswer[] = [
   {
     keywords: ['stack', 'tech', 'techno', 'compétence', 'competence'],
     answer:
-      'Je travaille surtout avec C# et .NET côté applicatif, Blazor et Vue.js côté interface, et Azure DevOps / CI-CD / Docker pour l’industrialisation et la qualité logicielle.',
+      "Je travaille surtout avec C# et .NET côté applicatif, Blazor et Vue.js côté interface, et Azure DevOps / CI-CD / Docker pour l'industrialisation et la qualité logicielle.",
   },
   {
     keywords: ['exp', 'expérience', 'experience', 'parcours', 'cv'],
@@ -84,11 +97,11 @@ export const cannedAnswers: CannedAnswer[] = [
   {
     keywords: ['qualité', 'qualite', 'tests', 'industrialisation', 'ci', 'cd'],
     answer:
-      'Je m’intéresse particulièrement à la qualité logicielle, à la testabilité, à la réduction des régressions et à l’industrialisation via les tests et les pipelines CI/CD.',
+      "Je m'intéresse particulièrement à la qualité logicielle, à la testabilité, à la réduction des régressions et à l'industrialisation via les tests et les pipelines CI/CD.",
   },
   {
-    keywords: ['projet', 'projets', 'travaux'],
+    keywords: ['projet', 'projets', 'travaux', 'tradecopilot'],
     answer:
-      'Les deux expériences que je mets le plus en avant sont le développement d’outils de diagnostic chez Renault Trucks et la conception d’un générateur de questionnaires sensoriels chez Biosystèmes.',
+      "Le portfolio présente les expériences principales de Quentin et comporte aussi une page Projets. TradeCopilot y est exposé comme application autonome, accessible depuis le même domaine.",
   },
 ]

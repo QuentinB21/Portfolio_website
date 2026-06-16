@@ -45,6 +45,16 @@ export type Project = {
   status: string
 }
 
+export type ShowcaseProject = {
+  title: string
+  description: string
+  stack: string[]
+  href: string
+  status: string
+  ctaLabel: string
+  note?: string
+}
+
 export type TimelineItem = {
   kind: 'experience' | 'education'
   title: string
