@@ -602,6 +602,80 @@
   line-height: 1.6;
 }
 
+.project-presentation-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.project-presentation-summary {
+  margin: 0;
+  color: var(--text-body);
+  line-height: 1.72;
+  font-size: 1rem;
+}
+
+.project-presentation-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border: 0;
+  padding: 0;
+  background: none;
+  color: var(--accent-link);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.project-presentation-toggle:hover {
+  color: var(--text-strong);
+}
+
+.project-presentation-toggle {
+  justify-content: flex-start;
+  font-size: 0.95rem;
+}
+
+.project-presentation-disclosure {
+  display: flex;
+  align-items: center;
+}
+
+.project-presentation-markdown {
+  padding-top: 0.95rem;
+  border-top: 1px solid rgba(130, 150, 175, 0.18);
+}
+
+.project-presentation-markdown h1,
+.project-presentation-markdown h2,
+.project-presentation-markdown h3 {
+  font-size: 1.05rem;
+}
+
+.project-feature-footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.project-repo-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-left: auto;
+  color: var(--accent-link);
+  text-decoration: none;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.project-repo-link:hover {
+  color: var(--text-strong);
+}
+
 .timeline-list {
   position: relative;
   display: flex;
@@ -1323,6 +1397,16 @@ body.light .chat-messages::-webkit-scrollbar-thumb:hover {
   .secondary-button,
   .inline-action {
     width: 100%;
+  }
+
+  .project-feature-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .project-presentation-toggle,
+  .project-repo-link {
+    width: fit-content;
   }
 
   .contact-pill {

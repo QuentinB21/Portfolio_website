@@ -1,4 +1,5 @@
-import { FiArrowUpRight } from 'react-icons/fi'
+import { FiArrowUpRight, FiGithub } from 'react-icons/fi'
+import { ProjectPresentationPreview } from '../components/ProjectPresentationPreview'
 import { SectionHeader } from '../components/SectionHeader'
 import { showcaseProjects } from '../data/content'
 
@@ -11,7 +12,8 @@ export function ProjectsPage() {
             <span className="section-kicker">Projets</span>
             <h1>Mes projets personnels</h1>
             <p className="hero-copy">
-              Cette page regroupe mes projets personnels que je souhaite partager avec vous. Chacun de ces projets sont experimental et sont en constante évolution. Je vous invite à les explorer et à me faire part de vos retours. 
+              Cette page regroupe les projets personnels que je souhaite partager. Chaque carte donne un point d’entrée
+              rapide, puis permet d’ouvrir soit l’application, soit son dépôt si tu veux creuser davantage.
             </p>
           </div>
         </div>
@@ -28,12 +30,18 @@ export function ProjectsPage() {
               <div className="project-feature-head">
                 <div>
                   <h2>{project.title}</h2>
-                  <p>{project.description}</p>
                 </div>
                 <a className="primary-button inline-action" href={project.href}>
                   {project.ctaLabel} <FiArrowUpRight size={15} />
                 </a>
               </div>
+
+              <ProjectPresentationPreview
+                projectTitle={project.title}
+                fallbackDescription={project.description}
+                presentationUrl={project.presentationUrl}
+              />
+
               <div className="pill-row">
                 {project.stack.map((item) => (
                   <span className="soft-pill" key={item}>
@@ -42,7 +50,15 @@ export function ProjectsPage() {
                 ))}
                 <span className="accent-pill">{project.status}</span>
               </div>
-              {project.note ? <p className="project-note">{project.note}</p> : null}
+
+              <div className="project-feature-footer">
+                {project.note ? <p className="project-note">{project.note}</p> : <span />}
+                {project.repoUrl ? (
+                  <a className="project-repo-link" href={project.repoUrl} rel="noreferrer" target="_blank">
+                    Accéder au repo <FiGithub size={15} />
+                  </a>
+                ) : null}
+              </div>
             </article>
           ))}
         </div>

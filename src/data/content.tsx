@@ -31,12 +31,14 @@ export const showcaseProjects: ShowcaseProject[] = [
   {
     title: 'TradeCopilot',
     description:
-      "Application dédiée au trading et à l'assistance opérationnelle, déployée sur le même VPS que le portfolio tout en restant dans son propre dépôt, avec sa propre API, sa base Postgres et son Keycloak.",
-    stack: ['React', 'API dédiée', 'PostgreSQL', 'Keycloak', 'Docker Compose'],
+      "Application dédiée au suivi patrimonial et à l'aide à la décision pour les investisseurs particuliers. Le portfolio l'expose simplement depuis le même domaine, sans fusionner son dépôt ni sa stack technique.",
+    stack: ['React', 'ASP.NET Core', 'PostgreSQL', 'Keycloak', 'Docker Compose'],
     href: '/projets/TradeCopilot/',
-    status: 'À connecter',
+    repoUrl: 'https://github.com/QuentinB21/TradeCopilot',
+    presentationUrl: 'https://github.com/QuentinB21/TradeCopilot/blob/master/docs/presentation.md',
+    status: 'MVP en évolution',
     ctaLabel: 'Ouvrir TradeCopilot',
-    note: "Le portfolio agit uniquement comme point d'entrée et reverse proxy. Le déploiement de TradeCopilot reste autonome.",
+    note: "Le portfolio agit ici comme point d'entrée et reverse proxy. Le déploiement de TradeCopilot reste autonome.",
   },
 ]
 
@@ -102,6 +104,6 @@ export const cannedAnswers: CannedAnswer[] = [
   {
     keywords: ['projet', 'projets', 'travaux', 'tradecopilot'],
     answer:
-      "Le portfolio présente les expériences principales de Quentin et comporte aussi une page Projets. TradeCopilot y est exposé comme application autonome, accessible depuis le même domaine.",
+      'La page Projets expose des applications autonomes hébergées depuis le même domaine. TradeCopilot y apparaît avec un aperçu de sa présentation directement extrait du dépôt.',
   },
 ]

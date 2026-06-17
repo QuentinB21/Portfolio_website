@@ -50,6 +50,8 @@ export type ShowcaseProject = {
   description: string
   stack: string[]
   href: string
+  repoUrl?: string
+  presentationUrl?: string
   status: string
   ctaLabel: string
   note?: string
