@@ -9,10 +9,9 @@ export function ProjectsPage() {
         <div className="glass-panel editorial-hero">
           <div>
             <span className="section-kicker">Projets</span>
-            <h1>Applications, démonstrateurs et produits associés à mon portfolio.</h1>
+            <h1>Mes projets personnels</h1>
             <p className="hero-copy">
-              Cette page regroupe les projets que je souhaite rendre accessibles depuis mon domaine principal, sans
-              fusionner leurs dépôts ni leurs cycles de déploiement.
+              Cette page regroupe mes projets personnels que je souhaite partager avec vous. Chacun de ces projets sont experimental et sont en constante évolution. Je vous invite à les explorer et à me faire part de vos retours. 
             </p>
           </div>
         </div>
@@ -20,8 +19,8 @@ export function ProjectsPage() {
 
       <section className="stacked-section">
         <SectionHeader
-          title="Applications accessibles"
-          subtitle="Chaque carte peut ouvrir une application autonome hébergée sur le même VPS, tout en gardant son propre dépôt, sa propre base de données et sa propre chaîne de déploiement."
+          title="Projets personnels"
+          subtitle="Chaque carte peut ouvrir un projet autonome hébergé sur le même VPS, tout en gardant son propre dépôt, sa propre base de données et sa propre chaîne de déploiement."
         />
         <div className="project-stack">
           {showcaseProjects.map((project) => (
