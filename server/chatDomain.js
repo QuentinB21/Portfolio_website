@@ -52,6 +52,7 @@ const SKILLS = {
 const NAVIGATION = [
   { label: 'Accueil', path: '/' },
   { label: 'Carrière', path: '/work' },
+  { label: 'Projets', path: '/projets' },
   { label: 'CV', path: '/cv' },
 ]
 
@@ -194,6 +195,22 @@ const deterministicHandlers = [
   },
   {
     matches(question) {
+      return includesAny(question, ['projet', 'tradecopilot', 'mailmanager', 'mail manager', 'workflow email'])
+    },
+    build(question) {
+      const asksAboutMailManager = includesAny(question, ['mailmanager', 'mail manager', 'workflow email'])
+
+      return buildResponse(
+        asksAboutMailManager
+          ? "Mail Manager Workflow est un projet de classement automatisé d'e-mails basé sur React, ASP.NET Core, PostgreSQL, Keycloak et n8n. Son intégration publique au portfolio est en préparation."
+          : "La page Projets présente notamment TradeCopilot et Mail Manager Workflow. TradeCopilot est accessible depuis le portfolio ; l'intégration publique de Mail Manager Workflow est encore en préparation.",
+        [buildCitation('Projets personnels', '/projets', 'Projets', 'TradeCopilot et Mail Manager Workflow sont présentés sur cette page.')],
+        [buildSuggestion('Voir la page Projets', '/projets', 'pour consulter les présentations et accéder aux dépôts')],
+      )
+    },
+  },
+  {
+    matches(question) {
       return includesAny(question, ['contact', 'email', 'mail', 'linkedin', 'github'])
     },
     build() {
@@ -222,8 +239,8 @@ const deterministicHandlers = [
     },
     build() {
       return buildResponse(
-        `Le site comporte trois pages principales : ${NAVIGATION.map((item) => `${item.label} (${item.path})`).join(', ')}.`,
-        [buildCitation('Navigation du site', '/', 'Navigation', 'Le site comporte Accueil, Carrière et CV.')],
+        `Le site comporte quatre pages principales : ${NAVIGATION.map((item) => `${item.label} (${item.path})`).join(', ')}.`,
+        [buildCitation('Navigation du site', '/', 'Navigation', 'Le site comporte Accueil, Carrière, Projets et CV.')],
         NAVIGATION.map((item) => buildSuggestion(`Aller vers ${item.label}`, item.path, `ouvrir la page ${item.label.toLowerCase()}`)),
       )
     },
@@ -235,7 +252,7 @@ export { REFUSAL_MESSAGE }
 export function buildDeterministicChatResponse(question) {
   const normalizedQuestion = normalize(question)
   const handler = deterministicHandlers.find((entry) => entry.matches(normalizedQuestion))
-  return handler ? handler.build() : null
+  return handler ? handler.build(normalizedQuestion) : null
 }
 
 export function buildRefusalResponse() {

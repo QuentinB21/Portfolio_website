@@ -52,6 +52,7 @@ export type ShowcaseProject = {
   href: string
   repoUrl?: string
   presentationUrl?: string
+  available?: boolean
   status: string
   ctaLabel: string
   note?: string

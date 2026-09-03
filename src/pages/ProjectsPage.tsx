@@ -31,9 +31,15 @@ export function ProjectsPage() {
                 <div>
                   <h2>{project.title}</h2>
                 </div>
-                <a className="primary-button inline-action" href={project.href}>
-                  {project.ctaLabel} <FiArrowUpRight size={15} />
-                </a>
+                {project.available === false ? (
+                  <button className="secondary-button inline-action project-action-unavailable" disabled type="button">
+                    {project.ctaLabel}
+                  </button>
+                ) : (
+                  <a className="primary-button inline-action" href={project.href}>
+                    {project.ctaLabel} <FiArrowUpRight size={15} />
+                  </a>
+                )}
               </div>
 
               <ProjectPresentationPreview

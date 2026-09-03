@@ -61,6 +61,42 @@
 		}
 	}
 
+	# Mail Manager Workflow keeps its own compose stack. Only its public HTTP
+	# entry points are reachable through the shared proxy network.
+	redir /projets/MailManagerWorkflow /projets/MailManagerWorkflow/ 308
+
+	@mailmanager_api path /projets/MailManagerWorkflow/api/* /projets/MailManagerWorkflow/health
+	handle @mailmanager_api {
+		uri strip_prefix /projets/MailManagerWorkflow
+		reverse_proxy {$MAILMANAGER_API_UPSTREAM} {
+			header_up X-Forwarded-Prefix /projets/MailManagerWorkflow
+		}
+	}
+
+	@mailmanager_auth path /projets/MailManagerWorkflow/auth /projets/MailManagerWorkflow/auth/*
+	handle @mailmanager_auth {
+		uri strip_prefix /projets/MailManagerWorkflow
+		reverse_proxy {$MAILMANAGER_AUTH_UPSTREAM} {
+			header_up X-Forwarded-Prefix /projets/MailManagerWorkflow
+		}
+	}
+
+	@mailmanager_webhook path /projets/MailManagerWorkflow/webhook/*
+	handle @mailmanager_webhook {
+		uri strip_prefix /projets/MailManagerWorkflow
+		reverse_proxy {$MAILMANAGER_WORKFLOW_UPSTREAM} {
+			header_up X-Forwarded-Prefix /projets/MailManagerWorkflow
+		}
+	}
+
+	@mailmanager_front path /projets/MailManagerWorkflow/* /projets/MailManagerWorkflow
+	handle @mailmanager_front {
+		uri strip_prefix /projets/MailManagerWorkflow
+		reverse_proxy {$MAILMANAGER_FRONTEND_UPSTREAM} {
+			header_up X-Forwarded-Prefix /projets/MailManagerWorkflow
+		}
+	}
+
 	handle {
 		reverse_proxy portfolio:80
 	}

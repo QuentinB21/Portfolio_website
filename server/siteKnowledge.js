@@ -80,14 +80,34 @@ export const siteKnowledge = [
     keywords: ['cv', 'github', 'telecharger', 'document', 'resume'],
   },
   {
+    id: 'projects-tradecopilot',
+    path: '/projets',
+    pageLabel: 'Projets',
+    section: 'TradeCopilot',
+    title: 'Projet TradeCopilot',
+    content:
+      "TradeCopilot est une application de suivi patrimonial et d'aide à la décision pour les investisseurs particuliers. Elle possède son propre dépôt GitHub et est accessible depuis le portfolio.",
+    keywords: ['projet', 'tradecopilot', 'investissement', 'patrimoine', 'react', 'asp.net', 'keycloak'],
+  },
+  {
+    id: 'projects-mail-manager',
+    path: '/projets',
+    pageLabel: 'Projets',
+    section: 'Mail Manager Workflow',
+    title: 'Projet Mail Manager Workflow',
+    content:
+      "Mail Manager Workflow est une application de classement automatisé d'e-mails basée sur React, ASP.NET Core, PostgreSQL, Keycloak et n8n. Son intégration publique au portfolio est en préparation et son dépôt GitHub est accessible depuis la page Projets.",
+    keywords: ['projet', 'mailmanager', 'mail manager', 'email', 'classement', 'workflow', 'n8n', 'gmail', 'outlook'],
+  },
+  {
     id: 'site-navigation',
     path: '/',
     pageLabel: 'Navigation',
     section: 'Navigation',
     title: 'Navigation du site',
     content:
-      "Le site comporte trois pages principales : Overview pour la presentation generale, Carriere pour les experiences, la chronologie et les competences, et CV pour la version document et le telechargement du CV.",
-    keywords: ['navigation', 'overview', 'carriere', 'cv', 'pages', 'rediriger'],
+      "Le site comporte quatre pages principales : Accueil pour la présentation générale, Carrière pour les expériences et les compétences, Projets pour les applications personnelles, et CV pour la version document et son téléchargement.",
+    keywords: ['navigation', 'accueil', 'carriere', 'projets', 'cv', 'pages', 'rediriger'],
   },
   {
     id: 'site-contact',

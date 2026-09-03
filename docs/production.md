@@ -5,6 +5,7 @@
 - `www.quentin-bouchot.fr` : redirection vers le domaine principal
 - `analytics.quentin-bouchot.fr` : interface Umami
 - `quentin-bouchot.fr/projets/TradeCopilot/*` : application TradeCopilot exposée via le Caddy du portfolio
+- `quentin-bouchot.fr/projets/MailManagerWorkflow/*` : future application Mail Manager Workflow
 
 ## DNS
 Créer les enregistrements `A` suivants dans OVH DNS :
@@ -68,6 +69,14 @@ cd /opt/tradecopilot
 git clone <tradecopilot-repo-url> .
 ```
 
+Mail Manager Workflow reste également dans son propre dossier :
+```bash
+sudo mkdir -p /opt/mail-manager-workflow
+sudo chown -R $USER:$USER /opt/mail-manager-workflow
+cd /opt/mail-manager-workflow
+git clone https://github.com/QuentinB21/MailManagerWorkflow.git .
+```
+
 ## Portfolio environment
 Édite `.env.prod` sur le serveur.
 
@@ -80,6 +89,10 @@ Valeurs importantes :
 - `TRADECOPILOT_FRONTEND_UPSTREAM=tradecopilot-client:80`
 - `TRADECOPILOT_API_UPSTREAM=tradecopilot-api:8080`
 - `TRADECOPILOT_AUTH_UPSTREAM=tradecopilot-keycloak:8080`
+- `MAILMANAGER_FRONTEND_UPSTREAM=mail-manager-web:80`
+- `MAILMANAGER_API_UPSTREAM=mail-manager-api:8080`
+- `MAILMANAGER_AUTH_UPSTREAM=mail-manager-keycloak:8080`
+- `MAILMANAGER_WORKFLOW_UPSTREAM=mail-manager-n8n:5678`
 - `OPENAI_API_KEY=...`
 - `OPENAI_MODEL=...`
 - `OPENAI_BASE_URL=...`
@@ -146,6 +159,66 @@ services:
 ```
 
 Les services Postgres ne doivent pas être connectés à `public-proxy`.
+
+## Mail Manager Workflow requirements
+
+Le portfolio prépare les routes suivantes :
+
+- `/projets/MailManagerWorkflow/` vers le frontend React ;
+- `/projets/MailManagerWorkflow/api/*` et `/projets/MailManagerWorkflow/health` vers l'API ASP.NET Core ;
+- `/projets/MailManagerWorkflow/auth/*` vers Keycloak ;
+- `/projets/MailManagerWorkflow/webhook/*` vers les webhooks n8n, sans exposer l'interface d'administration n8n.
+
+Avant d'activer la carte dans le portfolio, le repo MailManagerWorkflow devra fournir une configuration de production qui respecte les points suivants :
+
+1. Le build Vite utilise `base: '/projets/MailManagerWorkflow/'`.
+2. Le frontend utilise les URL publiques `/projets/MailManagerWorkflow/api`, `/projets/MailManagerWorkflow/auth` et `/projets/MailManagerWorkflow/webhook/mail-manager/email`.
+3. Les redirections Keycloak reviennent vers `https://quentin-bouchot.fr/projets/MailManagerWorkflow/`, et non vers la racine du domaine.
+4. Keycloak est démarré en mode production derrière un reverse proxy et sert son chemin relatif `/auth`.
+5. `WebOrigin`, les émetteurs JWT et les callbacks OAuth Gmail et Outlook utilisent les URL HTTPS publiques.
+6. Les services `web`, `api`, `keycloak` et `n8n` rejoignent `public-proxy` avec les aliases définis ci-dessous.
+7. PostgreSQL et les services d'initialisation restent uniquement sur le réseau privé du projet.
+8. Les ports des conteneurs ne sont pas publiés sur l'hôte en production ; seuls Caddy et le réseau partagé y accèdent.
+
+Exemple de raccordement du compose MailManagerWorkflow :
+
+```yaml
+networks:
+  default:
+  public-proxy:
+    external: true
+
+services:
+  web:
+    networks:
+      default:
+      public-proxy:
+        aliases:
+          - mail-manager-web
+
+  api:
+    networks:
+      default:
+      public-proxy:
+        aliases:
+          - mail-manager-api
+
+  keycloak:
+    networks:
+      default:
+      public-proxy:
+        aliases:
+          - mail-manager-keycloak
+
+  n8n:
+    networks:
+      default:
+      public-proxy:
+        aliases:
+          - mail-manager-n8n
+```
+
+La carte reste volontairement marquée `Bientôt disponible` tant que ces adaptations ne sont pas déployées. Il faudra ensuite passer son champ `available` à `true` dans `src/data/content.tsx`. La présentation affichée sur la carte est récupérée depuis le `README.md` public du dépôt MailManagerWorkflow.
 
 ## Umami
 1. Ouvre `https://analytics.quentin-bouchot.fr`

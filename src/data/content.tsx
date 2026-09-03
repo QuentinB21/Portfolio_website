@@ -40,6 +40,19 @@ export const showcaseProjects: ShowcaseProject[] = [
     ctaLabel: 'Ouvrir TradeCopilot',
     note: "Le portfolio agit ici comme point d'entrée et reverse proxy. Le déploiement de TradeCopilot reste autonome.",
   },
+  {
+    title: 'Mail Manager Workflow',
+    description:
+      "Application de classement automatisé d'e-mails combinant une interface React, une API ASP.NET Core et des workflows n8n. Son intégration publique au portfolio est en cours de préparation.",
+    stack: ['React', 'ASP.NET Core', 'PostgreSQL', 'Keycloak', 'n8n'],
+    href: '/projets/MailManagerWorkflow/',
+    repoUrl: 'https://github.com/QuentinB21/MailManagerWorkflow',
+    presentationUrl: 'https://github.com/QuentinB21/MailManagerWorkflow/blob/master/README.md',
+    available: false,
+    status: 'Intégration en préparation',
+    ctaLabel: 'Bientôt disponible',
+    note: "Le portfolio fournira uniquement le point d'entrée HTTPS et le reverse proxy. Le dépôt et le déploiement de l'application resteront autonomes.",
+  },
 ]
 
 export const timelineItems: TimelineItem[] = [
@@ -102,8 +115,8 @@ export const cannedAnswers: CannedAnswer[] = [
       "Je m'intéresse particulièrement à la qualité logicielle, à la testabilité, à la réduction des régressions et à l'industrialisation via les tests et les pipelines CI/CD.",
   },
   {
-    keywords: ['projet', 'projets', 'travaux', 'tradecopilot'],
+    keywords: ['projet', 'projets', 'travaux', 'tradecopilot', 'mailmanager', 'mail manager', 'email'],
     answer:
-      'La page Projets expose des applications autonomes hébergées depuis le même domaine. TradeCopilot y apparaît avec un aperçu de sa présentation directement extrait du dépôt.',
+      'La page Projets expose des applications autonomes hébergées depuis le même domaine. Elle présente TradeCopilot ainsi que Mail Manager Workflow, dont l’intégration au portfolio est en préparation.',
   },
 ]

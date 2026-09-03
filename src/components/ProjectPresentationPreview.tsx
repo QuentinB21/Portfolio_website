@@ -2,6 +2,7 @@ import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi'
 import { useProjectPresentation } from '../hooks/useProjectPresentation'
+import { resolveMarkdownLinkUrl } from '../utils/markdown'
 
 type ProjectPresentationPreviewProps = {
   projectTitle: string
@@ -38,7 +39,15 @@ export function ProjectPresentationPreview({
 
       {!loading && !error && expanded ? (
         <div className="markdown-body project-presentation-markdown">
-          <ReactMarkdown>{markdown}</ReactMarkdown>
+          <ReactMarkdown
+            components={{
+              a: ({ href, ...props }) => (
+                <a {...props} href={resolveMarkdownLinkUrl(href, presentationUrl)} rel="noreferrer" target="_blank" />
+              ),
+            }}
+          >
+            {markdown}
+          </ReactMarkdown>
         </div>
       ) : null}
     </div>

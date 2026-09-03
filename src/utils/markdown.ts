@@ -21,6 +21,25 @@ export function resolveMarkdownSourceUrl(url: string) {
   }
 }
 
+export function resolveMarkdownLinkUrl(url: string | undefined, sourceUrl?: string) {
+  if (!url || !sourceUrl || url.startsWith('#') || /^[a-z][a-z\d+.-]*:/i.test(url) || url.startsWith('//')) {
+    return url
+  }
+
+  try {
+    const source = new URL(sourceUrl)
+
+    if (source.hostname === 'github.com' && source.pathname.includes('/blob/')) {
+      const sourceDirectory = source.pathname.slice(0, source.pathname.lastIndexOf('/') + 1)
+      return new URL(url, `${source.origin}${sourceDirectory}`).toString()
+    }
+
+    return new URL(url, sourceUrl).toString()
+  } catch {
+    return url
+  }
+}
+
 export async function fetchMarkdownText(url: string) {
   const sourceUrl = resolveMarkdownSourceUrl(url)
   const response = await fetch(sourceUrl, { cache: 'no-store' })
