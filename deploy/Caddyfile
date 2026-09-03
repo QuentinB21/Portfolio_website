@@ -63,37 +63,37 @@
 
 	# Mail Manager Workflow keeps its own compose stack. Only its public HTTP
 	# entry points are reachable through the shared proxy network.
-	redir /projets/MailManagerWorkflow /projets/MailManagerWorkflow/ 308
+	redir /projets/MailManager /projets/MailManager/ 308
 
-	@mailmanager_api path /projets/MailManagerWorkflow/api/* /projets/MailManagerWorkflow/health
+	@mailmanager_api path /projets/MailManager/api/* /projets/MailManager/health
 	handle @mailmanager_api {
-		uri strip_prefix /projets/MailManagerWorkflow
+		uri strip_prefix /projets/MailManager
 		reverse_proxy {$MAILMANAGER_API_UPSTREAM} {
-			header_up X-Forwarded-Prefix /projets/MailManagerWorkflow
+			header_up X-Forwarded-Prefix /projets/MailManager
 		}
 	}
 
-	@mailmanager_auth path /projets/MailManagerWorkflow/auth /projets/MailManagerWorkflow/auth/*
+	@mailmanager_auth path /projets/MailManager/auth /projets/MailManager/auth/*
 	handle @mailmanager_auth {
-		uri strip_prefix /projets/MailManagerWorkflow
+		uri strip_prefix /projets/MailManager
 		reverse_proxy {$MAILMANAGER_AUTH_UPSTREAM} {
-			header_up X-Forwarded-Prefix /projets/MailManagerWorkflow
+			header_up X-Forwarded-Prefix /projets/MailManager
 		}
 	}
 
-	@mailmanager_webhook path /projets/MailManagerWorkflow/webhook/*
+	@mailmanager_webhook path /projets/MailManager/webhook/*
 	handle @mailmanager_webhook {
-		uri strip_prefix /projets/MailManagerWorkflow
+		uri strip_prefix /projets/MailManager
 		reverse_proxy {$MAILMANAGER_WORKFLOW_UPSTREAM} {
-			header_up X-Forwarded-Prefix /projets/MailManagerWorkflow
+			header_up X-Forwarded-Prefix /projets/MailManager
 		}
 	}
 
-	@mailmanager_front path /projets/MailManagerWorkflow/* /projets/MailManagerWorkflow
+	@mailmanager_front path /projets/MailManager/* /projets/MailManager
 	handle @mailmanager_front {
-		uri strip_prefix /projets/MailManagerWorkflow
+		uri strip_prefix /projets/MailManager
 		reverse_proxy {$MAILMANAGER_FRONTEND_UPSTREAM} {
-			header_up X-Forwarded-Prefix /projets/MailManagerWorkflow
+			header_up X-Forwarded-Prefix /projets/MailManager
 		}
 	}
 

@@ -45,7 +45,7 @@ export const showcaseProjects: ShowcaseProject[] = [
     description:
       "Application de classement automatisé d'e-mails combinant une interface React, une API ASP.NET Core et des workflows n8n. Son intégration publique au portfolio est en cours de préparation.",
     stack: ['React', 'ASP.NET Core', 'PostgreSQL', 'Keycloak', 'n8n'],
-    href: '/projets/MailManagerWorkflow/',
+    href: '/projets/MailManager/',
     repoUrl: 'https://github.com/QuentinB21/MailManagerWorkflow',
     presentationUrl: 'https://github.com/QuentinB21/MailManagerWorkflow/blob/master/README.md',
     available: false,

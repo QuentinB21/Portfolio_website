@@ -5,7 +5,7 @@
 - `www.quentin-bouchot.fr` : redirection vers le domaine principal
 - `analytics.quentin-bouchot.fr` : interface Umami
 - `quentin-bouchot.fr/projets/TradeCopilot/*` : application TradeCopilot exposée via le Caddy du portfolio
-- `quentin-bouchot.fr/projets/MailManagerWorkflow/*` : future application Mail Manager Workflow
+- `quentin-bouchot.fr/projets/MailManager/*` : future application Mail Manager Workflow
 
 ## DNS
 Créer les enregistrements `A` suivants dans OVH DNS :
@@ -164,16 +164,16 @@ Les services Postgres ne doivent pas être connectés à `public-proxy`.
 
 Le portfolio prépare les routes suivantes :
 
-- `/projets/MailManagerWorkflow/` vers le frontend React ;
-- `/projets/MailManagerWorkflow/api/*` et `/projets/MailManagerWorkflow/health` vers l'API ASP.NET Core ;
-- `/projets/MailManagerWorkflow/auth/*` vers Keycloak ;
-- `/projets/MailManagerWorkflow/webhook/*` vers les webhooks n8n, sans exposer l'interface d'administration n8n.
+- `/projets/MailManager/` vers le frontend React ;
+- `/projets/MailManager/api/*` et `/projets/MailManager/health` vers l'API ASP.NET Core ;
+- `/projets/MailManager/auth/*` vers Keycloak ;
+- `/projets/MailManager/webhook/*` vers les webhooks n8n, sans exposer l'interface d'administration n8n.
 
 Avant d'activer la carte dans le portfolio, le repo MailManagerWorkflow devra fournir une configuration de production qui respecte les points suivants :
 
-1. Le build Vite utilise `base: '/projets/MailManagerWorkflow/'`.
-2. Le frontend utilise les URL publiques `/projets/MailManagerWorkflow/api`, `/projets/MailManagerWorkflow/auth` et `/projets/MailManagerWorkflow/webhook/mail-manager/email`.
-3. Les redirections Keycloak reviennent vers `https://quentin-bouchot.fr/projets/MailManagerWorkflow/`, et non vers la racine du domaine.
+1. Le build Vite utilise `base: '/projets/MailManager/'`.
+2. Le frontend utilise les URL publiques `/projets/MailManager/api`, `/projets/MailManager/auth` et `/projets/MailManager/webhook/mail-manager/email`.
+3. Les redirections Keycloak reviennent vers `https://quentin-bouchot.fr/projets/MailManager/`, et non vers la racine du domaine.
 4. Keycloak est démarré en mode production derrière un reverse proxy et sert son chemin relatif `/auth`.
 5. `WebOrigin`, les émetteurs JWT et les callbacks OAuth Gmail et Outlook utilisent les URL HTTPS publiques.
 6. Les services `web`, `api`, `keycloak` et `n8n` rejoignent `public-proxy` avec les aliases définis ci-dessous.
