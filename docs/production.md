@@ -5,7 +5,7 @@
 - `www.quentin-bouchot.fr` : redirection vers le domaine principal
 - `analytics.quentin-bouchot.fr` : interface Umami
 - `quentin-bouchot.fr/projets/TradeCopilot/*` : application TradeCopilot exposée via le Caddy du portfolio
-- `quentin-bouchot.fr/projets/MailManager/*` : future application Mail Manager Workflow
+- `quentin-bouchot.fr/projets/MailManager/*` : application Mail Manager Workflow
 
 ## DNS
 Créer les enregistrements `A` suivants dans OVH DNS :
@@ -169,7 +169,7 @@ Le portfolio prépare les routes suivantes :
 - `/projets/MailManager/auth/*` vers Keycloak ;
 - `/projets/MailManager/webhook/*` vers les webhooks n8n, sans exposer l'interface d'administration n8n.
 
-Avant d'activer la carte dans le portfolio, le repo MailManagerWorkflow devra fournir une configuration de production qui respecte les points suivants :
+La configuration de production du repo MailManagerWorkflow respecte les points suivants :
 
 1. Le build Vite utilise `base: '/projets/MailManager/'`.
 2. Le frontend utilise les URL publiques `/projets/MailManager/api`, `/projets/MailManager/auth` et `/projets/MailManager/webhook/mail-manager/email`.
@@ -218,7 +218,7 @@ services:
           - mail-manager-n8n
 ```
 
-La carte reste volontairement marquée `Bientôt disponible` tant que ces adaptations ne sont pas déployées. Il faudra ensuite passer son champ `available` à `true` dans `src/data/content.tsx`. La présentation affichée sur la carte est récupérée depuis le `README.md` public du dépôt MailManagerWorkflow.
+La carte du portfolio ouvre l'application déployée sous `/projets/MailManager/`. Sa présentation est récupérée depuis le `README.md` public du dépôt MailManagerWorkflow.
 
 ## Umami
 1. Ouvre `https://analytics.quentin-bouchot.fr`

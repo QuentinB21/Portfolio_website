@@ -20,7 +20,7 @@ services:
       MAILMANAGER_AUTH_UPSTREAM: ${MAILMANAGER_AUTH_UPSTREAM:-mail-manager-keycloak:8080}
       MAILMANAGER_WORKFLOW_UPSTREAM: ${MAILMANAGER_WORKFLOW_UPSTREAM:-mail-manager-n8n:5678}
     volumes:
-      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./deploy:/etc/caddy:ro
       - caddy-data:/data
       - caddy-config:/config
     depends_on:

@@ -96,7 +96,7 @@ export const siteKnowledge = [
     section: 'Mail Manager Workflow',
     title: 'Projet Mail Manager Workflow',
     content:
-      "Mail Manager Workflow est une application de classement automatisé d'e-mails basée sur React, ASP.NET Core, PostgreSQL, Keycloak et n8n. Son intégration publique au portfolio est en préparation et son dépôt GitHub est accessible depuis la page Projets.",
+      "Mail Manager Workflow est une application de classement automatisé d'e-mails basée sur React, ASP.NET Core, PostgreSQL, Keycloak et n8n. L'application et son dépôt GitHub sont accessibles depuis la page Projets.",
     keywords: ['projet', 'mailmanager', 'mail manager', 'email', 'classement', 'workflow', 'n8n', 'gmail', 'outlook'],
   },
   {

@@ -202,8 +202,8 @@ const deterministicHandlers = [
 
       return buildResponse(
         asksAboutMailManager
-          ? "Mail Manager Workflow est un projet de classement automatisé d'e-mails basé sur React, ASP.NET Core, PostgreSQL, Keycloak et n8n. Son intégration publique au portfolio est en préparation."
-          : "La page Projets présente notamment TradeCopilot et Mail Manager Workflow. TradeCopilot est accessible depuis le portfolio ; l'intégration publique de Mail Manager Workflow est encore en préparation.",
+          ? "Mail Manager Workflow est un projet de classement automatisé d'e-mails basé sur React, ASP.NET Core, PostgreSQL, Keycloak et n8n. L'application et son dépôt sont accessibles depuis la page Projets."
+          : 'La page Projets présente notamment TradeCopilot et Mail Manager Workflow. Les deux applications et leurs dépôts sont accessibles depuis le portfolio.',
         [buildCitation('Projets personnels', '/projets', 'Projets', 'TradeCopilot et Mail Manager Workflow sont présentés sur cette page.')],
         [buildSuggestion('Voir la page Projets', '/projets', 'pour consulter les présentations et accéder aux dépôts')],
       )
