@@ -65,6 +65,23 @@
 	# entry points are reachable through the shared proxy network.
 	redir /projets/MailManager /projets/MailManager/ 308
 
+	# OAuth discovery for an issuer with a path (RFC 8414 / OIDC).
+	# Keep these exact routes ahead of the portfolio SPA fallback.
+	@mailmanager_oauth_metadata path /.well-known/oauth-authorization-server/projets/MailManager/auth/realms/mail-manager /.well-known/openid-configuration/projets/MailManager/auth/realms/mail-manager
+	handle @mailmanager_oauth_metadata {
+		rewrite * /auth/realms/mail-manager/.well-known/openid-configuration
+		reverse_proxy {$MAILMANAGER_AUTH_UPSTREAM} {
+			header_up X-Forwarded-Prefix /projets/MailManager
+		}
+	}
+
+	handle /.well-known/oauth-protected-resource/projets/MailManager/api/mcp {
+		rewrite * /api/mcp/oauth-protected-resource
+		reverse_proxy {$MAILMANAGER_API_UPSTREAM} {
+			header_up X-Forwarded-Prefix /projets/MailManager
+		}
+	}
+
 	@mailmanager_api path /projets/MailManager/api/* /projets/MailManager/health
 	handle @mailmanager_api {
 		uri strip_prefix /projets/MailManager
