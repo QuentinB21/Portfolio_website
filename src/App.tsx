@@ -14,6 +14,8 @@ import { CvPage } from './pages/CvPage'
 import { OverviewPage } from './pages/OverviewPage'
 import { ProjectsPage } from './pages/ProjectsPage'
 import { WorkPage } from './pages/WorkPage'
+import { LegalPage } from './pages/LegalPage'
+import { PrivacyPage } from './pages/PrivacyPage'
 import { buildAnalyticsContext, initializeAnalytics, sendAnalyticsEvent } from './utils/analytics'
 import { printHtmlContent } from './utils/printCv'
 import { getTimelineStartValue } from './utils/timeline'
@@ -30,6 +32,7 @@ function App() {
   const { cvLoading, cvError, cvHtml } = useCvContent({ cvMarkdownUrl })
   const { theme, toggleTheme } = useThemePreference({ path: location.pathname })
   const { messages, input, setInput, typingText, isTyping, chatOpen, handleSubmit, toggleChat } = useChatbot({
+    enabled: CHATBOT_ENABLED,
     path: location.pathname,
     theme,
   })
@@ -90,6 +93,8 @@ function App() {
             <Route path="/work" element={<WorkPage timelineEntries={timelineEntries} />} />
             <Route path="/projets" element={<ProjectsPage />} />
             <Route path="/cv" element={<CvPage cvHtml={cvHtml} cvLoading={cvLoading} cvError={cvError} />} />
+            <Route path="/mentions-legales" element={<LegalPage />} />
+            <Route path="/confidentialite" element={<PrivacyPage />} />
           </Routes>
         </SiteChrome>
       </div>

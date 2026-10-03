@@ -6,14 +6,16 @@ import { cannedAnswers } from '../data/content'
 import { fetchChatResponse } from '../services/chatApi'
 import type { AnalyticsPayload } from '../utils/analytics'
 import type { ChatCitation, ChatMessage, ChatSuggestedPath, Theme } from '../types'
+import { defaultMessages } from '../config/site'
 
 type UseChatbotParams = {
+  enabled: boolean
   path: string
   theme: Theme
 }
 
-export function useChatbot({ path, theme }: UseChatbotParams) {
-  const [messages, setMessages] = useState<ChatMessage[]>(() => readStoredMessages())
+export function useChatbot({ path, theme, enabled }: UseChatbotParams) {
+  const [messages, setMessages] = useState<ChatMessage[]>(() => enabled ? readStoredMessages() : defaultMessages)
   const [input, setInput] = useState('')
   const [typingText, setTypingText] = useState('')
   const [isTyping, setIsTyping] = useState(false)
@@ -29,8 +31,8 @@ export function useChatbot({ path, theme }: UseChatbotParams) {
   }, [])
 
   useEffect(() => {
-    storeMessages(messages)
-  }, [messages])
+    if (enabled) storeMessages(messages)
+  }, [messages, enabled])
 
   const pickAnswer = (question: string) => {
     const normalized = question.toLowerCase()

@@ -1,6 +1,8 @@
 import { useLayoutEffect, useRef, type ReactNode } from 'react'
 import { LuMoon, LuSun } from 'react-icons/lu'
 import logoMark from '../assets/1_glass.png'
+import { Link } from 'react-router-dom'
+import { PrivacyControls } from './PrivacyControls'
 import { navItems } from '../config/site'
 import type { Theme } from '../types'
 
@@ -104,7 +106,14 @@ export function SiteChrome({
       </header>
 
       <main key={currentPath} className="page-content">{children}</main>
-      <footer className="site-footer">© 2026 Quentin Bouchot.</footer>
+      <footer className="site-footer">
+        <span>© 2026 Quentin Bouchot.</span>
+        <nav className="footer-links" aria-label="Informations légales">
+          <Link className="footer-link" to="/mentions-legales" onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })}>Mentions légales</Link>
+          <Link className="footer-link" to="/confidentialite" onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })}>Confidentialité</Link>
+          <PrivacyControls />
+        </nav>
+      </footer>
     </div>
   )
 }

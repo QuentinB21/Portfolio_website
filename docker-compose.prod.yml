@@ -1,7 +1,14 @@
 name: portfolio-prod
 
+x-logging: &limited-logging
+  driver: json-file
+  options:
+    max-size: '10m'
+    max-file: '3'
+
 services:
   caddy:
+    logging: *limited-logging
     image: caddy:2-alpine
     restart: unless-stopped
     ports:
@@ -31,6 +38,7 @@ services:
       - public-proxy
 
   portfolio:
+    logging: *limited-logging
     build:
       context: .
       args:
@@ -52,6 +60,7 @@ services:
       - umami
 
   umami-db:
+    logging: *limited-logging
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
@@ -62,6 +71,7 @@ services:
       - umami-db-data:/var/lib/postgresql/data
 
   umami:
+    logging: *limited-logging
     image: ghcr.io/umami-software/umami:postgresql-latest
     restart: unless-stopped
     expose:
@@ -72,6 +82,30 @@ services:
       APP_SECRET: ${UMAMI_APP_SECRET}
     depends_on:
       - umami-db
+
+  # Applies only to the portfolio website UUID, never other sites in Umami.
+  umami-retention:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    logging: *limited-logging
+    environment:
+      PGHOST: umami-db
+      PGDATABASE: ${UMAMI_DB_NAME}
+      PGUSER: ${UMAMI_DB_USER}
+      PGPASSWORD: ${UMAMI_DB_PASSWORD}
+      WEBSITE_ID: ${VITE_UMAMI_WEBSITE_ID}
+    volumes:
+      - ./deploy/umami-retention.sql:/retention.sql:ro
+    depends_on:
+      - umami-db
+    entrypoint: ['/bin/sh', '-ec']
+    command:
+      - |
+        until pg_isready; do sleep 5; done
+        while true; do
+          psql -v ON_ERROR_STOP=1 -v website_id="$$WEBSITE_ID" -f /retention.sql
+          sleep 86400
+        done
 
 volumes:
   caddy-data:

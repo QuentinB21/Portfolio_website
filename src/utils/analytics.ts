@@ -1,3 +1,5 @@
+import { analyticsAllowed, clearAnalyticsIdentifiers } from './privacy'
+
 export type AnalyticsPayload = Record<string, string | number | boolean | null>
 
 declare global {
@@ -23,6 +25,7 @@ function createId() {
 
 export function getVisitorId() {
   if (typeof window === 'undefined') return 'server'
+  if (!analyticsAllowed()) return 'disabled'
 
   const existing = window.localStorage.getItem(VISITOR_STORAGE_KEY)
   if (existing) return existing
@@ -34,6 +37,7 @@ export function getVisitorId() {
 
 export function getSessionId() {
   if (typeof window === 'undefined') return 'server'
+  if (!analyticsAllowed()) return 'disabled'
 
   const existing = window.sessionStorage.getItem(SESSION_STORAGE_KEY)
   if (existing) return existing
@@ -43,7 +47,8 @@ export function getSessionId() {
   return next
 }
 
-export function buildAnalyticsContext(path: string, theme: 'dark' | 'light') {
+export function buildAnalyticsContext(path: string, theme: 'dark' | 'light'): AnalyticsPayload {
+  if (typeof window !== 'undefined' && !analyticsAllowed()) return {}
   if (typeof window === 'undefined') {
     return {
       visitorId: 'server',
@@ -70,7 +75,12 @@ export function buildAnalyticsContext(path: string, theme: 'dark' | 'light') {
 }
 
 export function initializeAnalytics() {
-  if (typeof document === 'undefined' || !UMAMI_SCRIPT_URL || !UMAMI_WEBSITE_ID) return
+  if (typeof document === 'undefined') return
+  if (!analyticsAllowed()) {
+    clearAnalyticsIdentifiers()
+    return
+  }
+  if (!UMAMI_SCRIPT_URL || !UMAMI_WEBSITE_ID) return
   if (document.querySelector('script[data-umami-script="true"]')) return
 
   const script = document.createElement('script')
@@ -84,6 +94,7 @@ export function initializeAnalytics() {
 
 export function sendAnalyticsEvent(type: string, payload: AnalyticsPayload) {
   if (typeof window === 'undefined') return
+  if (!analyticsAllowed()) return
   if (!window.umami?.track) return
 
   window.umami.track(type, payload)
