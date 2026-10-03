@@ -195,6 +195,8 @@
   text-align: center;
   white-space: nowrap;
   cursor: pointer;
+  /* The animated indicator provides feedback instead of the browser's tap overlay. */
+  -webkit-tap-highlight-color: transparent;
   transition:
     color 0.28s ease,
     transform 0.28s ease,
