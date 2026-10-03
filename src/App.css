@@ -1496,9 +1496,34 @@ body.light .chat-messages::-webkit-scrollbar-thumb:hover {
 }
 
 @media (max-width: 720px) {
+  :root {
+    --mobile-nav-height: calc(2.75rem + 0.6rem + 2px);
+    --mobile-nav-offset: 1.25rem;
+    --mobile-nav-clearance: calc(var(--mobile-nav-height) + var(--mobile-nav-offset) + 1rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  html {
+    scroll-padding-bottom: var(--mobile-nav-clearance);
+  }
+
   .page-shell {
     width: min(100% - 20px, 1160px);
-    padding-top: 9rem;
+    padding-top: calc(6rem + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(var(--mobile-nav-clearance) + 0.75rem);
+  }
+
+  .page-shell::before {
+    content: '';
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 19;
+    height: var(--mobile-nav-clearance);
+    pointer-events: none;
+    background: linear-gradient(to bottom, transparent, var(--bg-end));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    mask-image: linear-gradient(to bottom, transparent, black 65%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 65%);
   }
 
   .topbar,
@@ -1600,16 +1625,22 @@ body.light .chat-messages::-webkit-scrollbar-thumb:hover {
 
   .floating-chat {
     right: 1rem;
-    bottom: 1rem;
+    bottom: var(--mobile-nav-clearance);
   }
 
   .topbar {
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100vw - 132px);
-    max-width: 18rem;
+    top: auto;
+    bottom: calc(var(--mobile-nav-offset) + env(safe-area-inset-bottom, 0px));
+    left: calc(12px + env(safe-area-inset-left, 0px));
+    right: calc(12px + env(safe-area-inset-right, 0px));
+    transform: none;
+    width: auto;
+    max-width: none;
     justify-content: center;
     padding: 0;
+    margin-bottom: 0;
+    border-radius: 999px;
+    background: var(--button-secondary-fill);
   }
 
   .brand-text {
@@ -1617,7 +1648,8 @@ body.light .chat-messages::-webkit-scrollbar-thumb:hover {
   }
 
   .chrome-brand {
-    left: 10px;
+    top: calc(1.5rem + env(safe-area-inset-top, 0px));
+    left: calc(10px + env(safe-area-inset-left, 0px));
   }
 
   .brand-button {
@@ -1642,15 +1674,16 @@ body.light .chat-messages::-webkit-scrollbar-thumb:hover {
   }
 
   .nav-tab {
-    padding-inline: 0.55rem;
-    font-size: 0.82rem;
+    min-height: 2.75rem;
+    padding-inline: 1rem;
+    font-size: 0.9rem;
   }
 
   .chrome-utilities {
-    top: 1.5rem;
-    right: 10px;
+    top: calc(1.5rem + env(safe-area-inset-top, 0px));
+    right: calc(10px + env(safe-area-inset-right, 0px));
     width: auto;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
   }
 
@@ -1676,5 +1709,10 @@ body.light .chat-messages::-webkit-scrollbar-thumb:hover {
   .chrome-utilities .primary-button svg {
     width: 16px;
     height: 16px;
+  }
+
+  .privacy-banner {
+    bottom: var(--mobile-nav-clearance);
+    max-height: calc(100dvh - var(--mobile-nav-clearance) - 1rem);
   }
 }
