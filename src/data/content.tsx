@@ -60,6 +60,15 @@ export const personalProjects: PersonalProject[] = [
 
 export const timelineItems: TimelineItem[] = [
   {
+    kind: "experience",
+    title: "Stage · Agents IA & automatisation",
+    place: "Innoova · Montréal, Québec, Canada",
+    periodStart: "2026-06-29",
+    periodEnd: "2026-08-28",
+    detail:
+      "Conception d'agents IA pour accélérer les processus internes d'Innoova dans son activité d'intégration Workday. Analyse des besoins avec l'équipe et exploration des usages de l'intelligence artificielle pour faciliter le travail des intégrateurs. Une expérience internationale mêlant autonomie, compréhension des enjeux métiers et collaboration au sein d'une équipe de conseil en transformation numérique.",
+  },
+  {
     kind: 'experience',
     title: 'Software Engineer Apprentice',
     place: 'Renault Trucks (Volvo Group)',
