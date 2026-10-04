@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <title>Quentin Bouchot — monogramme BQ</title>
+  <defs>
+    <!-- One continuous silhouette: shared bowls, stem and Q tail. -->
+    <path id="monogram" fill-rule="evenodd" d="M250 35C133 35 48 123 48 252C48 380 132 451 250 451C287 451 319 445 347 432C367 455 385 476 417 476C441 476 462 466 478 450C446 431 418 407 397 379C425 354 439 323 439 289C439 259 425 235 395 220C421 203 431 179 431 153C431 82 359 35 250 35ZM250 100C160 100 111 166 111 252C111 340 165 391 250 391C325 391 375 352 375 302C375 269 350 253 286 253L286 352Q286 366 272 368Q245 373 225 366Q216 364 216 354L216 130Q216 119 229 117Q253 112 273 117Q286 119 286 130L286 199C342 202 371 185 371 156C371 122 321 100 250 100Z"/>
+    <linearGradient id="body" x1="78" y1="130" x2="433" y2="338" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#77b8f0" stop-opacity=".62"/>
+      <stop offset=".42" stop-color="#a9d9ee" stop-opacity=".46"/>
+      <stop offset="1" stop-color="#80decd" stop-opacity=".7"/>
+    </linearGradient>
+    <linearGradient id="depth" x1="110" y1="380" x2="359" y2="98" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#24518c" stop-opacity=".22"/>
+      <stop offset=".52" stop-color="#437ba0" stop-opacity="0"/>
+      <stop offset="1" stop-color="#effcff" stop-opacity=".38"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="161" y1="43" x2="385" y2="460" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#e6f8ff" stop-opacity=".95"/>
+      <stop offset=".43" stop-color="#72b9d5" stop-opacity=".48"/>
+      <stop offset="1" stop-color="#c3ffed" stop-opacity=".95"/>
+    </linearGradient>
+    <linearGradient id="reflection" x1="166" y1="51" x2="301" y2="329" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff" stop-opacity=".48"/>
+      <stop offset=".65" stop-color="#e4faff" stop-opacity=".03"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="glass"><use href="#monogram"/></clipPath>
+  </defs>
+  <use href="#monogram" fill="url(#body)"/>
+  <use href="#monogram" fill="url(#depth)"/>
+  <g clip-path="url(#glass)">
+    <!-- Clipped bevels keep both the exterior and counters truly transparent. -->
+    <use href="#monogram" stroke="#28618c" stroke-opacity=".2" stroke-width="12" transform="translate(0 3)"/>
+    <use href="#monogram" stroke="url(#edge)" stroke-width="7"/>
+    <path d="M84 244C82 141 153 48 258 48C329 48 400 81 409 137C361 112 327 92 268 93C173 94 124 166 120 277Z" fill="url(#reflection)"/>
+    <path d="M224 130Q251 122 277 130V348Q251 356 224 348Z" fill="url(#reflection)"/>
+    <path d="M74 231C81 122 154 46 250 46C321 46 389 70 415 122M123 295C141 356 187 402 252 403C322 403 359 381 384 350M355 420C385 451 405 473 455 451" stroke="#ecfffc" stroke-opacity=".46" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+  <use href="#monogram" stroke="url(#edge)" stroke-width="1.5"/>
+</svg>

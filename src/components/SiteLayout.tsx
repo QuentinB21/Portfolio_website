@@ -1,6 +1,6 @@
 import { useRef, type ReactNode } from 'react'
 import { LuMoon, LuSun } from 'react-icons/lu'
-import logoMark from '../assets/logo.png'
+import logoMark from '../assets/logo.svg'
 import { SiteNavigation } from './SiteNavigation'
 import { SiteFooter } from './SiteFooter'
 import type { Theme } from '../types'
