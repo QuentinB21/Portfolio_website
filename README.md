@@ -10,6 +10,8 @@ Site personnel/portfolio en React + TypeScript + Vite, servi par un backend Node
 - Caddy pour le reverse proxy et le HTTPS en production
 
 ## Démarrer en local
+Utiliser Node.js 24 LTS.
+
 ```bash
 npm install
 npm run dev
