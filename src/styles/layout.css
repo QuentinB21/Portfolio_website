@@ -6,48 +6,21 @@
 
 .ambient {
   position: fixed;
+  inset: 0;
   pointer-events: none;
   z-index: 0;
-  filter: blur(56px);
-  opacity: 0.9;
-}
-
-.ambient-top {
-  top: 2rem;
-  left: 42%;
-  width: 48rem;
-  height: 8rem;
-  border-radius: 999px;
-  background: linear-gradient(
-    90deg,
-    rgba(106, 168, 255, 0.18),
-    rgba(128, 226, 255, 0.14),
-    rgba(137, 240, 193, 0.12)
-  );
-  transform: rotate(-5deg);
-}
-
-.ambient-left {
-  top: 18rem;
-  left: -6rem;
-  width: 14rem;
-  height: 48rem;
-  border-radius: 999px;
-  background: linear-gradient(
-    180deg,
-    rgba(79, 139, 255, 0.14),
-    rgba(128, 226, 255, 0.1),
-    rgba(137, 240, 193, 0.08)
-  );
-  transform: rotate(-8deg);
+  background:
+    radial-gradient(ellipse at 12% 35%, var(--halo-blue), transparent 56%),
+    radial-gradient(ellipse at 88% 12%, var(--halo-violet), transparent 48%),
+    radial-gradient(ellipse at 70% 90%, var(--halo-mint), transparent 54%);
 }
 
 .page-shell {
   position: relative;
   z-index: 1;
-  width: min(1160px, calc(100% - 32px));
+  width: min(1240px, calc(100% - 80px));
   margin: 0 auto;
-  padding: 7.5rem 0 5rem;
+  padding: 9rem 0 4rem;
 }
 
 .site-utilities {
@@ -82,7 +55,7 @@
 .page-content {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: clamp(3.5rem, 7vw, 6rem);
   /* Release the opacity/transform layer when the entrance animation finishes. */
   animation: page-enter 0.42s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }

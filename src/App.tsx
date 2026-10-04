@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useLayoutEffect } from 'react'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { CvDownloadButton } from './components/CvDownloadButton'
 import { SiteLayout } from './components/SiteLayout'
@@ -22,6 +22,10 @@ function App() {
   const { pathname } = useLocation()
   const { cvLoading, cvError, cvHtml } = useCvContent({ cvMarkdownUrl })
   const { theme, toggleTheme } = useThemePreference({ path: pathname })
+
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+  }, [pathname])
 
   useEffect(() => {
     initializeAnalytics()

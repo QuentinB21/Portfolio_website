@@ -12,7 +12,7 @@ export function CvPage({ cvHtml, cvLoading, cvError }: CvPageProps) {
     <>
       <PageIntro
         kicker="CV"
-        title="Mon CV, consultable ici et synchronisé avec GitHub."
+        title="Mon parcours, en quelques pages."
         variant="cv"
         aside={
           <div className="cv-meta">
@@ -30,7 +30,7 @@ export function CvPage({ cvHtml, cvLoading, cvError }: CvPageProps) {
       </PageIntro>
 
       <section className="stacked-section">
-        <article className="glass-panel cv-document">
+        <article className="cv-document">
           {cvLoading && <p className="body-copy">Chargement du CV...</p>}
           {cvError && !cvLoading && <p className="body-copy">{cvError}</p>}
           {!cvLoading && !cvError && (

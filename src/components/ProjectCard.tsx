@@ -9,7 +9,7 @@ type ProjectCardProps = {
 
 export function ProjectCard({ title, description, action, children }: ProjectCardProps) {
   return (
-    <article className="glass-panel proof-card project-feature">
+    <article className="project-feature">
       <div className="project-feature-head">
         <div>
           <h2>{title}</h2>

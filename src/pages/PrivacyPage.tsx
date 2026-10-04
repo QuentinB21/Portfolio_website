@@ -3,7 +3,7 @@ import { ANALYTICS_CONFIGURED } from '../utils/privacy'
 
 export function PrivacyPage() {
   return (
-    <article className="glass-panel legal-page">
+    <article className="legal-page">
       <span className="section-kicker">Données personnelles</span>
       <h1>Confidentialité</h1>
       <p>

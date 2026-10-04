@@ -1,4 +1,4 @@
-import { contact } from '../data/content'
+import { contact } from "../data/content";
 
 export function ContactLinks() {
   return (
@@ -7,30 +7,33 @@ export function ContactLinks() {
         <a
           className={`glass-panel contact-pill ${getContactToneClass(item.href)}`}
           href={item.href}
+          aria-label={item.label}
           key={item.label}
           rel="noreferrer"
           target="_blank"
         >
-          <span className="contact-icon">{item.icon}</span>
-          <span>{item.label}</span>
+          <span className="contact-icon" aria-hidden="true">
+            {item.icon}
+          </span>
+          <span className="contact-label">{item.label}</span>
         </a>
       ))}
     </div>
-  )
+  );
 }
 
 function getContactToneClass(href: string) {
-  if (href.startsWith('mailto:')) {
-    return 'contact-pill-mail'
+  if (href.startsWith("mailto:")) {
+    return "contact-pill-mail";
   }
 
-  if (href.includes('linkedin.com')) {
-    return 'contact-pill-linkedin'
+  if (href.includes("linkedin.com")) {
+    return "contact-pill-linkedin";
   }
 
-  if (href.includes('github.com')) {
-    return 'contact-pill-github'
+  if (href.includes("github.com")) {
+    return "contact-pill-github";
   }
 
-  return ''
+  return "";
 }

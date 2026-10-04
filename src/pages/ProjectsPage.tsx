@@ -9,15 +9,14 @@ import { personalProjects } from '../data/content'
 export function ProjectsPage() {
   return (
     <>
-      <PageIntro kicker="Projets" title="Mes projets personnels">
-        Cette page regroupe les projets personnels que je souhaite partager. Chaque carte donne un point
-        d’entrée rapide, puis permet d’ouvrir soit l’application, soit son dépôt si tu veux creuser davantage.
+      <PageIntro kicker="Projets personnels" title="Des idées, du code, des usages.">
+        Des applications que je construis pour explorer, apprendre et répondre à des besoins concrets.
+        Le code et les présentations sont accessibles pour aller plus loin.
       </PageIntro>
 
       <section className="stacked-section">
         <SectionHeader
-          title="Projets personnels"
-          subtitle="Chaque carte peut ouvrir un projet autonome hébergé sur le même VPS, tout en gardant son propre dépôt, sa propre base de données et sa propre chaîne de déploiement."
+          title="Ce que je construis."
         />
         <div className="project-stack">
           {personalProjects.map((project) => (

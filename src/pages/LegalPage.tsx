@@ -3,7 +3,7 @@ import { legal } from '../config/legal'
 
 export function LegalPage() {
   return (
-    <article className="glass-panel legal-page">
+    <article className="legal-page">
       <span className="section-kicker">Informations du site</span>
       <h1>Mentions légales</h1>
       <p>Ce portfolio personnel présente le parcours et les projets de {legal.publisher}. Il ne propose ni vente en ligne ni prestation commerciale.</p>

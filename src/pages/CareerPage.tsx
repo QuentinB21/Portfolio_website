@@ -12,7 +12,7 @@ export function CareerPage() {
     <>
       <PageIntro
         kicker="Travaux & parcours"
-        title="Un parcours chronologique centré sur des expériences concretes."
+        title="Apprendre. Construire. Améliorer."
         aside={
           <div className="editorial-stats">
             <ProfileFact label="Poste actuel" value="Software Engineer Apprentice" />
@@ -21,8 +21,8 @@ export function CareerPage() {
           </div>
         }
       >
-        Cette page rassemble les expériences professionnelles, la formation et les compétences techniques qui
-        structurent aujourd'hui mon profil d'ingénieur logiciel orienté produit et qualité.
+        Du développement d'interfaces aux outils de diagnostic : un parcours guidé par le produit,
+        la fiabilité et l'envie de comprendre comment les choses fonctionnent.
       </PageIntro>
 
       <section className="stacked-section">
@@ -54,7 +54,7 @@ export function CareerPage() {
       </section>
 
       <section className="stacked-section split-section">
-        <div className="split-main glass-panel">
+        <div className="split-main">
           <SectionHeader
             title="Chronologie"
             subtitle="Une lecture simple du parcours, des experiences d'alternance jusqu'à la formation d'ingénieur."
@@ -62,7 +62,7 @@ export function CareerPage() {
           <CareerTimeline />
         </div>
 
-        <aside className="split-rail glass-panel">
+        <aside className="split-rail">
           <SectionHeader
             title="Compétences"
             subtitle="Les outils et domaines que j'utilise aujourd'hui le plus dans un contexte logiciel professionnel."

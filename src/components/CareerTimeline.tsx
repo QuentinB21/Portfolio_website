@@ -15,7 +15,7 @@ export function CareerTimeline() {
             key={`${item.title}-${item.periodStart}`}
           >
             <div className="timeline-card-shell">
-              <div className={`timeline-card glass-panel timeline-card-${variant.kind}`}>
+              <div className={`timeline-card timeline-card-${variant.kind}`}>
                 <div className="timeline-card-top">
                   <span className="timeline-badge">{formatTimelinePeriod(item)}</span>
                   <span className={`timeline-kind timeline-kind-${variant.kind}`}>
