@@ -16,7 +16,7 @@ L’inventaire suit les imports depuis `src/main.tsx`, les références HTML/CSS
 | Styles du chatbot | Aucun élément correspondant après suppression | Retrait du bloc complet, des surcharges mobile et des variables associées |
 | Autres styles inutilisés | `theme-switch-glyph`, `accent-pill-wide`, `principle-list`, `quote-block`, ancienne règle mobile `timeline-period`, variable `text-subtle` | Suppression ; règles répétées du bouton de présentation fusionnées |
 | `src/assets/1.png`, `react.svg`, `public/vite.svg` | Aucune référence active | Suppression |
-| `1_glass.png`, `2_glass.png` | Ancien logo et favicon | Remplacés par le monogramme vectoriel transparent `logo.svg`, partagé par le site et le favicon |
+| `1_glass.png`, `2_glass.png` | Ancien logo et favicon | Remplacés par le logo vectoriel transparent `logo.svg` et sa version simplifiée pour les onglets `favicon.svg` |
 | README et informations sur l’assistant | Documentation en décalage avec le code, référence à un fichier partagé inexistant | Mise à jour du README, de la documentation de production et retrait des passages sur l’assistant dans la confidentialité |
 
 Au total, 17 fichiers obsolètes sont supprimés, hors fichiers remplacés ou renommés. Les sources `src/` et `server/` passent de **5 009 à 3 423 lignes**, soit **1 586 lignes en moins**, malgré l’extraction de composants et la mise en forme. Ce comptage exclut documentation, images et nouveaux tests.

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="24 16 480 480" fill="none">
+  <title>Quentin Bouchot</title>
+  <defs>
+    <!-- Opaque colours preserve contrast at 16–32 px on light and dark tabs. -->
+    <linearGradient id="colour" x1="80" y1="70" x2="430" y2="430" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#609fda"/>
+      <stop offset=".5" stop-color="#74b8d1"/>
+      <stop offset="1" stop-color="#6acdb2"/>
+    </linearGradient>
+  </defs>
+  <path fill-rule="evenodd" d="M250 35C133 35 48 123 48 252C48 380 132 451 250 451C287 451 319 445 347 432C367 455 385 476 417 476C441 476 462 466 478 450C446 431 418 407 397 379C425 354 439 323 439 289C439 259 425 235 395 220C421 203 431 179 431 153C431 82 359 35 250 35ZM250 100C160 100 111 166 111 252C111 340 165 391 250 391C325 391 375 352 375 302C375 269 350 253 286 253L286 352Q286 366 272 368Q245 373 225 366Q216 364 216 354L216 130Q216 119 229 117Q253 112 273 117Q286 119 286 130L286 199C342 202 371 185 371 156C371 122 321 100 250 100Z" fill="url(#colour)" stroke="#478aa3" stroke-width="5" stroke-linejoin="round"/>
+</svg>
