@@ -1,14 +1,17 @@
 import { FiGithub, FiLinkedin, FiMail } from 'react-icons/fi'
-import type { CannedAnswer, ContactItem, Project, ShowcaseProject, Skill, TimelineItem } from '../types'
+import type { ContactItem, ProfessionalProject, PersonalProject, Skill, TimelineItem } from '../types'
 
 export const skills: Skill[] = [
   { title: 'Backend', items: ['C#', '.NET', 'ASP.NET', 'API REST', 'Architecture logicielle'] },
   { title: 'Frontend', items: ['Blazor', 'Vue.js', 'TypeScript', 'JavaScript'] },
   { title: 'DevOps & outils', items: ['Azure DevOps', 'CI/CD', 'Docker', 'Git'] },
-  { title: 'Qualité logicielle', items: ['Tests unitaires', 'Tests fonctionnels', 'Testabilité', 'Réduction des régressions'] },
+  {
+    title: 'Qualité logicielle',
+    items: ['Tests unitaires', 'Tests fonctionnels', 'Testabilité', 'Réduction des régressions'],
+  },
 ]
 
-export const projects: Project[] = [
+export const professionalProjects: ProfessionalProject[] = [
   {
     title: 'Outils de diagnostic véhicules',
     description:
@@ -27,7 +30,7 @@ export const projects: Project[] = [
   },
 ]
 
-export const showcaseProjects: ShowcaseProject[] = [
+export const personalProjects: PersonalProject[] = [
   {
     title: 'TradeCopilot',
     description:
@@ -96,27 +99,4 @@ export const contact: ContactItem[] = [
   { label: 'bouchotquentin0603@gmail.com', icon: <FiMail />, href: 'mailto:bouchotquentin0603@gmail.com' },
   { label: 'LinkedIn', icon: <FiLinkedin />, href: 'https://www.linkedin.com/in/quentin-bouchot-1b55321a7/' },
   { label: 'GitHub', icon: <FiGithub />, href: 'https://github.com/QuentinB21' },
-]
-
-export const cannedAnswers: CannedAnswer[] = [
-  {
-    keywords: ['stack', 'tech', 'techno', 'compétence', 'competence'],
-    answer:
-      "Je travaille surtout avec C# et .NET côté applicatif, Blazor et Vue.js côté interface, et Azure DevOps / CI-CD / Docker pour l'industrialisation et la qualité logicielle.",
-  },
-  {
-    keywords: ['exp', 'expérience', 'experience', 'parcours', 'cv'],
-    answer:
-      'Je suis actuellement Software Engineer Apprentice chez Renault Trucks après une alternance chez Biosystèmes. Je suis également élève ingénieur à CPE Lyon, spécialisé en développement logiciel, data et IA.',
-  },
-  {
-    keywords: ['qualité', 'qualite', 'tests', 'industrialisation', 'ci', 'cd'],
-    answer:
-      "Je m'intéresse particulièrement à la qualité logicielle, à la testabilité, à la réduction des régressions et à l'industrialisation via les tests et les pipelines CI/CD.",
-  },
-  {
-    keywords: ['projet', 'projets', 'travaux', 'tradecopilot', 'mailmanager', 'mail manager', 'email'],
-    answer:
-      'La page Projets expose des applications autonomes hébergées depuis le même domaine. TradeCopilot et Mail Manager Workflow y sont accessibles avec leur présentation et leur dépôt.',
-  },
 ]

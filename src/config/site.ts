@@ -1,6 +1,4 @@
-import type { ChatMessage, NavItem, ProofItem } from '../types'
-
-export const CHATBOT_ENABLED = false
+import type { NavItem, ProofItem } from '../types'
 
 export const navItems: NavItem[] = [
   { label: 'Accueil', path: '/' },
@@ -24,19 +22,4 @@ export const overviewProofs: ProofItem[] = [
   },
 ]
 
-export const CHAT_STORAGE_KEY = 'quentinbot:messages'
 export const THEME_STORAGE_KEY = 'portfolio:theme'
-
-export const defaultMessages: ChatMessage[] = [
-  {
-    from: 'assistant',
-    text: "Salut, je suis QuentinBot. Je peux t'aider à comprendre le parcours de Quentin, ses compétences, les pages du site et te rediriger vers les sections utiles.",
-    suggestedPaths: [
-      { label: 'Voir la page Carrière', path: '/work', reason: 'pour consulter la chronologie, les expériences et les compétences' },
-      { label: 'Voir la page CV', path: '/cv', reason: 'pour lire et télécharger le CV' },
-      { label: 'Voir la page Projets', path: '/projets', reason: 'pour accéder aux applications et démonstrations hébergées' },
-    ],
-  },
-]
-
-export const MONTH_LABELS = ['Janv.', 'Févr.', 'Mars', 'Avr.', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.']

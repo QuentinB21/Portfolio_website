@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { fetchAndRenderMarkdown } from '../utils/printCv'
+import { fetchAndRenderMarkdown } from '../utils/renderMarkdown'
 
 type UseCvContentParams = {
   cvMarkdownUrl: string

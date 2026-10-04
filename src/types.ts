@@ -1,12 +1,5 @@
 import type { ReactNode } from 'react'
 
-export type ChatMessage = {
-  from: 'user' | 'assistant'
-  text: string
-  citations?: ChatCitation[]
-  suggestedPaths?: ChatSuggestedPath[]
-}
-
 export type Theme = 'dark' | 'light'
 
 export type NavItem = {
@@ -19,25 +12,12 @@ export type ProofItem = {
   body: string
 }
 
-export type ChatCitation = {
-  title: string
-  path: string
-  section: string
-  excerpt: string
-}
-
-export type ChatSuggestedPath = {
-  label: string
-  path: string
-  reason: string
-}
-
 export type Skill = {
   title: string
   items: string[]
 }
 
-export type Project = {
+export type ProfessionalProject = {
   title: string
   description: string
   stack: string[]
@@ -45,7 +25,7 @@ export type Project = {
   status: string
 }
 
-export type ShowcaseProject = {
+export type PersonalProject = {
   title: string
   description: string
   stack: string[]
@@ -71,9 +51,4 @@ export type ContactItem = {
   label: string
   icon: ReactNode
   href: string
-}
-
-export type CannedAnswer = {
-  keywords: string[]
-  answer: string
 }

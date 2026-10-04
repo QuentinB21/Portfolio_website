@@ -1,7 +1,7 @@
 import { THEME_STORAGE_KEY } from '../config/site'
 import type { Theme } from '../types'
 
-export function getSystemTheme(): Theme {
+function getSystemTheme(): Theme {
   if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
     return 'dark'
   }

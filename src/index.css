@@ -13,12 +13,10 @@
   --text-strong: #f4f7fb;
   --text-body: #d6dfeb;
   --text-muted: #92a3b8;
-  --text-subtle: #718197;
-  --glass-fill: rgba(17, 24, 38, 0.10);
-  --topbar-fill: rgba(17, 24, 38, 0.10);
+  --glass-fill: rgba(17, 24, 38, 0.1);
+  --navigation-fill: rgba(17, 24, 38, 0.1);
   --panel-soft-fill: rgba(17, 24, 38, 0.4);
   --button-secondary-fill: rgba(21, 34, 53, 0.74);
-  --chat-fill: rgba(13, 20, 32, 0.74);
   --glass-stroke: rgba(244, 248, 255, 0.12);
   --glass-inner: rgba(248, 251, 255, 0.08);
   --glass-shadow: 0 24px 56px rgba(1, 4, 10, 0.34);
@@ -47,7 +45,9 @@ body {
   min-height: 100vh;
   background: linear-gradient(180deg, var(--bg-start) 0%, var(--bg-end) 100%);
   color: var(--text-strong);
-  transition: background 0.25s ease, color 0.25s ease;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease;
 }
 
 body.light {
@@ -60,12 +60,10 @@ body.light {
   --text-strong: #142033;
   --text-body: #334155;
   --text-muted: #66758a;
-  --text-subtle: #7e8a9c;
-  --glass-fill: rgba(255, 255, 255, 0.10);
-  --topbar-fill: rgba(255, 255, 255, 0.10);
+  --glass-fill: rgba(255, 255, 255, 0.1);
+  --navigation-fill: rgba(255, 255, 255, 0.1);
   --panel-soft-fill: rgba(255, 255, 255, 0.46);
   --button-secondary-fill: rgba(238, 244, 251, 1);
-  --chat-fill: rgba(255, 255, 255, 0.78);
   --glass-stroke: rgba(255, 255, 255, 0.78);
   --glass-inner: rgba(255, 255, 255, 0.92);
   --glass-shadow: 0 24px 56px rgba(138, 160, 184, 0.18);

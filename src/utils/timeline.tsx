@@ -1,8 +1,21 @@
 import { LuBriefcaseBusiness, LuGraduationCap } from 'react-icons/lu'
 import type { TimelineItem } from '../types'
-import { MONTH_LABELS } from '../config/site'
+const MONTH_LABELS = [
+  'Janv.',
+  'Févr.',
+  'Mars',
+  'Avr.',
+  'Mai',
+  'Juin',
+  'Juil.',
+  'Août',
+  'Sept.',
+  'Oct.',
+  'Nov.',
+  'Déc.',
+]
 
-export function parseTimelineDate(value: string | null) {
+function parseTimelineDate(value: string | null) {
   if (!value) return null
 
   const [yearPart, monthPart] = value.split('-')
@@ -22,7 +35,7 @@ export function getTimelineStartValue(item: TimelineItem) {
   return parsed.year * 100 + parsed.month
 }
 
-export function formatTimelineDate(value: string | null) {
+function formatTimelineDate(value: string | null) {
   if (!value) return 'Present'
 
   const parsed = parseTimelineDate(value)

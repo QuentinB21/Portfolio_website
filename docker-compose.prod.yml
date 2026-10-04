@@ -51,11 +51,7 @@ services:
       - '80'
     environment:
       PORT: 80
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
-      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
-      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-https://api.openai.com/v1}
       PROFILE_BIRTHDATE: ${PROFILE_BIRTHDATE}
-      CHATBOT_SYSTEM_PROMPT: ${CHATBOT_SYSTEM_PROMPT}
     depends_on:
       - umami
 

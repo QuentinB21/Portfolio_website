@@ -93,11 +93,7 @@ Valeurs importantes :
 - `MAILMANAGER_API_UPSTREAM=mail-manager-api:8080`
 - `MAILMANAGER_AUTH_UPSTREAM=mail-manager-keycloak:8080`
 - `MAILMANAGER_WORKFLOW_UPSTREAM=mail-manager-n8n:5678`
-- `OPENAI_API_KEY=...`
-- `OPENAI_MODEL=...`
-- `OPENAI_BASE_URL=...`
 - `PROFILE_BIRTHDATE=...`
-- `CHATBOT_SYSTEM_PROMPT=...`
 
 Les trois variables `TRADECOPILOT_*_UPSTREAM` doivent correspondre à des aliases DNS réellement exposés par le compose TradeCopilot sur le réseau `public-proxy`.
 
@@ -250,6 +246,25 @@ Exemple attendu pour `DEPLOY_PATH` :
 ```
 
 ## Operations
+
+Le workflow déploie le SHA testé par GitHub Actions et sérialise les déploiements
+de production. Le dépôt du VPS doit être propre : toute modification suivie ou
+tout fichier non ignoré bloque le déploiement avant la reconstruction des services.
+Les fichiers `.env.prod` et autres données ignorées restent sur le serveur.
+
+Après une intervention manuelle, sauvegarder et réconcilier les modifications
+avec les commits du dépôt avant de relancer le workflow. Ne pas utiliser de
+`reset --hard` automatique pour masquer un conflit. Un ancien workflow ne peut
+pas redéployer une révision antérieure à celle du dépôt serveur : relancer le
+workflow correspondant au commit voulu après avoir vérifié l’état du serveur.
+
+Le 4 octobre 2026, les deux déploiements de `d71ecfd` et `829fc87` ont échoué
+parce que cinq fichiers de la mise à jour de sécurité étaient restés modifiés
+sur le VPS. Leurs contenus correspondaient déjà à `d71ecfd`. Ils ont été
+sauvegardés dans `/home/codexops/portfolio-deploy-repair-20261004/` et dans un
+stash Git nommé `Security updates already committed in d71ecfd - deployment
+repair 20261004`, puis le dépôt a été avancé sans conflit jusqu’à `829fc87`.
+
 Commandes utiles sur le VPS :
 ```bash
 cd /opt/portfolio_website

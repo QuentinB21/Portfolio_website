@@ -23,7 +23,7 @@ function createId() {
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`
 }
 
-export function getVisitorId() {
+function getVisitorId() {
   if (typeof window === 'undefined') return 'server'
   if (!analyticsAllowed()) return 'disabled'
 
@@ -35,7 +35,7 @@ export function getVisitorId() {
   return next
 }
 
-export function getSessionId() {
+function getSessionId() {
   if (typeof window === 'undefined') return 'server'
   if (!analyticsAllowed()) return 'disabled'
 

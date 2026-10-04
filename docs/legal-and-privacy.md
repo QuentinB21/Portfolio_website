@@ -18,7 +18,6 @@ l’éditeur pour appliquer le régime non professionnel de l’article 1-1 II L
 - Accepter et refuser ont le même traitement visuel. Le choix expire en 180 jours.
 - Le retrait efface les identifiants locaux et recharge le document pour arrêter
   aussi les événements automatiques du script Umami.
-- L’assistant désactivé ne lit ni n’écrit son historique local.
 - Les polices sont servies localement avec leurs licences OFL.
 - La configuration production limite chaque log Docker à 3 fichiers de 10 Mo.
 - Le service `umami-retention` purge chaque jour les statistiques du seul UUID
@@ -56,8 +55,6 @@ du CV et des README ; si nécessaire, les récupérer côté serveur pour limite
 transmissions directes. Les applications TradeCopilot et MailManager doivent avoir
 leurs propres informations et contrôles de confidentialité.
 
-Ne pas réactiver le chatbot sans mettre à jour ses destinataires, les transferts,
-la conservation et les informations visibles avant l’envoi d’un message.
 
 ## Références
 

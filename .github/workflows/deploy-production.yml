@@ -6,6 +6,10 @@ on:
       - main
   workflow_dispatch:
 
+concurrency:
+  group: portfolio-production
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -24,13 +28,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build application
+      - name: Lint application
+        run: npm run lint
+
+      - name: Build and test application
         env:
           VITE_CV_PDF_URL: ${{ secrets.VITE_CV_PDF_URL }}
           VITE_CV_MARKDOWN_URL: ${{ secrets.VITE_CV_MARKDOWN_URL }}
           VITE_UMAMI_SCRIPT_URL: ${{ secrets.VITE_UMAMI_SCRIPT_URL }}
           VITE_UMAMI_WEBSITE_ID: ${{ secrets.VITE_UMAMI_WEBSITE_ID }}
-        run: npm run build
+        run: npm test
 
       - name: Start SSH agent
         uses: webfactory/ssh-agent@v0.9.0
@@ -47,16 +54,27 @@ jobs:
           SSH_USER: ${{ secrets.SSH_USER }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
-          ssh -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" "
-            set -e
-            cd '$DEPLOY_PATH'
-            git fetch --all
+          printf -v remote_command 'bash -s -- %q %q' "$DEPLOY_PATH" "$GITHUB_SHA"
+          ssh -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" "$remote_command" <<'REMOTE'
+            set -euo pipefail
+            cd "$1"
+            revision="$2"
+            if [ -n "$(git status --porcelain)" ]; then
+              echo 'Deployment blocked: the server checkout has local changes. Back them up and reconcile them before retrying.' >&2
+              git status --short >&2
+              exit 1
+            fi
+            git fetch origin main
             git checkout main
-            git pull --ff-only origin main
+            git merge --ff-only "$revision"
+            if [ "$(git rev-parse HEAD)" != "$revision" ]; then
+              echo 'Deployment blocked: the server revision differs from the tested commit.' >&2
+              exit 1
+            fi
             if ! docker network inspect public-proxy >/dev/null 2>&1; then
               docker network create public-proxy >/dev/null
             fi
             docker compose --env-file .env.prod -f docker-compose.prod.yml up -d --build --remove-orphans
             docker compose --env-file .env.prod -f docker-compose.prod.yml exec -T caddy caddy validate --config /etc/caddy/Caddyfile
             docker compose --env-file .env.prod -f docker-compose.prod.yml exec -T caddy caddy reload --config /etc/caddy/Caddyfile
-          "
+          REMOTE
