@@ -47,7 +47,7 @@ export function SiteNavigation({ currentPath, onNavigate }: SiteNavigationProps)
   }, [currentPath])
 
   return (
-    <header className="site-navigation">
+    <header className="site-navigation" data-liquid-glass>
       <nav ref={navRef} className="navigation-tabs" aria-label="Navigation principale">
         <span ref={indicatorRef} className="nav-indicator" aria-hidden="true" />
         {navItems.map((item) => (

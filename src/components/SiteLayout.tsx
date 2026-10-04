@@ -5,6 +5,8 @@ import { SiteNavigation } from './SiteNavigation'
 import { SiteFooter } from './SiteFooter'
 import type { Theme } from '../types'
 import { useScrollReveal } from '../hooks/useScrollReveal'
+import { useGlassLighting } from '../hooks/useGlassLighting'
+import { useGlassRefraction } from '../hooks/useGlassRefraction'
 
 type SiteLayoutProps = {
   currentPath: string
@@ -24,15 +26,19 @@ export function SiteLayout({
   action,
 }: SiteLayoutProps) {
   const contentRef = useRef<HTMLElement>(null)
+  const shellRef = useRef<HTMLDivElement>(null)
   useScrollReveal(contentRef, currentPath)
+  useGlassLighting(shellRef, currentPath)
+  useGlassRefraction(shellRef, currentPath)
 
   return (
-    <div className="app-shell">
+    <div className="app-shell" ref={shellRef}>
       <div className="ambient" aria-hidden="true" />
       <div className="page-shell">
         <div className="site-brand" aria-label="Identite du site">
           <button
             className="brand-button"
+            data-liquid-glass
             onClick={() => onNavigate('/')}
             type="button"
             aria-label="Retour a l'accueil"
@@ -46,6 +52,7 @@ export function SiteLayout({
           {action}
           <button
             className="icon-button theme-toggle-button"
+            data-liquid-glass
             onClick={onToggleTheme}
             type="button"
             aria-label={theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'}

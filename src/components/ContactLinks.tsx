@@ -7,6 +7,7 @@ export function ContactLinks() {
         <a
           className={`glass-panel contact-pill ${getContactToneClass(item.href)}`}
           href={item.href}
+          data-liquid-glass
           aria-label={item.label}
           key={item.label}
           rel="noreferrer"

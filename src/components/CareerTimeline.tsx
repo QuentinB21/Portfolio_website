@@ -78,6 +78,7 @@ export function CareerTimeline() {
     <div className="career-timeline-switcher" data-track={active}>
       <div
         className="timeline-tabs"
+        data-liquid-glass
         ref={tabsRef}
         role="tablist"
         aria-label="Choisir une chronologie"
