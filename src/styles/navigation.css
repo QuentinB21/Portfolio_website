@@ -12,8 +12,20 @@
   gap: 1rem;
   margin-bottom: 2rem;
   border-radius: 1.4rem;
-  background: var(--navigation-fill);
+  border: 1px solid transparent;
+  isolation: isolate;
   overflow: visible;
+}
+
+.site-navigation::before {
+  /* Keep the backdrop separate from tab hover, focus and indicator repaints. */
+  content: '';
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--navigation-fill);
+  pointer-events: none;
 }
 
 .brand-button {
@@ -102,10 +114,7 @@
   cursor: pointer;
   /* The animated indicator provides feedback instead of the browser's tap overlay. */
   -webkit-tap-highlight-color: transparent;
-  transition:
-    color 0.28s ease,
-    transform 0.28s ease,
-    opacity 0.28s ease;
+  transition: color 0.28s ease;
 }
 
 .nav-indicator {
@@ -129,6 +138,11 @@
 
 .nav-tab:hover {
   color: var(--text-strong);
+}
+
+.nav-tab:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: -3px;
 }
 
 .nav-tab.is-active {
