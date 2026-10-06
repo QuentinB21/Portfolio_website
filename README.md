@@ -52,6 +52,21 @@ npm test
 
 Le bilan du ménage et les fonctionnalités conservées sont détaillés dans [docs/code-cleanup.md](docs/code-cleanup.md).
 
+## Icônes du site et de l’application
+
+Le logo affiché dans le site reste `src/assets/logo.svg`. `public/favicon.svg` est sa version simplifiée pour les petites tailles. Le favicon possède une URL stable et des variantes PNG et ICO. `public/site.webmanifest` déclare les icônes d’installation et de lancement jusqu’à 1 024 px ; les variantes Android `maskable` gardent le dessin dans la zone centrale protégée. L’icône Apple est déclarée séparément dans `index.html`.
+
+Pour régénérer les exports depuis le SVG, démarrer Vite avec `npm run dev`, puis exécuter depuis la racine du dépôt :
+
+```bash
+npx --yes --package @playwright/cli playwright-cli -s=icon-export open http://127.0.0.1:5173/
+npx --yes --package @playwright/cli playwright-cli -s=icon-export run-code --filename scripts/render-icons.js
+npx --yes --package @playwright/cli playwright-cli -s=icon-export close
+python scripts/build-favicon.py
+```
+
+Les exports sont versionnés dans le dépôt ; ces outils ne sont pas requis pour le build ou sur le VPS. Lors d’un changement d’icône, modifier la version des noms PNG et des liens dans le manifeste et `index.html` pour éviter les anciens caches. Une application déjà installée peut nécessiter une réinstallation après déploiement. Les moteurs de recherche actualisent leur icône lors d’une nouvelle exploration du site.
+
 ## CV et présentations de projets
 
 Le CV est récupéré depuis le README public du profil GitHub, ou depuis `VITE_CV_MARKDOWN_URL`. Son HTML est nettoyé avec DOMPurify avant affichage et impression. Le bouton PDF utilise ce contenu ; si celui-ci est indisponible, il ouvre le fichier `public/cv.pdf` ou `VITE_CV_PDF_URL`.

@@ -74,6 +74,45 @@ test('production routes, assets and profile survive the cleanup; the chat API is
   }
 })
 
+test('favicons and installed-app icons are served as images with the declared dimensions', async () => {
+  const { child, url } = await startServer()
+  try {
+    const index = await readFile('dist/index.html', 'utf8')
+    assert.match(index, /rel="manifest" href="\/site\.webmanifest"/)
+    const manifestResponse = await fetch(url + '/site.webmanifest')
+    assert.match(manifestResponse.headers.get('content-type'), /json|manifest/)
+    const manifest = await manifestResponse.json()
+    assert.equal(manifest.start_url, '/')
+    assert.equal(manifest.display, 'standalone')
+    assert.ok(manifest.icons.some(icon => icon.sizes === '1024x1024' && icon.purpose === 'any'))
+    assert.ok(manifest.icons.some(icon => icon.purpose === 'maskable'))
+    const pngs = [
+      ...manifest.icons.map(icon => [icon.src, Number(icon.sizes.split('x')[0])]),
+      ['/icons/apple-touch-180-v2.png', 180],
+      ...[16, 32, 48].map(size => [`/icons/favicon-${size}-v2.png`, size]),
+    ]
+    for (const [src, size] of pngs) {
+      const response = await fetch(url + src)
+      assert.equal(response.status, 200, src)
+      assert.match(response.headers.get('content-type'), /image\/png/, src)
+      const bytes = Buffer.from(await response.arrayBuffer())
+      assert.equal(bytes.subarray(1, 4).toString(), 'PNG', src)
+      assert.equal(bytes.readUInt32BE(16), size, src)
+      assert.equal(bytes.readUInt32BE(20), size, src)
+    }
+    const svg = await fetch(url + '/favicon.svg?v=2')
+    assert.match(svg.headers.get('content-type'), /image\/svg\+xml/)
+    const ico = await fetch(url + '/favicon.ico?v=2')
+    assert.match(ico.headers.get('content-type'), /image\//)
+    const directory = Buffer.from(await ico.arrayBuffer())
+    assert.equal(directory.readUInt16LE(2), 1)
+    assert.equal(directory.readUInt16LE(4), 3)
+    assert.deepEqual([6, 22, 38].map(offset => directory[offset]), [16, 32, 48])
+  } finally {
+    await stopServer(child)
+  }
+})
+
 test('profile age still comes from the server configuration', async () => {
   const now = new Date()
   const birthYear = now.getFullYear() - 25
