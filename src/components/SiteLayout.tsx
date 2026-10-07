@@ -7,6 +7,8 @@ import type { Theme } from '../types'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import { useGlassLighting } from '../hooks/useGlassLighting'
 import { useGlassRefraction } from '../hooks/useGlassRefraction'
+import { useSwipeNavigation } from '../hooks/useSwipeNavigation'
+import { useKeyboardNavigation } from '../hooks/useKeyboardNavigation'
 
 type SiteLayoutProps = {
   currentPath: string
@@ -30,6 +32,8 @@ export function SiteLayout({
   useScrollReveal(contentRef, currentPath)
   useGlassLighting(shellRef, currentPath)
   useGlassRefraction(shellRef, currentPath)
+  useSwipeNavigation(contentRef, currentPath, onNavigate)
+  useKeyboardNavigation(currentPath, onNavigate)
 
   return (
     <div className="app-shell" ref={shellRef}>
