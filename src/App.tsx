@@ -2,7 +2,6 @@ import { useEffect, useLayoutEffect } from 'react'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { CvDownloadButton } from './components/CvDownloadButton'
 import { SiteLayout } from './components/SiteLayout'
-import { useCvContent } from './hooks/useCvContent'
 import { useThemePreference } from './hooks/useThemePreference'
 import { CareerPage } from './pages/CareerPage'
 import { CvPage } from './pages/CvPage'
@@ -12,15 +11,9 @@ import { PrivacyPage } from './pages/PrivacyPage'
 import { ProjectsPage } from './pages/ProjectsPage'
 import { initializeAnalytics } from './utils/analytics'
 
-const cvPdfUrl = import.meta.env.VITE_CV_PDF_URL || '/cv.pdf'
-const cvMarkdownUrl =
-  import.meta.env.VITE_CV_MARKDOWN_URL ||
-  'https://raw.githubusercontent.com/QuentinB21/QuentinB21/main/README.md'
-
 function App() {
   const navigate = useNavigate()
   const { pathname } = useLocation()
-  const { cvLoading, cvError, cvHtml } = useCvContent({ cvMarkdownUrl })
   const { theme, toggleTheme } = useThemePreference({ path: pathname })
 
   useLayoutEffect(() => {
@@ -43,7 +36,7 @@ function App() {
       theme={theme}
       action={
         pathname === '/cv' ? (
-          <CvDownloadButton html={cvHtml} pdfUrl={cvPdfUrl} path={pathname} theme={theme} />
+          <CvDownloadButton path={pathname} theme={theme} />
         ) : undefined
       }
     >
@@ -51,7 +44,7 @@ function App() {
         <Route path="/" element={<OverviewPage onNavigate={handleNavigate} />} />
         <Route path="/work" element={<CareerPage />} />
         <Route path="/projets" element={<ProjectsPage />} />
-        <Route path="/cv" element={<CvPage cvHtml={cvHtml} cvLoading={cvLoading} cvError={cvError} />} />
+        <Route path="/cv" element={<CvPage />} />
         <Route path="/mentions-legales" element={<LegalPage />} />
         <Route path="/confidentialite" element={<PrivacyPage />} />
       </Routes>

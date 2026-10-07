@@ -85,9 +85,6 @@
   .inline-action {
     width: 100%;
   }
-  .cv-meta {
-    display: none;
-  }
   .project-repo-link,
   .project-presentation-toggle {
     width: fit-content;

@@ -101,7 +101,7 @@ export function PrivacyPage() {
       <section>
         <h2>Services externes</h2>
         <p>
-          Le CV et les présentations de projets sont récupérés depuis GitHub, via raw.githubusercontent.com.
+          Les présentations de projets sont récupérées depuis GitHub, via raw.githubusercontent.com.
           Ces appels servent à afficher des contenus à jour, sur la base de l’intérêt légitime de l’éditeur à
           présenter son portfolio. Ces requêtes transmettent à GitHub votre adresse IP et des informations
           techniques du navigateur. Ce fournisseur peut traiter ces données hors de l’Union européenne selon

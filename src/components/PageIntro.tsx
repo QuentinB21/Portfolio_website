@@ -5,12 +5,11 @@ type PageIntroProps = {
   title: string
   children: ReactNode
   aside?: ReactNode
-  variant?: 'editorial' | 'cv'
 }
 
-export function PageIntro({ kicker, title, children, aside, variant = 'editorial' }: PageIntroProps) {
+export function PageIntro({ kicker, title, children, aside }: PageIntroProps) {
   return (
-    <section className={`page-intro ${variant === 'cv' ? 'cv-hero' : 'editorial-hero'}`}>
+    <section className="page-intro editorial-hero">
       <div className="intro-copy">
         <span className="section-kicker">{kicker}</span>
         <h1>{title}</h1>

@@ -28,8 +28,7 @@
 .hero-copy,
 .body-copy,
 .project-feature p,
-.side-panel p,
-.cv-hero p {
+.side-panel p {
   margin: 0;
   color: var(--text-body);
   font-size: 1rem;

@@ -43,10 +43,10 @@ npm test
 - `src/components/` : introductions, cartes, compétences, chronologie, contacts et présentation Markdown des projets.
 - `src/data/content.tsx` : contenu éditorial, projets professionnels et personnels, compétences, parcours et contacts.
 - `src/config/` : onglets, préférence de thème et informations légales.
-- `src/hooks/` : chargement du CV, âge, thème et cache des présentations de projets.
+- `src/hooks/` : âge, thème et cache des présentations de projets.
 - `src/styles/` : styles répartis par responsabilité ; `index.css` fixe l’ordre de la cascade et charge les adaptations responsive en dernier.
 - `src/index.css` : thèmes, variables et règles globales ; `src/fonts.css` et `public/fonts/` : polices locales et licences.
-- `src/utils/` : analytics, consentement, Markdown, dates et impression du CV.
+- `src/utils/` : analytics, consentement, Markdown, dates et génération du CV en PDF.
 - `server/index.js` : fichiers statiques, routes du frontend et calcul de l’âge via `/api/profile`.
 - `tests/server.test.js` : contrôles du serveur de production.
 
@@ -69,7 +69,7 @@ Les exports sont versionnés dans le dépôt ; ces outils ne sont pas requis pou
 
 ## CV et présentations de projets
 
-Le CV est récupéré depuis le README public du profil GitHub, ou depuis `VITE_CV_MARKDOWN_URL`. Son HTML est nettoyé avec DOMPurify avant affichage et impression. Le bouton PDF utilise ce contenu ; si celui-ci est indisponible, il ouvre le fichier `public/cv.pdf` ou `VITE_CV_PDF_URL`.
+Le CV possède une mise en page dédiée. Son contenu est centralisé dans `src/data/cv.ts` ; les dates, formations et compétences reprennent les données de la page Carrière. La page et le PDF partagent cette source. Le bouton génère un PDF A4 avec du texte sélectionnable et des liens cliquables, directement dans le navigateur. Le générateur est chargé uniquement au téléchargement. L’ancien fichier `public/cv.pdf` reste disponible pour les liens existants ; il n’est plus utilisé par le bouton.
 
 Les présentations des projets utilisent un cache en mémoire partagé et dédupliquent les requêtes simultanées. Changer d’onglet conserve les contenus pendant la visite ; recharger ou rouvrir le site démarre un nouveau cache. Les erreurs peuvent être retentées au prochain passage sur Projets.
 
@@ -78,7 +78,6 @@ Les présentations des projets utilisent un cache en mémoire partagé et dédup
 Créer `.env` à partir de `.env.example`, puis renseigner les variables nécessaires :
 
 - `PROFILE_BIRTHDATE` : date de naissance calculée côté serveur, jamais injectée dans le frontend.
-- `VITE_CV_MARKDOWN_URL` et `VITE_CV_PDF_URL` : sources du CV.
 - `VITE_UMAMI_SCRIPT_URL` et `VITE_UMAMI_WEBSITE_ID` : mesure d’audience facultative.
 - `UMAMI_DB_NAME`, `UMAMI_DB_USER`, `UMAMI_DB_PASSWORD`, `UMAMI_APP_SECRET` : installation Umami.
 

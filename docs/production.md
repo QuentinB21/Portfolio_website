@@ -235,8 +235,6 @@ Créer ces secrets de repository ou d'environment :
 - `SSH_USER`
 - `SSH_PRIVATE_KEY`
 - `DEPLOY_PATH`
-- `VITE_CV_PDF_URL`
-- `VITE_CV_MARKDOWN_URL`
 - `VITE_UMAMI_SCRIPT_URL`
 - `VITE_UMAMI_WEBSITE_ID`
 
