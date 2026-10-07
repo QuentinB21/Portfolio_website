@@ -63,6 +63,11 @@ test('production routes, assets and profile survive the cleanup; the chat API is
     const pdf = await fetch(url + '/cv.pdf')
     assert.equal(pdf.status, 200)
     assert.match(pdf.headers.get('content-type'), /application\/pdf/)
+    const extensionPath = '/downloads/RefScope-1.0.3.1993412.vsix'
+    const extension = await fetch(url + extensionPath)
+    assert.equal(extension.status, 200)
+    assert.doesNotMatch(extension.headers.get('content-type'), /text\/html/)
+    assert.deepEqual(Buffer.from(await extension.arrayBuffer()), await readFile('public' + extensionPath))
     const chat = await fetch(url + '/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

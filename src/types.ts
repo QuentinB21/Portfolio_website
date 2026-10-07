@@ -7,11 +7,6 @@ export type NavItem = {
   path: string
 }
 
-export type ProofItem = {
-  title: string
-  body: string
-}
-
 export type Skill = {
   title: string
   items: string[]
@@ -30,6 +25,7 @@ export type PersonalProject = {
   description: string
   stack: string[]
   href: string
+  download?: boolean
   repoUrl?: string
   presentationUrl?: string
   available?: boolean
@@ -45,6 +41,7 @@ export type TimelineItem = {
   periodStart: string
   periodEnd: string | null
   detail: string
+  stack?: string[]
 }
 
 export type ContactItem = {

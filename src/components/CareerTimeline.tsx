@@ -6,6 +6,7 @@ import {
   type KeyboardEvent,
 } from "react";
 import { timelineItems } from "../data/content";
+import { TechnologyTags } from './TechnologyTags';
 import { useTimelineMotion } from "../hooks/useTimelineMotion";
 import {
   formatTimelinePeriod,
@@ -195,6 +196,7 @@ function TimelineTrack({
                           {formatTimelinePeriod(item)}
                         </p>
                         <p className="timeline-detail">{item.detail}</p>
+                        {item.stack && <TechnologyTags items={item.stack} />}
                       </article>
                     );
                   })}

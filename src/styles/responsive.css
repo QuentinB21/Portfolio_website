@@ -1,23 +1,8 @@
 @media (max-width: 1024px) {
-  .hero-layout,
   .editorial-hero,
   .split-section {
     grid-template-columns: 1fr;
     gap: 2.5rem;
-  }
-  .hero-rail {
-    border-left: 0;
-    border-top: 1px solid var(--glass-stroke);
-    padding: 1.75rem 0 0;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.5rem;
-  }
-  .hero-rail > .section-kicker {
-    grid-column: 1 / -1;
-  }
-  .hero-rail h2 {
-    display: none;
   }
   .editorial-stats {
     border-left: 0;
@@ -75,7 +60,6 @@
   .page-content {
     gap: 3.5rem;
   }
-  .hero-layout,
   .page-intro {
     padding-top: 0.5rem;
   }
@@ -89,19 +73,6 @@
   .hero-panel > .hero-copy {
     font-size: 1rem;
   }
-  .hero-rail,
-  .proof-grid {
-    grid-template-columns: 1fr;
-    gap: 1.4rem;
-  }
-  .proof-card {
-    border-bottom: 1px solid var(--glass-stroke);
-    padding-bottom: 1.5rem;
-  }
-  .proof-card:last-child {
-    border-bottom: 0;
-    padding-bottom: 0;
-  }
   .hero-actions,
   .project-feature-head,
   .project-feature-footer {
@@ -113,16 +84,6 @@
   .secondary-button,
   .inline-action {
     width: 100%;
-  }
-  .feature-item {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    padding-block: 1.75rem;
-  }
-  .experience-label {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 0.5rem 1rem;
   }
   .cv-meta {
     display: none;

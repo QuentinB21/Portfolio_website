@@ -1,125 +1,85 @@
-import { FiArrowRight, FiBriefcase, FiMapPin, FiBookOpen } from 'react-icons/fi'
+import { FiArrowRight, FiDownload } from 'react-icons/fi'
 import { ContactLinks } from '../components/ContactLinks'
-import { TechnologyTags } from '../components/TechnologyTags'
-import { ProfileFact } from '../components/ProfileFact'
+import { ScratchMaze } from '../components/ScratchMaze'
 import { SectionHeader } from '../components/SectionHeader'
-import { useProfileAge } from '../hooks/useProfileAge'
-import { professionalProjects } from '../data/content'
-import { overviewProofs } from '../config/site'
+import { RefScopeExample } from '../components/RefScopeExample'
+import { refScopeRelease } from '../data/content'
 
 type OverviewPageProps = { onNavigate: (path: string) => void }
 
 export function OverviewPage({ onNavigate }: OverviewPageProps) {
-  const { currentAge } = useProfileAge()
   return (
     <>
-      <section className="hero-layout">
-        <div className="hero-panel">
-          <span className="section-kicker hero-kicker">
-            Quentin Bouchot · Élève ingénieur
-          </span>
-          <h1 className="hero-title">
-            <span>Des logiciels</span>
-            <span className="title-accent">pensés pour durer.</span>
-          </h1>
-          <p className="hero-copy">
-            Élève ingénieur à CPE Lyon, je développe des outils de diagnostic
-            chez Renault Trucks. J'aime concevoir des applications utiles,
-            soigner leur expérience et faire grandir un code fiable.
+      <section className="personal-intro hero-panel">
+        <h1 className="hero-title">
+          <span>Moi, c’est</span>
+          <span className="personal-name">Quentin.</span>
+        </h1>
+        <p className="hero-copy">
+          Je suis en troisième année du cycle ingénieur en informatique et réseaux
+          de communication à CPE Lyon, et alternant chez Renault Trucks.
+          J’y développe et maintiens les outils de diagnostic des véhicules
+          utilitaires de la marque.
+        </p>
+        <p className="personal-next-step">
+          Ma formation se termine en 2027. J’aimerais ensuite continuer comme
+          Software Engineer, idéalement dans l’équipe avec laquelle je travaille aujourd’hui.
+        </p>
+        <div className="hero-actions">
+          <button className="primary-button" onClick={() => onNavigate('/work')} type="button">
+            Mon parcours <FiArrowRight size={18} aria-hidden="true" />
+          </button>
+          <button className="secondary-button" onClick={() => onNavigate('/projets')} type="button">
+            Mes projets <FiArrowRight size={18} aria-hidden="true" />
+          </button>
+        </div>
+      </section>
+
+      <section className="refscope-feature" aria-labelledby="refscope-title">
+        <div className="personal-copy">
+          <span className="section-kicker">Un projet personnel · Visual Studio</span>
+          <h2 id="refscope-title">RefScope</h2>
+          <p>
+            Avec l’ajout de tests, le compteur de références de CodeLens ne
+            permettait plus de voir facilement si une méthode était appelée
+            par l’application ou seulement par les tests. Un collègue m’a
+            fait part de sa frustration face à ce problème.
           </p>
-          <div className="hero-actions">
-            <button
-              className="primary-button"
-              onClick={() => onNavigate('/work')}
-              type="button"
-            >
-              Voir mon parcours <FiArrowRight size={18} />
-            </button>
-            <button
-              className="secondary-button"
-              onClick={() => onNavigate('/cv')}
-              type="button"
-            >
-              Consulter le CV <FiArrowRight size={18} />
-            </button>
-          </div>
-          <TechnologyTags
-            items={['C#', '.NET', 'Blazor', 'Vue.js', 'Azure DevOps', 'Docker']}
-          />
+          <p>
+            J’ai développé une extension Visual Studio qui affiche ces deux
+            nombres séparément, directement au-dessus des méthodes C#.
+          </p>
+          <a className="primary-button refscope-download" href={refScopeRelease.href} download>
+            Télécharger RefScope <FiDownload size={18} aria-hidden="true" />
+          </a>
+          <p className="refscope-release">
+            VSIX · Version {refScopeRelease.version} · Windows x64
+          </p>
+          <button className="refscope-details" type="button" onClick={() => onNavigate('/projets')}>
+            Détails et installation <FiArrowRight size={15} aria-hidden="true" />
+          </button>
         </div>
-        <aside className="hero-rail" aria-label="Mon profil en bref">
-          <span className="section-kicker">En ce moment</span>
-          <h2>
-            Du logiciel.
-            <br />
-            Du concret.
-          </h2>
-          <div className="profile-detail">
-            <FiBriefcase aria-hidden="true" />
-            <ProfileFact
-              label="Renault Trucks"
-              value="Software Engineer Apprentice"
-            />
-          </div>
-          <div className="profile-detail">
-            <FiBookOpen aria-hidden="true" />
-            <ProfileFact
-              label="CPE Lyon · 2024–2027"
-              value="Informatique, data & IA"
-            />
-          </div>
-          <div className="profile-detail">
-            <FiMapPin aria-hidden="true" />
-            <ProfileFact
-              label="Lyon, France"
-              value={
-                currentAge !== null
-                  ? `${currentAge} ans · Toujours en apprentissage`
-                  : 'Toujours en apprentissage'
-              }
-            />
-          </div>
-        </aside>
+        <RefScopeExample />
       </section>
-      <section className="stacked-section principles-section">
-        <h2 className="section-kicker">Ma façon de travailler</h2>
-        <div className="proof-grid">
-          {overviewProofs.map((proof, index) => (
-            <article className="proof-card" key={proof.title}>
-              <span className="principle-index" aria-hidden="true">
-                0{index + 1}
-              </span>
-              <h3>{proof.title}</h3>
-              <p>{proof.body}</p>
-            </article>
-          ))}
+
+      <section className="scratch-story" aria-labelledby="scratch-story-title">
+        <div className="personal-copy">
+          <h2 id="scratch-story-title">Pourquoi le développement ?</h2>
+          <p>
+            J’aime chercher une solution à un problème. Un de mes premiers
+            souvenirs de programmation, c’est un labyrinthe sur Scratch au
+            collège : il fallait trouver comment en faire sortir la mascotte,
+            et l’exercice m’avait beaucoup plu.
+          </p>
+          <p>
+            Au fil des cours, cet intérêt s’est confirmé, jusqu’à devenir
+            le domaine dans lequel je voulais poursuivre mes études.
+          </p>
         </div>
+        <ScratchMaze />
       </section>
-      <section className="stacked-section">
-        <span className="section-kicker">Sur le terrain</span>
-        <SectionHeader title="Du terrain au logiciel." />
-        <div className="feature-list">
-          {professionalProjects.map((project, index) => (
-            <article className="feature-item" key={project.title}>
-              <div className="experience-label">
-                <span className="section-kicker">
-                  {index === 0 ? 'Renault Trucks' : 'Biosystèmes'}
-                </span>
-                <span>
-                  {index === 0 ? '2024 — aujourd’hui' : '2023 — 2024'}
-                </span>
-              </div>
-              <div className="experience-description">
-                <h3>{project.title}</h3>
-                <p>{project.description}</p>
-                <TechnologyTags items={project.stack} />
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
+
       <section className="stacked-section contact-section">
-        <span className="section-kicker">Restons en contact</span>
         <SectionHeader title="Un échange, une idée ?" />
         <ContactLinks />
       </section>

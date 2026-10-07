@@ -33,7 +33,7 @@ export function ProjectsPage() {
                     {project.ctaLabel}
                   </button>
                 ) : (
-                  <a className="primary-button inline-action" href={project.href}>
+                  <a className="primary-button inline-action" href={project.href} download={project.download || undefined}>
                     {project.ctaLabel} <FiArrowUpRight size={15} />
                   </a>
                 )

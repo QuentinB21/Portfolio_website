@@ -30,7 +30,22 @@ export const professionalProjects: ProfessionalProject[] = [
   },
 ]
 
+export const refScopeRelease = {
+  version: '1.0.3.1993412',
+  href: '/downloads/RefScope-1.0.3.1993412.vsix',
+} as const
+
 export const personalProjects: PersonalProject[] = [
+  {
+    title: 'RefScope',
+    description: 'Extension Visual Studio développée pour distinguer les références applicatives des références de tests au-dessus des méthodes C#. Elle répond à une difficulté rencontrée dans mon équipe après la mise en place d’une nouvelle stratégie de tests.',
+    stack: ['C#', '.NET'],
+    href: refScopeRelease.href,
+    download: true,
+    status: `Version ${refScopeRelease.version}`,
+    ctaLabel: 'Télécharger RefScope (.vsix)',
+    note: 'Installation : fermer Visual Studio, ouvrir le fichier VSIX puis suivre l’assistant. Compatibilité déclarée : Visual Studio 17.x et 18.x, Windows x64. Dans cette version, une référence est classée comme test si le chemin de son fichier se termine par Tests.cs. Distribution directe, sans publication sur le Marketplace.',
+  },
   {
     title: 'TradeCopilot',
     description:
@@ -72,6 +87,7 @@ export const timelineItems: TimelineItem[] = [
     kind: 'experience',
     title: 'Software Engineer Apprentice',
     place: 'Renault Trucks (Volvo Group)',
+    stack: professionalProjects[0].stack,
     periodStart: '2024-09',
     periodEnd: null,
     detail:
@@ -89,6 +105,7 @@ export const timelineItems: TimelineItem[] = [
     kind: 'experience',
     title: 'Developer Apprentice',
     place: 'Biosystèmes',
+    stack: professionalProjects[1].stack,
     periodStart: '2023-09',
     periodEnd: '2024-08',
     detail:

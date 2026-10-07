@@ -1,0 +1,132 @@
+.personal-intro {
+  padding-block: 1.5rem 2rem;
+  gap: 2rem;
+}
+.personal-intro .hero-title {
+  font-size: clamp(4rem, 9vw, 7.5rem);
+}
+.personal-name {
+  background: linear-gradient(110deg, var(--accent-blue), #80dfbf);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+body.light .personal-name {
+  background-image: linear-gradient(110deg, #276aa9, #248367);
+}
+.personal-intro > .hero-copy { max-width: 740px; }
+.personal-next-step {
+  max-width: 740px;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: .95rem;
+  line-height: 1.8;
+}
+.scratch-story,
+.refscope-feature {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(2rem, 6vw, 6rem);
+}
+.personal-copy { display: flex; flex-direction: column; gap: 1.2rem; min-width: 0; }
+.personal-copy h2,
+.refscope-feature h2 {
+  margin: 0 0 .5rem;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 600;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 1.15;
+  letter-spacing: -.045em;
+  max-width: 16ch;
+  text-wrap: balance;
+}
+.personal-copy p {
+  margin: 0;
+  color: var(--text-body);
+  font-size: 1.05rem;
+  line-height: 1.85;
+  max-width: 60ch;
+}
+.scratch-maze {
+  --maze-mint: #80dfbf;
+  margin: 0;
+  width: 100%;
+  max-width: 430px;
+  justify-self: center;
+}
+body.light .scratch-maze { --maze-mint: #218567; }
+.scratch-maze svg { display: block; width: 100%; overflow: visible; }
+.maze-walls { stroke: var(--text-muted); opacity: .48; }
+.maze-route { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.scratch-maze.is-still .maze-route { stroke-dashoffset: 0; }
+.scratch-maze figcaption {
+  margin-top: .8rem;
+  color: var(--text-muted);
+  font-size: .78rem;
+  text-align: center;
+}
+.timeline-event .technology-list { margin-top: 1rem; }
+.refscope-feature {
+  padding-top: 2rem;
+  border-top: 1px solid var(--glass-stroke);
+}
+.refscope-download { align-self: flex-start; margin-top: .3rem; }
+.refscope-details {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: .5rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent-link);
+  font: inherit;
+  font-size: .85rem;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: .25em;
+}
+.personal-copy .refscope-release { font-size: .78rem; color: var(--text-muted); }
+.refscope-example { min-width: 0; margin: 0; }
+.refscope-editor {
+  border: 1px solid var(--glass-stroke);
+  border-radius: 1rem;
+  background: var(--glass-fill);
+  overflow: hidden;
+}
+.refscope-editor-heading {
+  display: flex;
+  justify-content: space-between;
+  padding: .9rem 1.25rem;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--glass-stroke);
+  font-size: .78rem;
+}
+.refscope-editor-code { padding: 1.8rem 1.25rem 2rem; }
+.refscope-codelens { display: flex; flex-wrap: wrap; gap: .5rem 1rem; margin-bottom: .8rem; font-size: .75rem; color: var(--text-muted); }
+.refscope-codelens strong { color: var(--accent-link); }
+.refscope-editor pre { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font-size: .8rem; line-height: 1.9; color: var(--text-body); }
+/* Familiar C# editor colours, independent of the portfolio accent palette. */
+.refscope-editor pre { color: #d4d4d4; }
+.refscope-keyword { color: #569cd6; }
+.refscope-control { color: #c586c0; }
+.refscope-type { color: #4ec9b0; }
+.refscope-method { color: #dcdcaa; }
+body.light .refscope-editor pre { color: #000; }
+body.light .refscope-keyword { color: #0000ff; }
+body.light .refscope-control { color: #af00db; }
+body.light .refscope-type { color: #267f99; }
+body.light .refscope-method { color: #795e26; }
+.refscope-example figcaption { margin-top: 1rem; color: var(--text-muted); font-size: .78rem; line-height: 1.7; }
+@media (max-width: 720px) {
+  .personal-intro { padding-block: .5rem 0; }
+  .personal-intro .hero-title { font-size: clamp(3.4rem, 13vw, 5rem); }
+  .scratch-story, .refscope-feature { grid-template-columns: 1fr; gap: 2rem; }
+  .personal-copy p { font-size: 1rem; }
+  .scratch-maze { max-width: 350px; }
+  .refscope-feature { padding-top: 2rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scratch-maze .maze-route { stroke-dashoffset: 0; animation: none; }
+}
