@@ -23,7 +23,7 @@ export function OverviewPage({ onNavigate }: OverviewPageProps) {
         </p>
         <p className="personal-next-step">
           Ma formation se termine en 2027. J’aimerais ensuite continuer comme
-          Software Engineer, idéalement dans l’équipe avec laquelle je travaille aujourd’hui.
+          Software Engineer.
         </p>
         <div className="hero-actions">
           <button className="primary-button" onClick={() => onNavigate('/work')} type="button">
