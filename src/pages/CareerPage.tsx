@@ -30,15 +30,14 @@ export function CareerPage() {
           </div>
         }
       >
-        Du développement d'interfaces aux outils de diagnostic : un parcours
-        guidé par le produit, la fiabilité et l'envie de comprendre comment les
-        choses fonctionnent.
+        Du développement d'interfaces aux outils de diagnostic, mes expériences
+        m'ont permis d'aborder plusieurs aspects du développement logiciel.
       </PageIntro>
 
       <section className="stacked-section">
         <SectionHeader
           title="Expériences mises en avant"
-          subtitle="Deux contextes concrets qui montrent à la fois le développement logiciel, l'ergonomie et les enjeux de qualité."
+          subtitle="Deux expériences qui associent développement logiciel, ergonomie et qualité."
         />
         <div className="project-stack">
           {professionalProjects.map((project) => (
@@ -74,7 +73,7 @@ export function CareerPage() {
       <section className="stacked-section career-skills">
         <SectionHeader
           title="Compétences"
-          subtitle="Les outils et domaines que j'utilise aujourd'hui le plus dans un contexte logiciel professionnel."
+          subtitle="Les technologies et domaines que j'utilise dans mon travail."
         />
         <SkillsList />
       </section>

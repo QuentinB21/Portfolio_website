@@ -51,7 +51,7 @@ export function ProjectsPage() {
                 {project.note ? <p className="project-note">{project.note}</p> : <span />}
                 {project.repoUrl ? (
                   <a className="project-repo-link" href={project.repoUrl} rel="noreferrer" target="_blank">
-                    Accéder au repo <FiGithub size={15} />
+                    Accéder  le dépôt <FiGithub size={15} />
                   </a>
                 ) : null}
               </div>

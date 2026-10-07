@@ -21,7 +21,7 @@ export function useCvContent({ cvMarkdownUrl }: UseCvContentParams) {
         }
       } catch {
         if (!cancelled) {
-          setCvError("Le CV n'a pas pu etre charge depuis GitHub.")
+          setCvError("Le CV n'a pas pu être chargé depuis GitHub.")
         }
       } finally {
         if (!cancelled) {

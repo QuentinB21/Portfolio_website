@@ -39,13 +39,13 @@ export function SiteLayout({
     <div className="app-shell" ref={shellRef}>
       <div className="ambient" aria-hidden="true" />
       <div className="page-shell">
-        <div className="site-brand" aria-label="Identite du site">
+        <div className="site-brand" aria-label="Identité du site">
           <button
             className="brand-button"
             data-liquid-glass
             onClick={() => onNavigate('/')}
             type="button"
-            aria-label="Retour a l'accueil"
+            aria-label="Retour à l'accueil"
           >
             <img className="brand-logo" src={logoMark} alt="Logo Quentin Bouchot" />
             <span className="brand-text">Quentin Bouchot</span>

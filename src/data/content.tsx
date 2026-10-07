@@ -13,7 +13,7 @@ export const skills: Skill[] = [
 
 export const professionalProjects: ProfessionalProject[] = [
   {
-    title: 'Outils de diagnostic véhicules',
+    title: 'Outils de diagnostic des véhicules',
     description:
       "Développement et amélioration d'outils de diagnostic pour véhicules utilitaires Renault Trucks, dans un environnement .NET avec des enjeux de maintenabilité et de qualité logicielle.",
     stack: ['C#', '.NET', 'WPF', 'Blazor', 'Azure DevOps'],
@@ -23,7 +23,7 @@ export const professionalProjects: ProfessionalProject[] = [
   {
     title: 'Générateur de questionnaires sensoriels',
     description:
-      "Conception frontend d'une application web en Vue.js pour générer des questionnaires sensoriels à partir de templates éditables, avec un travail sur l'ergonomie et le Green IT.",
+      "Conception frontend d'une application web en Vue.js pour générer des questionnaires sensoriels à partir de modèles modifiables, avec un travail sur l'ergonomie et le Green IT.",
     stack: ['Vue.js', 'TypeScript', 'JavaScript', 'Bootstrap'],
     link: 'https://www.biosystemes.com/',
     status: 'Livré',
@@ -49,7 +49,7 @@ export const personalProjects: PersonalProject[] = [
   {
     title: 'TradeCopilot',
     description:
-      "Application dédiée au suivi patrimonial et à l'aide à la décision pour les investisseurs particuliers. Le portfolio l'expose simplement depuis le même domaine, sans fusionner son dépôt ni sa stack technique.",
+      "Application dédiée au suivi patrimonial et à l'aide à la décision pour les investisseurs particuliers. Elle est accessible depuis le domaine du portfolio, tout en conservant son propre dépôt et ses technologies.",
     stack: ['React', 'ASP.NET Core', 'PostgreSQL', 'Keycloak', 'Docker Compose'],
     href: '/projets/TradeCopilot/',
     repoUrl: 'https://github.com/QuentinB21/TradeCopilot',
@@ -109,7 +109,7 @@ export const timelineItems: TimelineItem[] = [
     periodStart: '2023-09',
     periodEnd: '2024-08',
     detail:
-      "Développement frontend d'une application web from scratch en Vue.js pour générer des questionnaires sensoriels depuis des templates éditables.",
+      "Conception et développement frontend d'une application web en Vue.js pour générer des questionnaires sensoriels à partir de modèles pré-configurés.",
   },
   {
     kind: 'education',
