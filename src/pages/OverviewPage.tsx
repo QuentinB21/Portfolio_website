@@ -4,35 +4,41 @@ import { ScratchMaze } from '../components/ScratchMaze'
 import { SectionHeader } from '../components/SectionHeader'
 import { RefScopeExample } from '../components/RefScopeExample'
 import { refScopeRelease } from '../data/content'
+import portrait from '../assets/quentin-portrait.webp'
 
 type OverviewPageProps = { onNavigate: (path: string) => void }
 
 export function OverviewPage({ onNavigate }: OverviewPageProps) {
   return (
     <>
-      <section className="personal-intro hero-panel">
-        <h1 className="hero-title">
-          <span>Moi, c’est</span>
-          <span className="personal-name">Quentin.</span>
-        </h1>
-        <p className="hero-copy">
-          Je suis en troisième année du cycle ingénieur en informatique et réseaux
-          de communication à CPE Lyon, et alternant chez Renault Trucks.
-          J’y développe et maintiens les outils de diagnostic des véhicules
-          utilitaires de la marque.
-        </p>
-        <p className="personal-next-step">
-          Ma formation se termine en 2027. J’aimerais ensuite continuer comme
-          Software Engineer.
-        </p>
-        <div className="hero-actions">
-          <button className="primary-button" onClick={() => onNavigate('/work')} type="button">
-            Mon parcours <FiArrowRight size={18} aria-hidden="true" />
-          </button>
-          <button className="secondary-button" onClick={() => onNavigate('/projets')} type="button">
-            Mes projets <FiArrowRight size={18} aria-hidden="true" />
-          </button>
+      <section className="personal-intro">
+        <div className="personal-intro-copy hero-panel">
+          <h1 className="hero-title">
+            <span className="personal-name">Quentin Bouchot.</span>
+          </h1>
+          <p className="hero-copy">
+            Je suis en troisième année du cycle ingénieur en informatique et réseaux
+            de communication à CPE Lyon, et alternant chez Renault Trucks.
+            J’y développe et maintiens les outils de diagnostic des véhicules
+            utilitaires de la marque.
+          </p>
+          <p className="personal-next-step">
+            Ma formation se termine en 2027. J’aimerais ensuite continuer comme
+            Software Engineer.
+          </p>
+          <div className="hero-actions">
+            <button className="primary-button" onClick={() => onNavigate('/work')} type="button">
+              Mon parcours <FiArrowRight size={18} aria-hidden="true" />
+            </button>
+            <button className="secondary-button" onClick={() => onNavigate('/projets')} type="button">
+              Mes projets <FiArrowRight size={18} aria-hidden="true" />
+            </button>
+          </div>
         </div>
+        <figure className="personal-portrait">
+          <img src={portrait} alt="Quentin Bouchot" width="1600" height="901" fetchPriority="high" />
+          <figcaption>Jardin botanique, Montreal, Canada</figcaption>
+        </figure>
       </section>
 
       <section className="refscope-feature" aria-labelledby="refscope-title">

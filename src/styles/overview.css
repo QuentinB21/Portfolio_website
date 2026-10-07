@@ -1,9 +1,46 @@
 .personal-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  align-items: center;
   padding-block: 1.5rem 2rem;
-  gap: 2rem;
+  gap: clamp(2rem, 5vw, 5rem);
 }
 .personal-intro .hero-title {
-  font-size: clamp(4rem, 9vw, 7.5rem);
+  font-size: clamp(3.5rem, 7.5vw, 6.5rem);
+}
+.personal-intro-copy { gap: 2rem; }
+.personal-portrait {
+  width: 100%;
+  max-width: 320px;
+  margin: 0;
+  justify-self: center;
+  padding: .85rem .85rem 0;
+  background: #faf9f4;
+  border-radius: .15rem;
+  box-shadow: 0 16px 36px rgb(0 0 0 / .16), inset 0 0 0 1px rgb(0 0 0 / .05);
+  transform: rotate(-3deg);
+}
+.personal-portrait img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  object-position: 59% center;
+  border-radius: 0;
+}
+.personal-portrait figcaption {
+  display: grid;
+  align-content: center;
+  min-height: 4.5rem;
+  padding: .8rem .15rem 1rem;
+  color: #2d343b;
+  font-family: 'Caveat', 'Segoe Print', cursive;
+  font-size: 1.4rem;
+  font-weight: 500;
+  line-height: 1.15;
+  text-align: center;
+  text-wrap: balance;
 }
 .personal-name {
   background: linear-gradient(110deg, var(--accent-blue), #80dfbf);
@@ -14,7 +51,7 @@
 body.light .personal-name {
   background-image: linear-gradient(110deg, #276aa9, #248367);
 }
-.personal-intro > .hero-copy { max-width: 740px; }
+.personal-intro-copy > .hero-copy { max-width: 740px; }
 .personal-next-step {
   max-width: 740px;
   margin: 0;
@@ -120,7 +157,9 @@ body.light .refscope-type { color: #267f99; }
 body.light .refscope-method { color: #795e26; }
 .refscope-example figcaption { margin-top: 1rem; color: var(--text-muted); font-size: .78rem; line-height: 1.7; }
 @media (max-width: 720px) {
-  .personal-intro { padding-block: .5rem 0; }
+  .personal-intro { padding-block: .5rem 0; grid-template-columns: 1fr; gap: 2.5rem; }
+  .personal-portrait { width: min(72%, 240px); transform: rotate(-2deg); }
+  .personal-portrait img { aspect-ratio: 1 / 1; }
   .personal-intro .hero-title { font-size: clamp(3.4rem, 13vw, 5rem); }
   .scratch-story, .refscope-feature { grid-template-columns: 1fr; gap: 2rem; }
   .personal-copy p { font-size: 1rem; }
