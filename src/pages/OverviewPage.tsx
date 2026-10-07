@@ -14,7 +14,7 @@ export function OverviewPage({ onNavigate }: OverviewPageProps) {
       <section className="personal-intro">
         <div className="personal-intro-copy hero-panel">
           <h1 className="hero-title">
-            <span className="personal-name">Quentin Bouchot.</span>
+            <span className="personal-name">Quentin Bouchot</span>
           </h1>
           <p className="hero-copy">
             Je suis en troisième année du cycle ingénieur en informatique et réseaux
